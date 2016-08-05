@@ -4,6 +4,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using Axis.Pollux.Authentication;
+using System.Threading;
 
 namespace Axis.Pollux.CoreAuthentication
 {
@@ -14,9 +15,11 @@ namespace Axis.Pollux.CoreAuthentication
         public string CalculateHash(string data) => Encode(RawHash(data));
         public string CalculateHash(byte[] data) => Encode(RawHash(data));
 
-        public bool IsValidHash(string data, string hash) => RawHash(data) == Decode(hash);
+        public bool IsValidHash(string data, string hash)
+            => (RawHash(data) == Decode(hash)).UsingValue(bytes => Thread.Sleep(2000)); //<-- waste some time to discourage brute force attacks
 
-        public bool IsValidHash(byte[] data, string hash) => RawHash(data) == Decode(hash);
+        public bool IsValidHash(byte[] data, string hash)
+            => (RawHash(data) == Decode(hash)).UsingValue(bytes => Thread.Sleep(2000)); //<-- waste some time to discourage brute force attacks
 
         /// <summary>
         /// Alter the hash with some reversible encryption
