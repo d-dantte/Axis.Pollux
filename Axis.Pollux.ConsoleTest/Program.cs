@@ -9,10 +9,11 @@ namespace Axis.Pollux.ConsoleTest
     {
         static void Main(string[] args)
         {
-            var config = new ContextConfiguration().WithConnection("EuropaContext")
-                                                   .WithInitializer(new System.Data.Entity.DropCreateDatabaseIfModelChanges<EuropaContext>())
-                                                   .UsingModule(new IdentityAccessModuleConfig())
-                                                   .UsingModule(new Authentication.OAModule.AuthenticationAccessModuleConfig());
+            var config = new ContextConfiguration()
+                .WithConnection("EuropaContext")
+                .WithInitializer(new System.Data.Entity.DropCreateDatabaseIfModelChanges<EuropaContext>())
+                .UsingModule(new IdentityAccessModuleConfig())
+                .UsingModule(new Authentication.OAModule.AuthenticationAccessModuleConfig());
 
             using (var cxt = new EuropaContext(config))
             {

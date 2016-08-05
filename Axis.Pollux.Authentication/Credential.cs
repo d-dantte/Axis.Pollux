@@ -2,6 +2,7 @@
 using System;
 using Axis.Luna.Extensions;
 using static Axis.Luna.Extensions.ObjectExtensions;
+using static Axis.Luna.Extensions.ExceptionExtensions;
 
 namespace Axis.Pollux.Authentication
 {
@@ -12,6 +13,8 @@ namespace Axis.Pollux.Authentication
         public virtual byte[] Value  { get { return get<byte[]>(); } set { set(ref value); } }
 
         public virtual string SecuredHash  { get { return get<string>(); } set { set(ref value); } } //hash of data if required is kept here
+
+        public virtual TimeSpan? ExpiresIn { get { return get<TimeSpan?>(); } set { set(ref value); } }
 
         #region navigational properties
         public virtual User Owner  { get { return get<User>(); } set { set(ref value); } }
@@ -44,6 +47,17 @@ namespace Axis.Pollux.Authentication
         
         public static readonly CredentialMetadata Other = new CredentialMetadata() { Name = nameof(Other), Access = Access.Public };
         #endregion
+
+        private CredentialMetadata()
+        { }
+
+        public CredentialMetadata(string name, Access access = Access.Secret)
+        {
+            ThrowNullArguments(() => name);
+
+            this.Name = name;
+            this.Access = access;
+        }
 
         #region properties
         public string Name { get; private set; }

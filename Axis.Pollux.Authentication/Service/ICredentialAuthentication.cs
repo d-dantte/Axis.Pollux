@@ -7,8 +7,7 @@ namespace Axis.Pollux.Authentication.Service
     public interface ICredentialAuthentication
     {
         ICredentialHasher CredentialHasher { get; }
-
-        //Operation<AuthenticationParameter> RequestAuthenticationParameter(AuthenticationParameter authParam);
+        
         Operation VerifyCredential(Credential credential);
         
         Operation DeleteCredential(Credential credential);

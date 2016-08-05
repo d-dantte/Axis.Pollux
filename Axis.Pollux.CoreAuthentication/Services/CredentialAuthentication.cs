@@ -26,7 +26,7 @@ namespace Axis.Pollux.CoreAuthentication.Services
             CredentialHasher = hasher ?? new DefaultHasher();
         }
 
-        #region IUserAuthentication
+        #region ICredentialAuthentication
         public Operation AssignCredential(string userId, Credential credential)
             => Operation.Run(() =>
             {
@@ -43,8 +43,8 @@ namespace Axis.Pollux.CoreAuthentication.Services
             {
                 OwnerId = userId,
                 Metadata = metadata.ThrowIfNull(),
-                Value = metadata.Access == Access.Public? value:null,
-                SecuredHash = metadata.Access == Access.Secret? CredentialHasher.CalculateHash(value): null
+                Value = metadata.Access == Access.Public ? value : null,
+                SecuredHash = metadata.Access == Access.Secret ? CredentialHasher.CalculateHash(value) : null
             };
 
         public Operation DeleteCredential(Credential credential)
@@ -52,9 +52,6 @@ namespace Axis.Pollux.CoreAuthentication.Services
             {
                 _context.Store<Credential>().Delete(credential, true);
             });
-
-        //public virtual Operation<AuthenticationParameter> RequestAuthenticationParameter(AuthenticationParameter authParam)
-        //    => Operation.Run(() => (AuthenticationParameter)null);
 
         public Operation VerifyCredential(Credential credential)
             => Operation.Run(() =>
