@@ -37,7 +37,7 @@
       <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
     </Reference>
     <Reference Include="Axis.Narvi">
-      <HintPath>..\..\Axis.Narvi\Axis.Narvi\Axis.Narvi\bin\Debug\Axis.Narvi.dll</HintPath>
+      <HintPath>..\..\Axis.Narvi\Axis.Narvi\bin\Debug\Axis.Narvi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

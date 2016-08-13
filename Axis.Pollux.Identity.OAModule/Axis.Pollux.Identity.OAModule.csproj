@@ -40,7 +40,7 @@
       <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
     </Reference>
     <Reference Include="Axis.Narvi">
-      <HintPath>..\..\Axis.Narvi\Axis.Narvi\Axis.Narvi\bin\Debug\Axis.Narvi.dll</HintPath>
+      <HintPath>..\..\Axis.Narvi\Axis.Narvi\bin\Debug\Axis.Narvi.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>

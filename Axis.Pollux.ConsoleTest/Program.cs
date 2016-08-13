@@ -35,7 +35,14 @@ namespace Axis.Pollux.ConsoleTest
         {
             base.Initialize();
 
-            this.WithQueryGenerator(_cxt => _cxt.As<DbContext>().Set<User>().OrderBy(_u => _u.UId));
+            this.WithStoreQueryGenerator(_cxt => _cxt.As<DbContext>().Set<User>().OrderBy(_u => _u.UId));
+
+            this.UsingContext(cxt =>
+            {
+                cxt.Store<User>().Add(new User { EntityId = "Senj@k" });
+
+                cxt.CommitChanges();
+            });
         }
     }
 }
