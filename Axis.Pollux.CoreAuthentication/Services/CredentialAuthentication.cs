@@ -16,8 +16,8 @@ namespace Axis.Pollux.CoreAuthentication.Services
         private Jupiter.IDataContext _context = null;
         public ICredentialHasher CredentialHasher { get; private set; }
 
-        public CredentialAuthentication(Jupiter.IDataContext dataContext) : this(dataContext, null)
-        { }
+        //public CredentialAuthentication(Jupiter.IDataContext dataContext) : this(dataContext, null)
+        //{ }
         public CredentialAuthentication(Jupiter.IDataContext dataContext, ICredentialHasher hasher)
         {
             ThrowNullArguments(() => dataContext);
