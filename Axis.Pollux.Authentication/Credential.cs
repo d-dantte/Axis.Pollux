@@ -16,6 +16,15 @@ namespace Axis.Pollux.Authentication
 
         public virtual TimeSpan? ExpiresIn { get { return get<TimeSpan?>(); } set { set(ref value); } }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Tags
+        {
+            get { return get<string>(); }
+            set { set(ref value); }
+        }
+
         #region navigational properties
         public virtual User Owner  { get { return get<User>(); } set { set(ref value); } }
         public virtual string OwnerId  { get { return get<string>(); } set { set(ref value); } }

@@ -15,8 +15,8 @@ namespace Axis.Pollux.ConsoleTest
             var config = new ContextConfiguration()
                 .WithConnection("EuropaContext")
                 .WithInitializer(new System.Data.Entity.DropCreateDatabaseIfModelChanges<EuropaContext>())
-                //.UsingModule(new IdentityAccessModuleConfig())
-                .UsingModule(new XyzModule())
+                .UsingModule(new IdentityAccessModuleConfig())
+                //.UsingModule(new XyzModule())
                 .UsingModule(new Authentication.OAModule.AuthenticationAccessModuleConfig());
 
             using (var cxt = new EuropaContext(config))
