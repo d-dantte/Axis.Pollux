@@ -12,7 +12,7 @@ namespace Axis.Pollux.ConsoleTest
     {
         static void Main(string[] args)
         {
-            var config = new ContextConfiguration()
+            var config = new ContextConfiguration<EuropaContext>()
                 .WithConnection("EuropaContext")
                 .WithInitializer(new System.Data.Entity.DropCreateDatabaseIfModelChanges<EuropaContext>())
                 .UsingModule(new IdentityAccessModuleConfig())
