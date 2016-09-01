@@ -15,9 +15,9 @@ namespace Axis.Pollux.Identity.Principal
             set { set(ref value); }
         }
 
-        public virtual DateTime? CreatedOn
+        public virtual DateTime CreatedOn
         {
-            get { return get<DateTime?>(); }
+            get { return get<DateTime>(); }
             set { set(ref value); }
         }
 

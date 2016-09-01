@@ -56,11 +56,19 @@ namespace Axis.Pollux.CoreAuthentication.Services
         public Operation VerifyCredential(Credential credential)
             => Operation.Run(() =>
             {
-                var dbcred = _context.Store<Credential>().Query
-                                     .Where(c => c.OwnerId == credential.OwnerId)
-                                     .Where(c => c.Metadata.Name == credential.Metadata.Name)
-                                     .FirstOrDefault()
-                                     .ThrowIfNull("could not find Credential");
+                var credstsore = _context.Store<Credential>();
+                var dbcred = credstsore.Query
+                    .Where(c => c.OwnerId == credential.OwnerId)
+                    .Where(c => c.Metadata.Name == credential.Metadata.Name)
+                    .Where(c => c.Status == CredentialStatus.Active)
+                    .FirstOrDefault()
+                    .ThrowIfNull("could not find Credential");
+
+                if (dbcred.ExpiresIn <= (DateTime.Now - dbcred.CreatedOn))
+                {
+                    credstsore.Modify(dbcred.With(new { Status = CredentialStatus.Inactive })).Context.CommitChanges();
+                    throw new Exception("Credential has expired");
+                }
 
                 if (dbcred.Metadata.Access == Access.Secret &&
                    !CredentialHasher.IsValidHash(credential.Value, dbcred.SecuredHash)) throw new Exception("Invalid Credential");

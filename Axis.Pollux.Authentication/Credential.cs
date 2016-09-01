@@ -8,13 +8,35 @@ namespace Axis.Pollux.Authentication
 {
     public class Credential: PolluxEntity<long>
     {
-        public virtual CredentialMetadata Metadata  { get { return get<CredentialMetadata>(); } set { set(ref value); } }
+        public virtual CredentialMetadata Metadata
+        {
+            get { return get<CredentialMetadata>(); }
+            set { set(ref value); }
+        }
         
-        public virtual byte[] Value  { get { return get<byte[]>(); } set { set(ref value); } }
+        public virtual byte[] Value
+        {
+            get { return get<byte[]>(); }
+            set { set(ref value); }
+        }
 
-        public virtual string SecuredHash  { get { return get<string>(); } set { set(ref value); } } //hash of data if required is kept here
+        public virtual string SecuredHash
+        {
+            get { return get<string>(); }
+            set { set(ref value); }
+        } //hash of data if required is kept here
 
-        public virtual TimeSpan? ExpiresIn { get { return get<TimeSpan?>(); } set { set(ref value); } }
+        public virtual TimeSpan? ExpiresIn
+        {
+            get { return get<TimeSpan?>(); }
+            set { set(ref value); }
+        }
+
+        public CredentialStatus Status
+        {
+            get { return get<CredentialStatus>(); }
+            set { set(ref value); }
+        }
 
         /// <summary>
         /// 
@@ -88,5 +110,11 @@ namespace Axis.Pollux.Authentication
     {
         Public,
         Secret
+    }
+
+    public enum CredentialStatus
+    {
+        Active,
+        Inactive
     }
 }
