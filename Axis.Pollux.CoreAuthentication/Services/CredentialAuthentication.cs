@@ -30,7 +30,7 @@ namespace Axis.Pollux.CoreAuthentication.Services
         public Operation AssignCredential(string userId, Credential credential)
             => Operation.Run(() =>
             {
-                if (!_context.Store<User>().Query.Any(_user => _user.UserId == userId)) throw new Exception("could not find user");
+                if (!_context.Store<User>().Query.Any(_user => _user.EntityId == userId)) throw new Exception("could not find user");
                 else
                 {
                     _context.Store<Credential>().Add(CreateCredential(userId, credential.Value, credential.Metadata));
