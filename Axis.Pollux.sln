@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{92D5A5DA-E27F-4718-B901-B5465B8D9C6C}"
 EndProject
@@ -38,6 +38,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.ABAC.OAModule", "Axis.Pollux.ABAC.OAModule\Axis.Pollux.ABAC.OAModule.csproj", "{0F259B59-B07D-4A47-AB8E-8B3425E3C121}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.ABAC.PVGExpressions", "Axis.Pollux.ABAC.PVGExpressions\Axis.Pollux.ABAC.PVGExpressions.csproj", "{1436DD65-CAAC-45E8-A61F-02A9C4F2F29E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0CFFDE1F-79D4-477B-B86B-78F2E0B69521}"
+	ProjectSection(SolutionItems) = preProject
+		TODO.txt = TODO.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

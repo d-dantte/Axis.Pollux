@@ -1,0 +1,4 @@
+
+2016/09/03 ===========================================================================================================
+
+1.   Remove all "virtual" modifiers from all entity properties in this library! see notes Axis.Europa for more information.
