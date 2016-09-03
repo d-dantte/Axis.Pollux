@@ -9,8 +9,8 @@ namespace Axis.Pollux.Identity.Principal
     public class CorporateData: PolluxEntity<long>
     {
         #region Identity
-        public virtual string CorporateName  { get { return get<string>(); } set { set(ref value); } }
-        public virtual string CorporateId  { get { return get<string>(); } set { set(ref value); } } //stuff like cac number, etc. unique
+        public string CorporateName  { get { return get<string>(); } set { set(ref value); } }
+        public string CorporateId  { get { return get<string>(); } set { set(ref value); } } //stuff like cac number, etc. unique
         #endregion
 
         #region Misc

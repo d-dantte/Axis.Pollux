@@ -9,19 +9,19 @@ namespace Axis.Pollux.Identity.Principal
 {
     public abstract class PolluxEntity<Key>: NotifierBase, IEquatable<PolluxEntity<Key>>
     {
-        public virtual Key EntityId
+        public Key EntityId
         {
             get { return get<Key>(); }
             set { set(ref value); }
         }
 
-        public virtual DateTime CreatedOn
+        public DateTime CreatedOn
         {
             get { return get<DateTime>(); }
             set { set(ref value); }
         }
 
-        public virtual DateTime? ModifiedOn
+        public DateTime? ModifiedOn
         {
             get { return get<DateTime?>(); }
             set { set(ref value); }

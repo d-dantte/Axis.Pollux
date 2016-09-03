@@ -14,19 +14,19 @@ namespace Axis.Pollux.Authentication
             set { set(ref value); }
         }
         
-        public virtual byte[] Value
+        public byte[] Value
         {
             get { return get<byte[]>(); }
             set { set(ref value); }
         }
 
-        public virtual string SecuredHash
+        public string SecuredHash
         {
             get { return get<string>(); }
             set { set(ref value); }
         } //hash of data if required is kept here
 
-        public virtual TimeSpan? ExpiresIn
+        public TimeSpan? ExpiresIn
         {
             get { return get<TimeSpan?>(); }
             set { set(ref value); }

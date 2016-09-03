@@ -10,7 +10,7 @@ namespace Axis.Pollux.Identity.Principal
             UId = Guid.NewGuid();
         }
         
-        public virtual string UserId
+        public string UserId
         {
             get { return this.EntityId; }
             set { this.EntityId = value; }
@@ -32,13 +32,13 @@ namespace Axis.Pollux.Identity.Principal
         /// Possible values include: Active, Suspended, Blocked, etc...
         /// </para>
         /// </summary>
-        public virtual int Status
+        public int Status
         {
             get { return get<int>(); }
             set { set(ref value); }
         }
 
-        public virtual Guid UId
+        public Guid UId
         {
             get { return get<Guid>(); }
             set { set(ref value); }

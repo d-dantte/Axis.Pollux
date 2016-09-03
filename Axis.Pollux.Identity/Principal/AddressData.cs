@@ -8,22 +8,22 @@ namespace Axis.Pollux.Identity.Principal
 {
     public class AddressData : PolluxEntity<long>
     {
-        public virtual string Street
+        public string Street
         {
             get { return get<string>(); }
             set { set(ref value); }
         }
-        public virtual string City
+        public string City
         {
             get { return get<string>(); }
             set { set(ref value); }
         }
-        public virtual string StateProvince
+        public string StateProvince
         {
             get { return get<string>(); }
             set { set(ref value); }
         }
-        public virtual string Country
+        public string Country
         {
             get { return get<string>(); }
             set { set(ref value); }
@@ -35,7 +35,7 @@ namespace Axis.Pollux.Identity.Principal
             get { return get<User>(); }
             set { set(ref value); }
         }
-        public virtual string OwnerId
+        public string OwnerId
         {
             get { return get<string>(); }
             set { set(ref value); }
