@@ -33,18 +33,19 @@ namespace Axis.Pollux.CoreAuthentication.Services
                 if (!_context.Store<User>().Query.Any(_user => _user.EntityId == userId)) throw new Exception("could not find user");
                 else
                 {
-                    _context.Store<Credential>().Add(CreateCredential(userId, credential.Value, credential.Metadata));
+                    _context.Store<Credential>().Add(CreateCredential(userId, credential.Value, credential.Metadata, credential.ExpiresIn));
                     _context.CommitChanges();
                 }
             });
 
-        private Credential CreateCredential(string userId, byte[] value, CredentialMetadata metadata)
+        private Credential CreateCredential(string userId, byte[] value, CredentialMetadata metadata, TimeSpan? expiresIn)
             => new Credential
             {
                 OwnerId = userId,
                 Metadata = metadata.ThrowIfNull(),
                 Value = metadata.Access == Access.Public ? value : null,
-                SecuredHash = metadata.Access == Access.Secret ? CredentialHasher.CalculateHash(value) : null
+                SecuredHash = metadata.Access == Access.Secret ? CredentialHasher.CalculateHash(value) : null,
+                ExpiresIn = expiresIn
             };
 
         public Operation DeleteCredential(Credential credential)

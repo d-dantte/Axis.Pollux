@@ -14,6 +14,14 @@ namespace Axis.Pollux.Identity.Principal
         #endregion
 
         #region Misc
+        public string Description
+        {
+            get { return get<string>(); }
+            set { set(ref value); }
+        }
+        #endregion
+
+        #region Misc
         public virtual DateTime? IncorporationDate  { get { return get<DateTime?>(); } set { set(ref value); } }
         #endregion
 

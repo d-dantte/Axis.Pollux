@@ -1,4 +1,5 @@
-﻿using Axis.Pollux.Identity.Principal;
+﻿using Axis.Jupiter.Europa;
+using Axis.Pollux.Identity.Principal;
 
 namespace Axis.Pollux.Identity.OAModule.Mappings
 {
