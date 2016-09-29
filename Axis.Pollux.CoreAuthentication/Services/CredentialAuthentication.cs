@@ -38,7 +38,7 @@ namespace Axis.Pollux.CoreAuthentication.Services
                 }
             });
 
-        private Credential CreateCredential(string userId, byte[] value, CredentialMetadata metadata, TimeSpan? expiresIn)
+        private Credential CreateCredential(string userId, byte[] value, CredentialMetadata metadata, long? expiresIn)
             => new Credential
             {
                 OwnerId = userId,
@@ -65,7 +65,7 @@ namespace Axis.Pollux.CoreAuthentication.Services
                     .FirstOrDefault()
                     .ThrowIfNull("could not find Credential");
 
-                if (dbcred.ExpiresIn <= (DateTime.Now - dbcred.CreatedOn))
+                if (dbcred.ExpiresIn <= (DateTime.Now - dbcred.CreatedOn).Ticks)
                 {
                     credstsore.Modify(dbcred.With(new { Status = CredentialStatus.Inactive })).Context.CommitChanges();
                     throw new Exception("Credential has expired");

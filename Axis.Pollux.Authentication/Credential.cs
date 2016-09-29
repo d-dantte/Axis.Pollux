@@ -26,11 +26,13 @@ namespace Axis.Pollux.Authentication
             set { set(ref value); }
         } //hash of data if required is kept here
 
-        public TimeSpan? ExpiresIn
+        public long? ExpiresIn
         {
-            get { return get<TimeSpan?>(); }
+            get { return get<long?>(); }
             set { set(ref value); }
         }
+
+        public TimeSpan Expires() => TimeSpan.FromTicks(ExpiresIn ?? 0);
 
         public CredentialStatus Status
         {

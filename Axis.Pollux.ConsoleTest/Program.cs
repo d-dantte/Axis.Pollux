@@ -4,6 +4,7 @@ using Axis.Pollux.Identity.OAModule;
 using Axis.Pollux.Identity.Principal;
 using System;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 
 namespace Axis.Pollux.ConsoleTest
@@ -12,6 +13,11 @@ namespace Axis.Pollux.ConsoleTest
     {
         static void Main(string[] args)
         {
+            var finfo = new FileInfo("abcd.xyz");
+            var finfo2 = new FileInfo("abcd.xyz");
+            Console.WriteLine(finfo == finfo2);
+            Console.WriteLine(finfo.Equals(finfo2));
+
             var config = new ContextConfiguration<EuropaContext>()
                 .WithConnection("EuropaContext")
                 .WithInitializer(new System.Data.Entity.DropCreateDatabaseIfModelChanges<EuropaContext>())
