@@ -4,7 +4,7 @@ using System;
 
 namespace Axis.Pollux.Identity.Principal
 {
-    public class UserData: PolluxEntity<long>, IDataAttribute
+    public class UserData: PolluxEntity<long>, IDataItem
     {
         public string Data
         {
