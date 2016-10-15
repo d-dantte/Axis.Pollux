@@ -28,11 +28,15 @@ namespace Axis.Pollux.Authentication
 
         public long? ExpiresIn
         {
-            get { return get<long?>(); }
-            set { set(ref value); }
+            get { return Eval(() => Expires?.Ticks); }
+            set { Expires = Eval(() => new TimeSpan(value.Value)); }
         }
 
-        public TimeSpan Expires() => TimeSpan.FromTicks(ExpiresIn ?? 0);
+        public TimeSpan? Expires
+        {
+            get { return get<TimeSpan?>(); }
+            set { set(ref value); }
+        }
 
         public CredentialStatus Status
         {

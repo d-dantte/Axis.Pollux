@@ -11,6 +11,8 @@ namespace Axis.Pollux.Authentication.OAModule.Mappings
             this.HasRequired(e => e.Owner) //one way to owner
                 .WithMany()
                 .HasForeignKey(e => e.OwnerId);
+
+            this.Ignore(c => c.Expires);
         }
     }
     public class CredentialMetadataMap : BaseComplexMap<CredentialMetadata>
