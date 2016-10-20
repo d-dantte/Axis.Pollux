@@ -19,10 +19,17 @@ namespace Axis.Pollux.Identity.Principal
             get { return get<string>(); }
             set { set(ref value); }
         }
-        #endregion
+        public DateTime? IncorporationDate
+        {
+            get { return get<DateTime?>(); }
+            set { set(ref value); }
+        }
 
-        #region Misc
-        public virtual DateTime? IncorporationDate  { get { return get<DateTime?>(); } set { set(ref value); } }
+        public int Status
+        {
+            get { return get<int>(); }
+            set { set(ref value); }
+        }
         #endregion
 
         #region navigational properties

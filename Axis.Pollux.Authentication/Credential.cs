@@ -28,8 +28,8 @@ namespace Axis.Pollux.Authentication
 
         public long? ExpiresIn
         {
-            get { return Eval(() => Expires?.Ticks); }
-            set { Expires = Eval(() => new TimeSpan(value.Value)); }
+            get { return Eval(() => Expires?.Ticks, ex => null); }
+            set { Expires = Eval(() => new TimeSpan?(new TimeSpan(value.Value)), ex => null); }
         }
 
         public TimeSpan? Expires

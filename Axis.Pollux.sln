@@ -44,6 +44,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TODO.txt = TODO.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{78CF0C7F-FFC8-44C4-9197-AC082F76A70A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Tests", "Axis.Pollux.Tests\Axis.Pollux.Tests.csproj", "{1BEBD5CE-79E9-4140-88BC-E23A456CA974}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +106,10 @@ Global
 		{1436DD65-CAAC-45E8-A61F-02A9C4F2F29E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1436DD65-CAAC-45E8-A61F-02A9C4F2F29E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1436DD65-CAAC-45E8-A61F-02A9C4F2F29E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BEBD5CE-79E9-4140-88BC-E23A456CA974}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BEBD5CE-79E9-4140-88BC-E23A456CA974}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BEBD5CE-79E9-4140-88BC-E23A456CA974}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BEBD5CE-79E9-4140-88BC-E23A456CA974}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,5 +130,6 @@ Global
 		{AD36D2A4-7ED0-4D00-BE9B-0DCD70D12390} = {819BC025-2D32-4CC8-A49B-A2E81C31B3AC}
 		{0F259B59-B07D-4A47-AB8E-8B3425E3C121} = {819BC025-2D32-4CC8-A49B-A2E81C31B3AC}
 		{1436DD65-CAAC-45E8-A61F-02A9C4F2F29E} = {819BC025-2D32-4CC8-A49B-A2E81C31B3AC}
+		{1BEBD5CE-79E9-4140-88BC-E23A456CA974} = {78CF0C7F-FFC8-44C4-9197-AC082F76A70A}
 	EndGlobalSection
 EndGlobal
