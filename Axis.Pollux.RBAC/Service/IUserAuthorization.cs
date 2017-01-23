@@ -2,6 +2,7 @@
 using Axis.Luna;
 using Axis.Pollux.RBAC.Auth;
 using Axis.Pollux.Identity.Principal;
+using System;
 
 namespace Axis.Pollux.RBAC.Services
 {
@@ -13,7 +14,9 @@ namespace Axis.Pollux.RBAC.Services
 
         IQueryable<Role> UserRoles(User user);
 
-        Operation Authorize(PermissionProfile authRequest);
+        Operation AuthorizeAccess(PermissionProfile authRequest, Func<Operation> operation = null);
+
+        Operation<T> AuthorizeAccess<T>(PermissionProfile authRequest, Func<Operation<T>> operation = null);
 
         Operation<Role> CreateRole(string name);
 

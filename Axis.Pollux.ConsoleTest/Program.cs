@@ -2,7 +2,9 @@
 using Axis.Luna.Extensions;
 using Axis.Pollux.Identity.OAModule;
 using Axis.Pollux.Identity.Principal;
+using Axis.Pollux.RBAC.OAModule;
 using System;
+using System.Configuration;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -19,16 +21,15 @@ namespace Axis.Pollux.ConsoleTest
             Console.WriteLine(finfo.Equals(finfo2));
 
             var config = new ContextConfiguration<EuropaContext>()
-                .WithConnection("EuropaContext")
-                .WithInitializer(new System.Data.Entity.DropCreateDatabaseIfModelChanges<EuropaContext>())
+                .WithConnection(ConfigurationManager.ConnectionStrings["EuropaContext"].ConnectionString)
+                .WithInitializer(new DropCreateDatabaseIfModelChanges<EuropaContext>())
                 .UsingModule(new IdentityAccessModuleConfig())
-                //.UsingModule(new XyzModule())
+                .UsingModule(new RBACAccessModuleConfig())
                 .UsingModule(new Authentication.OAModule.AuthenticationAccessModuleConfig());
 
             using (var cxt = new EuropaContext(config))
             {
                 var x = cxt.Store<Authentication.Credential>().Query.FirstOrDefault();
-                var r = cxt.Store<User>().Query;
             }
 
             Console.ReadKey();

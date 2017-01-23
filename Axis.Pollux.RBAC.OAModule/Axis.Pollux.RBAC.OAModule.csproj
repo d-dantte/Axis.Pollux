@@ -59,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContextModelConfig.cs" />
+    <Compile Include="Mappings\PermissionMapping.cs" />
+    <Compile Include="Mappings\ResourceMapping.cs" />
     <Compile Include="Mappings\RoleMapping.cs" />
     <Compile Include="Mappings\UserRoleMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
