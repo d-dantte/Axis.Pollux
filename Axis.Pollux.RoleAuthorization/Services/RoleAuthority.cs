@@ -79,6 +79,21 @@ namespace Axis.Pollux.RBAC.Services
 
 
 
+        public virtual Operation AuthorizeAccess(PermissionProfile authRequest, Action operation = null)
+            => Operation.Try(() =>
+            {
+                ValidatePermissionProfile(authRequest);
+                operation?.Invoke();
+            });
+
+        public virtual Operation<T> AuthorizeAccess<T>(PermissionProfile authRequest, Func<T> operation = null)
+            => Operation.Try(() =>
+            {
+                ValidatePermissionProfile(authRequest);
+                if (operation != null) return operation.Invoke();
+                else return default(T);
+            });
+
         public virtual Operation AuthorizeAccess(PermissionProfile authRequest, Func<Operation> operation = null)
             => Operation.Try(() =>
             {
@@ -86,12 +101,14 @@ namespace Axis.Pollux.RBAC.Services
                 return operation?.Invoke() ?? Operation.NoOp();
             });
 
-        public virtual Operation<T> AuthorizeAccess<T>(PermissionProfile authRequest, Func<Operation<T>> operation  = null)
+        public virtual Operation<T> AuthorizeAccess<T>(PermissionProfile authRequest, Func<Operation<T>> operation = null)
             => Operation.Try(() =>
             {
                 ValidatePermissionProfile(authRequest);
                 return operation?.Invoke() ?? Operation.NoOp<T>();
             });
+
+        private int abcd() => 0;
         #endregion
 
         /// <summary>

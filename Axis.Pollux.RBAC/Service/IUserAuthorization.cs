@@ -18,6 +18,10 @@ namespace Axis.Pollux.RBAC.Services
 
         Operation<T> AuthorizeAccess<T>(PermissionProfile authRequest, Func<Operation<T>> operation = null);
 
+        Operation<T> AuthorizeAccess<T>(PermissionProfile authRequest, Func<T> operation = null);
+
+        Operation AuthorizeAccess(PermissionProfile authRequest, Action operation = null);
+
         Operation<Role> CreateRole(string name);
 
         Operation DeleteUserRole(User user, Role role);
