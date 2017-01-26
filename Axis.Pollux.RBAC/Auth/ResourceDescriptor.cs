@@ -1,8 +1,9 @@
 ﻿using Axis.Pollux.Identity.Principal;
+using System;
 
 namespace Axis.Pollux.RBAC.Auth
 {
-    public class Resource: PolluxEntity<long>
+    public class ResourceDescriptor: PolluxEntity<long>
     {
         public string Name
         {
@@ -13,6 +14,11 @@ namespace Axis.Pollux.RBAC.Auth
         {
             get { return get<string>(); }
             set { set(ref value); }
+        }
+
+        public bool Match(string resourcePath)
+        {
+            throw new NotImplementedException();
         }
     }
 }

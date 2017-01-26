@@ -17,7 +17,7 @@ namespace Axis.Pollux.RoleAuthorization.Services
         {
         }
 
-        protected override Dictionary<string, IEnumerable<Permission>> GetRolePermissions(User user)
-            => _cache.GetOrAdd(user.UserId, _uid => base.GetRolePermissions(user));
+        protected override Dictionary<string, IEnumerable<Permission>> GetUserPermissions(User user)
+            => _cache.GetOrAdd(user.UserId, _uid => base.GetUserPermissions(user));
     }
 }

@@ -52,7 +52,7 @@
     <Compile Include="Auth\Effect.cs" />
     <Compile Include="Auth\PermissionProfile.cs" />
     <Compile Include="Auth\Permission.cs" />
-    <Compile Include="Auth\Resource.cs" />
+    <Compile Include="Auth\ResourceDescriptor.cs" />
     <Compile Include="Auth\ResourceAttribute.cs" />
     <Compile Include="PermissionUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
