@@ -43,7 +43,13 @@ namespace Axis.Pollux.Identity.Principal
                 case CommonDataType.String:
                 case CommonDataType.Url:
                 case CommonDataType.TimeSpan:
+                case CommonDataType.Email:
+                case CommonDataType.Phone:
+                case CommonDataType.Location:
+                case CommonDataType.IPV4:
+                case CommonDataType.IPV6:
                 case CommonDataType.JsonObject: return Data;
+
                 case CommonDataType.DateTime: return Eval(() => DateTime.Parse(Data).ToString(), ex => "");
 
                 case CommonDataType.Binary: return "Binary-Data";

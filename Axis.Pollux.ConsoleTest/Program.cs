@@ -1,5 +1,6 @@
 ﻿using Axis.Jupiter.Europa;
 using Axis.Luna.Extensions;
+using Axis.Pollux.Authentication;
 using Axis.Pollux.Identity.OAModule;
 using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.RBAC.OAModule;
@@ -29,7 +30,14 @@ namespace Axis.Pollux.ConsoleTest
 
             using (var cxt = new EuropaContext(config))
             {
-                var x = cxt.Store<Authentication.Credential>().Query.FirstOrDefault();
+                var user = new User
+                {
+                    EntityId = "something@thisway.comes",
+                    Status = 0
+                };
+
+                dynamic duser = user;
+                cxt.Add(duser).Context.CommitChanges();
             }
 
             Console.ReadKey();
