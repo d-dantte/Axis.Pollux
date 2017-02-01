@@ -10,6 +10,9 @@ using System.Collections.Generic;
 
 namespace Axis.Pollux.RBAC.Services
 {
+    using PermissionMap = Dictionary<string, IEnumerable<Permission>>;
+
+
     public class RoleAuthority : IUserAuthorization
     {
         private Jupiter.IDataContext _context = null;
@@ -43,6 +46,21 @@ namespace Axis.Pollux.RBAC.Services
                join r in _context.Store<Role>().Query on ur.RoleName equals r.EntityId
                where ur.UserId == user.EntityId
                select r;
+        
+        public virtual PermissionMap UserPermissions(User user)
+        {
+            var roles = _context.Store<UserRole>().Query
+                                .Where(_ur => _ur.UserId == user.UserId)
+                                .Select(_ur => _ur.RoleName)
+                                .ToArray();
+
+            return _context.Store<Permission>()
+                           .QueryWith(_p => _p.Role)
+                           .Where(_p => roles.Contains(_p.Role.RoleName))
+                           .GroupBy(_pgroup => _pgroup.Role.RoleName)
+                           .Select(_pgroup => new { Key = _pgroup.Key, Permissions = (IEnumerable<Permission>)_pgroup.ToArray() })
+                           .ToDictionary(_pmap => _pmap.Key, _pmap => _pmap.Permissions);
+        }
 
         public virtual Operation<Role> CreateRole(string name)
             => Operation.Run(() => _context.Store<Role>()
@@ -116,7 +134,7 @@ namespace Axis.Pollux.RBAC.Services
         /// <param name="authRequest"></param>
         protected void ValidatePermissionProfile(PermissionProfile authRequest)
         {
-            GetUserPermissions(authRequest.Principal).Values
+            UserPermissions(authRequest.Principal).Values
 
                 //flatten the permissions
                 .SelectMany(_rps => _rps)
@@ -139,21 +157,6 @@ namespace Axis.Pollux.RBAC.Services
                 //if the permission profile requires that permission to ANY of the given resources is adequate
                 .ThrowIf(_mgroups => authRequest.CombinationMethod == CombinationMethod.Any &&
                          !_mgroups.Any(_mgroup => _mgroup.Effect == Effect.Grant), "Access Denied");
-        }
-
-        protected virtual Dictionary<string, IEnumerable<Permission>> GetUserPermissions(User user)
-        {
-            var roles = _context.Store<UserRole>().Query
-                                .Where(_ur => _ur.UserId == user.UserId)
-                                .Select(_ur => _ur.RoleName)
-                                .ToArray();
-
-            return _context.Store<Permission>()
-                           .QueryWith(_p => _p.Role)
-                           .Where(_p => roles.Contains(_p.Role.RoleName))
-                           .GroupBy(_pgroup => _pgroup.Role.RoleName)
-                           .Select(_pgroup => new { Key = _pgroup.Key, Permissions = (IEnumerable<Permission>)_pgroup.ToArray() })
-                           .ToDictionary(_pmap => _pmap.Key, _pmap => _pmap.Permissions);
         }
     }
 }

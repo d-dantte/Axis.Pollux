@@ -38,6 +38,9 @@ namespace Axis.Pollux.Authentication
             set { set(ref value); }
         }
 
+        /// <summary>
+        /// At what point does a credential become inactive?
+        /// </summary>
         public CredentialStatus Status
         {
             get { return get<CredentialStatus>(); }

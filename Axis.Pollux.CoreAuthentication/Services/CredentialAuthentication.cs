@@ -33,7 +33,22 @@ namespace Axis.Pollux.CoreAuthentication.Services
                 if (!_context.Store<User>().Query.Any(_user => _user.EntityId == userId)) throw new Exception("could not find user");
                 else
                 {
-                    _context.Store<Credential>().Add(CreateCredential(userId, credential.Value, credential.Metadata, credential.ExpiresIn));
+                    var credStore = _context.Store<Credential>();
+
+                    //find and deactivate any old credentials of the same name and access belonging to the user
+                    var oldCred = credStore.Query
+                        .Where(_cred => _cred.Metadata.Name == credential.Metadata.Name)
+                        .Where(_cred => _cred.Metadata.Access == credential.Metadata.Access)
+                        .Where(_cred => _cred.OwnerId == userId)
+                        .OrderByDescending(_cred => _cred.CreatedOn)
+                        .FirstOrDefault();                    
+                    if (oldCred != null) //deactivate
+                    {
+                        oldCred.Status = CredentialStatus.Inactive;
+                        credStore.Modify(oldCred);
+                    }
+
+                    credStore.Add(CreateCredential(userId, credential.Value, credential.Metadata, credential.ExpiresIn));
                     _context.CommitChanges();
                 }
             });
@@ -62,6 +77,7 @@ namespace Axis.Pollux.CoreAuthentication.Services
                     .Where(c => c.OwnerId == credential.OwnerId)
                     .Where(c => c.Metadata.Name == credential.Metadata.Name)
                     .Where(c => c.Status == CredentialStatus.Active)
+                    .OrderByDescending(c => c.CreatedOn)
                     .FirstOrDefault()
                     .ThrowIfNull("could not find Credential");
 
@@ -78,17 +94,15 @@ namespace Axis.Pollux.CoreAuthentication.Services
                         !dbcred.Value.SequenceEqual(credential.Value)) throw new Exception("Invalid Credential");
             });
 
-        public Operation ModifyCredential(Credential oldValue, byte[] newValue)
+        public Operation ModifyCredential(Credential modifiedCredential)
             => Operation.Run(() =>
             {
                 var store = _context.Store<Credential>();
-                return this.VerifyCredential(oldValue)
-                           .Then(_opr => store.Query
-                                              .Where(_cred => _cred.Metadata.Name == oldValue.Metadata.Name)
-                                              .Where(_cred => _cred.OwnerId == oldValue.OwnerId)
-                                              .FirstOrDefault()
-                                              .ThrowIfNull("could not find credential")
-                                              .Do(_cred => store.Modify(_cred.With(new { Value = oldValue.Value }), true)));
+                return this.VerifyCredential(modifiedCredential)
+                           .Then(_opr =>
+                           {
+                               store.Modify(modifiedCredential, true);
+                           });
             });
         #endregion
     }
