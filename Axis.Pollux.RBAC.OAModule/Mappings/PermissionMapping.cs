@@ -7,9 +7,6 @@ namespace Axis.Pollux.RBAC.OAModule.Mappings
     {
         public PermissionMapping()
         {
-            this.HasRequired(_e => _e.ResourceSelector)
-                .WithMany();
-
             this.HasRequired(_e => _e.Role)
                 .WithMany();
         }
