@@ -4,9 +4,9 @@ namespace Axis.Pollux.RBAC.Auth
 {
     public class Permission: PolluxEntity<long>
     {
-        public ResourceDescriptor Resource
+        public string ResourceSelector
         {
-            get { return get<ResourceDescriptor>(); }
+            get { return get<string>(); }
             set { set(ref value); }
         }
 

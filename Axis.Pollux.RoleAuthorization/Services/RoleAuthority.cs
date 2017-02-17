@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 namespace Axis.Pollux.RBAC.Services
 {
+    using Exceptions;
     using PermissionMap = Dictionary<string, IEnumerable<Permission>>;
 
 
@@ -140,7 +141,7 @@ namespace Axis.Pollux.RBAC.Services
                 .SelectMany(_rps => _rps)
 
                 //cross multiply the permissions with the resources in the permission profile, then filter out permissions that dont apply to the resource
-                .SelectMany(_rp => authRequest.ResourcePaths.Select(_r => new { Matched = _rp.Resource.Match(_r), Resource = _r, Permission = _rp }).Where(_m => _m.Matched))
+                .SelectMany(_rp => authRequest.ResourcePaths.Select(_r => new { Matched = new ResourceSelector(_rp.ResourceSelector).Match(_r), Resource = _r, Permission = _rp }).Where(_m => _m.Matched))
 
                 //Group by the resource names (from those that matched)
                 .GroupBy(_m => _m.Resource)
@@ -148,15 +149,16 @@ namespace Axis.Pollux.RBAC.Services
                 //get the combined effect for each group
                 .Select(_mgroup => new { Resource = _mgroup.Key, Effect = _mgroup.Select(_m => _m.Permission.Effect).Combine() })
 
-                //if the permission profile requires that permission to all resources must be granted
+                //if the permission profile requires that permission to all resources must be granted...
                 .ThrowIf(_mgroups => authRequest.CombinationMethod == CombinationMethod.All &&
                          (_mgroups.Count() != authRequest.ResourcePaths.Count() || //all resources must be represented by groups
                           _mgroups.Select(_mgroup => _mgroup.Effect).Combine() == Effect.Deny), //all effecs must be Granted
-                         "Access Denied")
+                         new AuthorizationException("Access Denied"))
 
                 //if the permission profile requires that permission to ANY of the given resources is adequate
                 .ThrowIf(_mgroups => authRequest.CombinationMethod == CombinationMethod.Any &&
-                         !_mgroups.Any(_mgroup => _mgroup.Effect == Effect.Grant), "Access Denied");
+                         !_mgroups.Any(_mgroup => _mgroup.Effect == Effect.Grant),
+                         new AuthorizationException("Access Denied"));
         }
     }
 }

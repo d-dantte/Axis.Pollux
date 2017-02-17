@@ -3,9 +3,9 @@ using System;
 
 namespace Axis.Pollux.RBAC.Auth
 {
-    public class ResourceDescriptor: PolluxEntity<long>
+    public class Resource: PolluxEntity<long>
     {
-        public string Name
+        public string Path
         {
             get { return get<string>(); }
             set { set(ref value); }
@@ -14,11 +14,6 @@ namespace Axis.Pollux.RBAC.Auth
         {
             get { return get<string>(); }
             set { set(ref value); }
-        }
-
-        public bool Match(string resourcePath)
-        {
-            throw new NotImplementedException();
         }
     }
 }

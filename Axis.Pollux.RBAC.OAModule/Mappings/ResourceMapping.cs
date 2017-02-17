@@ -3,7 +3,7 @@ using Axis.Pollux.RBAC.Auth;
 
 namespace Axis.Pollux.RBAC.OAModule.Mappings
 {
-    public class ResourceMapping: BaseMap<ResourceDescriptor, long>
+    public class ResourceMapping: BaseMap<Resource, long>
     {
         public ResourceMapping()
         {
