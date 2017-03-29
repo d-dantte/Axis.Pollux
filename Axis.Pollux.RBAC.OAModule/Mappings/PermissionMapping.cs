@@ -7,8 +7,12 @@ namespace Axis.Pollux.RBAC.OAModule.Mappings
     {
         public PermissionMapping()
         {
+            this.Property(e => e.RoleId)
+                .HasMaxLength(400);
+
             this.HasRequired(_e => _e.Role)
-                .WithMany();
+                .WithMany()
+                .HasForeignKey(e => e.RoleId);
         }
     }
 }

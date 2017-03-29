@@ -6,104 +6,95 @@ using System;
 using System.Linq;
 using Axis.Luna;
 using Axis.Pollux.Authentication;
-using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.Authentication.Service;
+using Axis.Pollux.Authentication.Queries;
+using Axis.Jupiter.Kore.Command;
 
 namespace Axis.Pollux.CoreAuthentication.Services
 {
     public class CredentialAuthentication: ICredentialAuthentication
     {
-        private Jupiter.IDataContext _context = null;
+        private IAuthenticationQuery _query;
+        private IPersistenceCommands _pcommand;
+
         public ICredentialHasher CredentialHasher { get; private set; }
-
-        //public CredentialAuthentication(Jupiter.IDataContext dataContext) : this(dataContext, null)
-        //{ }
-        public CredentialAuthentication(Jupiter.IDataContext dataContext, ICredentialHasher hasher)
+        
+        public CredentialAuthentication(IAuthenticationQuery query, 
+                                        IPersistenceCommands pcommand,
+                                        ICredentialHasher hasher)
         {
-            ThrowNullArguments(() => dataContext);
+            ThrowNullArguments(() => query, () => pcommand);
 
-            _context = dataContext;
+            _query = query;
+            _pcommand = pcommand;
             CredentialHasher = hasher ?? new DefaultHasher();
         }
 
         #region ICredentialAuthentication
         public Operation AssignCredential(string userId, Credential credential)
-            => Operation.Run(() =>
+        => Operation.Run(() =>
+        {
+            if (!_query.UserExists(userId)) throw new Exception("could not find user");
+            else
             {
-                if (!_context.Store<User>().Query.Any(_user => _user.EntityId == userId)) throw new Exception("could not find user");
-                else
+                //find and deactivate any old credentials of the same name and access belonging to the user
+                var oldCred = _query.GetCredential(userId, credential.Metadata);                    
+                if (oldCred != null) //deactivate
                 {
-                    var credStore = _context.Store<Credential>();
-
-                    //find and deactivate any old credentials of the same name and access belonging to the user
-                    var oldCred = credStore.Query
-                        .Where(_cred => _cred.Metadata.Name == credential.Metadata.Name)
-                        .Where(_cred => _cred.Metadata.Access == credential.Metadata.Access)
-                        .Where(_cred => _cred.OwnerId == userId)
-                        .OrderByDescending(_cred => _cred.CreatedOn)
-                        .FirstOrDefault();                    
-                    if (oldCred != null) //deactivate
-                    {
-                        oldCred.Status = CredentialStatus.Inactive;
-                        credStore.Modify(oldCred);
-                    }
-
-                    credStore.Add(CreateCredential(userId, credential.Value, credential.Metadata, credential.ExpiresIn));
-                    _context.CommitChanges();
+                    oldCred.Status = CredentialStatus.Inactive;
+                    _pcommand.Update(oldCred).Resolve();
                 }
-            });
 
-        private Credential CreateCredential(string userId, byte[] value, CredentialMetadata metadata, long? expiresIn)
-            => new Credential
-            {
-                OwnerId = userId,
-                Metadata = metadata.ThrowIfNull(),
-                Value = metadata.Access == Access.Public ? value : null,
-                SecuredHash = metadata.Access == Access.Secret ? CredentialHasher.CalculateHash(value) : null,
-                ExpiresIn = expiresIn
-            };
+                _pcommand.Add(CreateCredential(userId, credential.Value, credential.Metadata, credential.ExpiresIn))
+                         .Resolve();
+            }
+        });
+
+        private Credential CreateCredential(string userId, byte[] value, CredentialMetadata metadata, long? expiresIn) => CreateCredential(0, userId, value, metadata, expiresIn);
+
+        private Credential CreateCredential(long entityId, string userId, byte[] value, CredentialMetadata metadata, long? expiresIn)
+        => new Credential
+        {
+            EntityId = entityId,
+            OwnerId = userId,
+            Metadata = metadata.ThrowIfNull(),
+            Value = metadata.Access == Access.Public ? value : null,
+            SecuredHash = metadata.Access == Access.Secret ? CredentialHasher.CalculateHash(value) : null,
+            ExpiresIn = expiresIn
+        };
 
         public Operation DeleteCredential(Credential credential)
-            => Operation.Run(() =>
-            {
-                _context.Store<Credential>().Delete(credential, true);
-            });
+        => Operation.Run(() =>
+        {
+            _pcommand.Delete(credential).Resolve();
+        });
 
         public Operation VerifyCredential(Credential credential)
-            => Operation.Run(() =>
+        => Operation.Run(() =>
+        {
+            var dbcred = _query
+                .GetCredential(credential.OwnerId, credential.Metadata)
+                .ThrowIf(_c => _c.Status != CredentialStatus.Active, "credential is not active")
+                .ThrowIfNull("could not find Credential");
+
+            if (dbcred.ExpiresIn <= (DateTime.Now - dbcred.CreatedOn).Ticks)
             {
-                var credstsore = _context.Store<Credential>();
-                var dbcred = credstsore.Query
-                    .Where(c => c.OwnerId == credential.OwnerId)
-                    .Where(c => c.Metadata.Name == credential.Metadata.Name)
-                    .Where(c => c.Status == CredentialStatus.Active)
-                    .OrderByDescending(c => c.CreatedOn)
-                    .FirstOrDefault()
-                    .ThrowIfNull("could not find Credential");
+                _pcommand.Update(dbcred.With(new { Status = CredentialStatus.Inactive })).Resolve();
+                throw new Exception("Credential has expired");
+            }
 
-                if (dbcred.ExpiresIn <= (DateTime.Now - dbcred.CreatedOn).Ticks)
-                {
-                    credstsore.Modify(dbcred.With(new { Status = CredentialStatus.Inactive })).Context.CommitChanges();
-                    throw new Exception("Credential has expired");
-                }
+            if (dbcred.Metadata.Access == Access.Secret &&
+               !CredentialHasher.IsValidHash(credential.Value, dbcred.SecuredHash)) throw new Exception("Invalid Credential");
 
-                if (dbcred.Metadata.Access == Access.Secret &&
-                   !CredentialHasher.IsValidHash(credential.Value, dbcred.SecuredHash)) throw new Exception("Invalid Credential");
+            else if (dbcred.Metadata.Access == Access.Public &&
+                    !dbcred.Value.SequenceEqual(credential.Value)) throw new Exception("Invalid Credential");
+        });
 
-                else if (dbcred.Metadata.Access == Access.Public &&
-                        !dbcred.Value.SequenceEqual(credential.Value)) throw new Exception("Invalid Credential");
-            });
-
-        public Operation ModifyCredential(Credential modifiedCredential)
-            => Operation.Run(() =>
-            {
-                var store = _context.Store<Credential>();
-                return this.VerifyCredential(modifiedCredential)
-                           .Then(_opr =>
-                           {
-                               store.Modify(modifiedCredential, true);
-                           });
-            });
+        public Operation ModifyCredential(Credential old, Credential @new)
+        => VerifyCredential(old).Then(_opr =>
+        {
+            _pcommand.Update(CreateCredential(old.EntityId, old.OwnerId, @new.Value, old.Metadata, old.ExpiresIn)).Resolve();
+        });
         #endregion
     }
 }

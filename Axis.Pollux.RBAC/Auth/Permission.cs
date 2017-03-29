@@ -15,6 +15,11 @@ namespace Axis.Pollux.RBAC.Auth
             get { return get<Role>(); }
             set { set(ref value); }
         }
+        public string RoleId
+        {
+            get { return get<string>(); }
+            set { set(ref value); }
+        }
 
         public Effect Effect
         {

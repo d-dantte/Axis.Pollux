@@ -1,6 +1,5 @@
 ﻿using Axis.Jupiter.Europa;
 using Axis.Luna.Extensions;
-using Axis.Pollux.Authentication;
 using Axis.Pollux.Identity.OAModule;
 using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.RBAC.OAModule;
@@ -14,6 +13,14 @@ namespace Axis.Pollux.ConsoleTest
 {
     class Program
     {
+        public static readonly ContextConfiguration<EuropaContext> Config = new ContextConfiguration<EuropaContext>()
+                .WithConnection(ConfigurationManager.ConnectionStrings["EuropaContext"].ConnectionString)
+                .WithInitializer(new DropCreateDatabaseIfModelChanges<EuropaContext>())
+                .UsingModule(new IdentityAccessModuleConfig())
+                .UsingModule(new RBACAccessModuleConfig())
+                .UsingModule(new Authentication.OAModule.AuthenticationAccessModuleConfig());
+
+
         static void Main(string[] args)
         {
             var finfo = new FileInfo("abcd.xyz");
@@ -21,23 +28,35 @@ namespace Axis.Pollux.ConsoleTest
             Console.WriteLine(finfo == finfo2);
             Console.WriteLine(finfo.Equals(finfo2));
 
-            var config = new ContextConfiguration<EuropaContext>()
-                .WithConnection(ConfigurationManager.ConnectionStrings["EuropaContext"].ConnectionString)
-                .WithInitializer(new DropCreateDatabaseIfModelChanges<EuropaContext>())
-                .UsingModule(new IdentityAccessModuleConfig())
-                .UsingModule(new RBACAccessModuleConfig())
-                .UsingModule(new Authentication.OAModule.AuthenticationAccessModuleConfig());
+            var config = Config;
 
             using (var cxt = new EuropaContext(config))
             {
+                cxt.Configuration.AutoDetectChangesEnabled = false;
                 var user = new User
                 {
                     EntityId = "something@thisway.comes",
-                    Status = 0
+                    Status = 1
                 };
 
-                dynamic duser = user;
-                cxt.Add(duser).Context.CommitChanges();
+                //cxt.Add(user).Context.CommitChanges();
+
+                user = new User
+                {
+                    EntityId = "something@thisway.comes",
+                    Status = 2
+                };
+                cxt.Modify(user).Context.CommitChanges();
+
+                var ud = new UserData
+                {
+                    Data = "dafdfa",
+                    Name = "here-it",
+                    Type = Luna.CommonDataType.String,
+                    OwnerId = "something@thisway.comes",
+                    //Owner = new User { EntityId = "something@thisway.comes" }
+                };
+                cxt.Add(ud).Context.CommitChanges();
             }
 
             Console.ReadKey();

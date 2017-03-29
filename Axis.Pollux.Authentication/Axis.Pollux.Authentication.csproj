@@ -51,6 +51,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="ICredentialHasher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\IAuthenticationQuery.cs" />
     <Compile Include="Service\ICredentialAuthentication.cs" />
   </ItemGroup>
   <ItemGroup>

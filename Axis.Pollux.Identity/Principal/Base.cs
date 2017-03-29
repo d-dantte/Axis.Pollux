@@ -4,6 +4,7 @@ using static Axis.Luna.Extensions.ExceptionExtensions;
 using System;
 using System.ComponentModel;
 using Axis.Narvi.Notify;
+using Axis.Luna;
 
 namespace Axis.Pollux.Identity.Principal
 {
@@ -33,6 +34,8 @@ namespace Axis.Pollux.Identity.Principal
             if (e.PropertyName != nameof(ModifiedOn) &&
                 e.PropertyName != nameof(CreatedOn)) this.ModifiedOn = DateTime.Now;
         }
+
+        public virtual Operation Validate() => Operation.NoOp();
 
         public virtual bool Equals(PolluxEntity<Key> other) => other?.EntityId.Equals(EntityId) ?? false;
 

@@ -59,6 +59,7 @@ namespace Axis.Pollux.RBAC.Services
                            .QueryWith(_p => _p.Role)
                            .Where(_p => roles.Contains(_p.Role.RoleName))
                            .GroupBy(_pgroup => _pgroup.Role.RoleName)
+                           .ToArray()
                            .Select(_pgroup => new { Key = _pgroup.Key, Permissions = (IEnumerable<Permission>)_pgroup.ToArray() })
                            .ToDictionary(_pmap => _pmap.Key, _pmap => _pmap.Permissions);
         }
@@ -123,8 +124,19 @@ namespace Axis.Pollux.RBAC.Services
         public virtual Operation<T> AuthorizeAccess<T>(PermissionProfile authRequest, Func<Operation<T>> operation = null)
             => Operation.Try(() =>
             {
-                ValidatePermissionProfile(authRequest);
-                return operation?.Invoke() ?? Operation.NoOp<T>();
+                try
+                {
+                    ValidatePermissionProfile(authRequest);
+                    return operation?.Invoke() ?? Operation.NoOp<T>();
+                }
+                catch(AuthorizationException ae)
+                {
+                    throw ae;
+                }
+                catch(Exception e)
+                {
+                    throw new AuthorizationException("See Inner Exception", e);
+                }
             });
         
         #endregion
@@ -135,13 +147,19 @@ namespace Axis.Pollux.RBAC.Services
         /// <param name="authRequest"></param>
         protected void ValidatePermissionProfile(PermissionProfile authRequest)
         {
+            if (authRequest.ResourcePaths.Count() == 0) return;
+
             UserPermissions(authRequest.Principal).Values
 
                 //flatten the permissions
                 .SelectMany(_rps => _rps)
 
                 //cross multiply the permissions with the resources in the permission profile, then filter out permissions that dont apply to the resource
-                .SelectMany(_rp => authRequest.ResourcePaths.Select(_r => new { Matched = new ResourceSelector(_rp.ResourceSelector).Match(_r), Resource = _r, Permission = _rp }).Where(_m => _m.Matched))
+                .SelectMany(_rp =>
+                {
+                    var selector = new ResourceSelector(_rp.ResourceSelector);
+                    return authRequest.ResourcePaths.Select(_r => new { Matched = selector.Match(_r), Resource = _r, Permission = _rp }).Where(_m => _m.Matched);
+                })
 
                 //Group by the resource names (from those that matched)
                 .GroupBy(_m => _m.Resource)

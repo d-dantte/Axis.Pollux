@@ -16,6 +16,8 @@ namespace Axis.Pollux.Identity.Principal
         public string AlternateEmail  { get { return get<string>(); } set { set(ref value); } }
         public bool EmailConfirmed  { get { return get<bool>(); } set { set(ref value); } }
 
+        public ContactStatus Status { get; set; }
+
         #region navigational properties
         public virtual User Owner  { get { return get<User>(); } set { set(ref value); } }
         public virtual string OwnerId  { get { return get<string>(); } set { set(ref value); } }
@@ -24,5 +26,11 @@ namespace Axis.Pollux.Identity.Principal
         public ContactData()
         {
         }
+    }
+
+    public enum ContactStatus
+    {
+        Current,
+        Archived
     }
 }

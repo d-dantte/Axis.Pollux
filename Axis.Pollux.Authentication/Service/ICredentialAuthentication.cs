@@ -12,6 +12,6 @@ namespace Axis.Pollux.Authentication.Service
 
         Operation AssignCredential(string userId, Credential credential);
 
-        Operation ModifyCredential(Credential modifiedCredential);
+        Operation ModifyCredential(Credential old, Credential @new);
     }
 }
