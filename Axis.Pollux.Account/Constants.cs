@@ -16,6 +16,7 @@ namespace Axis.Pollux.Account
 
         #region VerificationContext
         public static readonly string VerificationContext_CredentialResetPrefix = "Axis.Pollux.Account.VerificationContext/";
+        public static readonly string VerificationContext_UserActivation = "Axis.Pollux.Account.UserActivation";
         #endregion
     }
 }

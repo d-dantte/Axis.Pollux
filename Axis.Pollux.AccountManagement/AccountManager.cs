@@ -54,20 +54,41 @@ namespace Axis.Pollux.AccountManagement
             return user;
         });
 
-        public virtual Operation<ContextVerification> CreateVerificationObject(string userId, string verificationContext, DateTime expiryDate)
+        public virtual Operation<ContextVerification> GenerateContextVerification(string targetUser, string verificationContext, DateTime expiryDate)
         => Operation.Try(() =>
         {
-            var user = _query.GetUser(userId).ThrowIfNull("user not found");
-            var _cv = new ContextVerification
-            {
-                Context = verificationContext,
-                ExpiresOn = expiryDate,
-                Target = user,
-                VerificationToken = GenerateToken(),
-                Verified = false
-            };
+            var user = _query.GetUser(targetUser).ThrowIfNull("user not found");
+            if (user.Status != Constants.UserStatus_Active) throw new Exception("invalid account state");
 
-            return _pcommand.Add(_cv);
+            var verification = _query.GetLatestVerification(user.UserId, verificationContext);
+
+            //if no unverified context still exists in the db, create a new one
+            if (verification == null ||
+                verification.Verified ||
+                verification.ExpiresOn <= DateTime.Now) return _pcommand.Add(new ContextVerification
+                {
+                    Context = verificationContext,
+                    ExpiresOn = expiryDate,
+                    Target = user,
+                    VerificationToken = GenerateToken(),
+                    Verified = false
+                })
+                .Resolve();
+
+            else return verification;
+        });
+
+        public virtual Operation<User> ActivateUser(string targetUser)
+        => Operation.Try(() =>
+        {
+            var user = _query.GetUser(targetUser);
+            if (user?.Status == Constants.UserStatus_InActive)
+            {
+                //activate the user
+                user.Status = Constants.UserStatus_Active;
+                return _pcommand.Update(user);
+            }
+            else throw new Exception("user not found");
         });
 
         public virtual Operation<User> DeactivateUser(string targetUser)
@@ -93,46 +114,40 @@ namespace Axis.Pollux.AccountManagement
         });
 
         public virtual Operation<ContextVerification> GenrateCredentialResetVerification(string targetUser, CredentialMetadata meta, TimeSpan validityDuration)
-        => Operation.Try(() =>
-        {
-            var user = _query.GetUser(targetUser);
-            if (user.Status != Constants.UserStatus_Active) throw new Exception("invalid account state");
-
-            var context = Constants.VerificationContext_CredentialResetPrefix + $"{meta.Access}-{meta.Name}";
-            var verification = _query.GetLatestVerification(user.UserId, context);
-
-            //if no unverified context still exists in the db, create a new one
-            if (verification == null || verification.Verified || verification.ExpiresOn <= DateTime.Now)
-                return CreateVerificationObject(targetUser, context, DateTime.Now - validityDuration).Resolve();
-
-            else return verification;
-        });
+        => GenerateContextVerification(targetUser, 
+                                       Constants.VerificationContext_CredentialResetPrefix + $"{meta.Access}-{meta.Name}", 
+                                       DateTime.Now - validityDuration);
 
         public Operation<ContextVerification> GenerateUserActivationVerification(string targetUser, TimeSpan validityDuration)
-        {
-            throw new NotImplementedException();
-        }
+        => GenerateContextVerification(targetUser,
+                                       Constants.VerificationContext_UserActivation,
+                                       DateTime.Now - validityDuration);
 
 
-        public virtual Operation ResetCredential(Credential newCredential, string verificationToken, string targetUser)
-        {
-            throw new NotImplementedException();
-        }
+        public virtual Operation ResetCredential(string targetUser, Credential @new, string verificationToken)
+        => VerifyContext(targetUser,
+                         Constants.VerificationContext_CredentialResetPrefix + $"{@new.Metadata.Access}-{@new.Metadata.Name}",
+                         verificationToken)
+                        .Then(opr => _credAuth.AssignCredential(targetUser, @new));
 
         public virtual Operation<long> UserCount()
-        {
-            throw new NotImplementedException();
-        }
+        => Operation.Try(() => _query.UserCount());
 
         public virtual Operation VerifyContext(string userId, string verificationContext, string token)
+        => Operation.Try(() =>
         {
-            throw new NotImplementedException();
-        }
+            var cv = _query.GetContextVerification(userId, verificationContext, token)
+                           .ThrowIf(_cv => _cv == null || _cv.Verified, "verification token is invalid");
 
-        public virtual Operation<User> VerifyUserActivation(string targetUser, string contextToken)
-        {
-            throw new NotImplementedException();
-        }
+            cv.Verified = true;
+            _pcommand.Update(cv).Resolve();
+        });
+
+        public virtual Operation<User> VerifyUserActivation(string targetUser, string verificationToken)
+        => VerifyContext(targetUser,
+                         Constants.VerificationContext_UserActivation,
+                         verificationToken)
+                        .Then(opr => ActivateUser(targetUser));
 
 
         private string GenerateToken() => RandomAlphaNumericGenerator.RandomAlphaNumeric(50);

@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="ContextModuleConfig.cs" />
     <Compile Include="Mappings\ContextVerificationMap.cs" />
+    <Compile Include="Mappings\UserLogonMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AccountQuery.cs" />
   </ItemGroup>

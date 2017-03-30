@@ -1,4 +1,5 @@
-﻿using Axis.Pollux.Account.Objects;
+﻿using Axis.Jupiter.Europa;
+using Axis.Pollux.Account.Objects;
 using Axis.Pollux.Identity.OAModule.Mappings;
 
 namespace Axis.Pollux.Account.OAModule.Mappings
@@ -10,7 +11,11 @@ namespace Axis.Pollux.Account.OAModule.Mappings
             ///Conifgure Relationships.
             this.HasRequired(e => e.Target) //one way to owner
                 .WithMany()
-                .HasForeignKey(e => e.TargetId);            
+                .HasForeignKey(e => e.TargetId);
+
+            this.Property(e => e.VerificationToken)
+                .HasMaxLength(100)
+                .IsIndex("VerificationContextName", true); //<-- do i need this to be unique?
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Axis.Pollux.Account
         Operation<User> RegisterUser(string targetUser, int userStatus, Credential secretCredential);
 
         Operation<User> DeactivateUser(string targetUser);
+        Operation<User> ActivateUser(string targetUser);
 
         /// <summary>
         /// Enables an administrator (or @root) to block a target user
@@ -31,12 +32,12 @@ namespace Axis.Pollux.Account
 
         Operation<ContextVerification> GenrateCredentialResetVerification(string targetUser, CredentialMetadata credentialMetadata, TimeSpan validityDuration);
 
-        Operation ResetCredential(Credential newCredential, string verificationToken, string targetUser);
+        Operation ResetCredential(string targetUser, Credential newCredential, string verificationToken);
 
         #endregion
 
         #region Context Verification
-        Operation<ContextVerification> CreateVerificationObject(string userId, string verificationContext, DateTime expiryDate);
+        Operation<ContextVerification> GenerateContextVerification(string userId, string verificationContext, DateTime expiryDate);
 
         Operation VerifyContext(string userId, string verificationContext, string token);
         #endregion

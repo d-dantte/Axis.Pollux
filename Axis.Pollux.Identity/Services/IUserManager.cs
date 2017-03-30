@@ -17,8 +17,8 @@ namespace Axis.Pollux.Identity.Services
         Operation<ContactData> UpdateContactData(ContactData data);
 
         Operation<ContactData> ArchiveContactData(long id);
-        
-        Operation<SequencePage<ContactData>> GetAllContactData(int pageSize = 500, int pageIndex = 0, bool includeCount = true)
+
+        Operation<SequencePage<ContactData>> GetAllContactData(int pageSize = 500, int pageIndex = 0, bool includeCount = true);
         #endregion
 
         #region User data
