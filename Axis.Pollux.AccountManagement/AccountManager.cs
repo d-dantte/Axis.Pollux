@@ -37,7 +37,7 @@ namespace Axis.Pollux.AccountManagement
             _userManager = userManager;
         }
 
-        public virtual Operation<User> RegisterUser(string targetUser, int userStatus, Authentication.Credential secretCredential)
+        public virtual Operation<User> RegisterUser(string targetUser, int userStatus, Credential secretCredential)
         => _userManager.CreateUser(targetUser, userStatus)
                        .Then(opr => opr.Result.UsingValue(u => _credAuth.AssignCredential(u.UserId, secretCredential)));
 

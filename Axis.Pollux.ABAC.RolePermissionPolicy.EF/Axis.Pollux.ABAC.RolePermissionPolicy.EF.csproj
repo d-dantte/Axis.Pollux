@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{262C7913-179E-47DA-9931-428FA163FF52}</ProjectGuid>
+    <ProjectGuid>{A259D47A-442B-4E65-8654-02EB4898490D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Axis.Pollux.AttributeAuthorization</RootNamespace>
-    <AssemblyName>Axis.Pollux.AttributeAuthorization</AssemblyName>
+    <RootNamespace>Axis.Pollux.ABAC.RolePermissionPolicy.EF</RootNamespace>
+    <AssemblyName>Axis.Pollux.ABAC.RolePermissionPolicy.EF</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,16 +31,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Axis.Jupiter">
-      <HintPath>..\..\Axis.Jupiter\Axis.Jupiter\bin\Debug\Axis.Jupiter.dll</HintPath>
+      <HintPath>..\..\..\..\..\Jobs\BitDiamond\Dev\Git\Libs\Axis.Jupiter.dll</HintPath>
     </Reference>
-    <Reference Include="Axis.Jupiter.Kore">
-      <HintPath>..\..\Axis.Jupiter\Axis.Jupiter.Kore\bin\Debug\Axis.Jupiter.Kore.dll</HintPath>
+    <Reference Include="Axis.Jupiter.Europa">
+      <HintPath>..\..\..\..\..\Jobs\BitDiamond\Dev\Git\Libs\Axis.Jupiter.Europa.dll</HintPath>
     </Reference>
     <Reference Include="Axis.Luna">
-      <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
+      <HintPath>..\..\..\..\..\Jobs\BitDiamond\Dev\Git\Libs\Axis.Luna.dll</HintPath>
     </Reference>
     <Reference Include="Axis.Narvi">
-      <HintPath>..\..\Axis.Narvi\Axis.Narvi\bin\Debug\Axis.Narvi.dll</HintPath>
+      <HintPath>..\..\..\..\..\Jobs\BitDiamond\Dev\Git\Libs\Axis.Narvi.dll</HintPath>
     </Reference>
     <Reference Include="Axis.Sigma.Core">
       <HintPath>..\..\Axis.Sigma\Axis.Sigma.Core\bin\Debug\Axis.Sigma.Core.dll</HintPath>
@@ -55,32 +55,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="ContextModuleConfig.cs" />
+    <Compile Include="Mappings\RolePermissionMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IntentMap.cs" />
-    <Compile Include="Query\IUserAttributeQuery.cs" />
-    <Compile Include="Services\OperationAccessContextAttributeSource.cs" />
-    <Compile Include="Services\OperationAuthorizationFactory.cs" />
-    <Compile Include="Services\OperationIntentAttributeSource.cs" />
-    <Compile Include="Services\UserAttributeManager.cs" />
-    <Compile Include="Services\UserContextAttributeSource.cs" />
-    <Compile Include="Services\OperationAuthorizer.cs" />
+    <Compile Include="Queries\RolePermissionQuery.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Axis.Pollux.ABAC.RolePermissionPolicy\Axis.Pollux.ABAC.RolePermissionPolicy.csproj">
+      <Project>{df7c9a73-6ace-4e39-b14e-9fc896b0ceaa}</Project>
+      <Name>Axis.Pollux.ABAC.RolePermissionPolicy</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.ABAC\Axis.Pollux.ABAC.csproj">
       <Project>{ad36d2a4-7ed0-4d00-be9b-0dcd70d12390}</Project>
       <Name>Axis.Pollux.ABAC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.Identity.OAModule\Axis.Pollux.Identity.OAModule.csproj">
+      <Project>{972EF5D4-550B-499C-B4E4-90E1D964A0F6}</Project>
+      <Name>Axis.Pollux.Identity.OAModule</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
-      <Project>{b6fe1b10-92a4-474b-8605-e3d63e491dce}</Project>
+      <Project>{B6FE1B10-92A4-474B-8605-E3D63E491DCE}</Project>
       <Name>Axis.Pollux.Identity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
-      <Project>{ADD69F52-5EB2-4B5F-B4B1-46943A8F1CB7}</Project>
-      <Name>Axis.Pollux.Common</Name>
-    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

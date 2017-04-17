@@ -36,7 +36,8 @@
     <Reference Include="Axis.Narvi">
       <HintPath>..\..\Axis.Narvi\Axis.Narvi\bin\Debug\Axis.Narvi.dll</HintPath>
     </Reference>
-    <Reference Include="Axis.Sigma.Core">
+    <Reference Include="Axis.Sigma.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Axis.Sigma\Axis.Sigma.Core\bin\Debug\Axis.Sigma.Core.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -53,18 +54,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Auth\AuthorizationAttribute.cs" />
-    <Compile Include="Auth\Category.cs" />
-    <Compile Include="Auth\Policy.cs" />
-    <Compile Include="Auth\PolicySet.cs" />
-    <Compile Include="Auth\Rule.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="IPolicyExpressionProvider.cs" />
+    <Compile Include="Auth\AuthorizationAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IAttributeStore.cs" />
-    <Compile Include="Services\IPolicyStore.cs" />
-    <Compile Include="Services\IUserAuthorization.cs" />
-    <Compile Include="Utils\JsonSettings.cs" />
+    <Compile Include="Services\IAuthorizer.cs" />
+    <Compile Include="Services\IIntentAttributeManager.cs" />
+    <Compile Include="Services\IUserAttributeManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">

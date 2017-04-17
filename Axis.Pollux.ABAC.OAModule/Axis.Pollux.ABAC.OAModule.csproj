@@ -58,12 +58,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContextModuleConfig.cs" />
-    <Compile Include="Mappings\AttributeMapping.cs" />
-    <Compile Include="Mappings\CategoryMapping.cs" />
-    <Compile Include="Mappings\PolicyMapping.cs" />
-    <Compile Include="Mappings\PolicySetMapping.cs" />
-    <Compile Include="Mappings\RuleMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
