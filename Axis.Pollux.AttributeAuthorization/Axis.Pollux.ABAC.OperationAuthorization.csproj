@@ -7,8 +7,8 @@
     <ProjectGuid>{262C7913-179E-47DA-9931-428FA163FF52}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Axis.Pollux.AttributeAuthorization</RootNamespace>
-    <AssemblyName>Axis.Pollux.AttributeAuthorization</AssemblyName>
+    <RootNamespace>Axis.Pollux.ABAC.OperationAuthorization</RootNamespace>
+    <AssemblyName>Axis.Pollux.ABAC.OperationAuthorization</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

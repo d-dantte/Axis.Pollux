@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.CoreAuthenticat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.RoleAuthorization", "Axis.Pollux.RoleAuthorization\Axis.Pollux.RoleAuthorization.csproj", "{370F03F7-8F78-435B-B46A-88FDB27DB608}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.AttributeAuthorization", "Axis.Pollux.AttributeAuthorization\Axis.Pollux.AttributeAuthorization.csproj", "{262C7913-179E-47DA-9931-428FA163FF52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.ABAC.OperationAuthorization", "Axis.Pollux.AttributeAuthorization\Axis.Pollux.ABAC.OperationAuthorization.csproj", "{262C7913-179E-47DA-9931-428FA163FF52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.RBAC.OAModule", "Axis.Pollux.RBAC.OAModule\Axis.Pollux.RBAC.OAModule.csproj", "{F1D76DA5-B038-4CE6-AAA2-61F39B9A1E84}"
 EndProject
@@ -79,6 +79,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.ABAC.RolePermissionPolicy.EF", "Axis.Pollux.ABAC.RolePermissionPolicy.EF\Axis.Pollux.ABAC.RolePermissionPolicy.EF.csproj", "{A259D47A-442B-4E65-8654-02EB4898490D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Authorizers", "Authorizers", "{5E908F15-A68D-48D6-B075-FDB70B374C1A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExpressionPolicy", "ExpressionPolicy", "{6A50D11E-DAF5-4B13-958D-E4FD96EF4C14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -211,5 +213,6 @@ Global
 		{DF7C9A73-6ACE-4E39-B14E-9FC896B0CEAA} = {70CDE9A4-4933-4B40-9023-B171191983D6}
 		{A259D47A-442B-4E65-8654-02EB4898490D} = {70CDE9A4-4933-4B40-9023-B171191983D6}
 		{5E908F15-A68D-48D6-B075-FDB70B374C1A} = {819BC025-2D32-4CC8-A49B-A2E81C31B3AC}
+		{6A50D11E-DAF5-4B13-958D-E4FD96EF4C14} = {D174B687-3BFC-4A17-B007-3AFDD3E12CE8}
 	EndGlobalSection
 EndGlobal
