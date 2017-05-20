@@ -1,0 +1,6 @@
+﻿
+1.0.0/features ===========================================================================================================
+
+-	Add Necessary Entities
+-	Remove reference to Axis.Navi
+-	UserManager Interface
