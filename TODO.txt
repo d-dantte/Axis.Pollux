@@ -1,0 +1,6 @@
+
+2016/09/03 ===========================================================================================================
+
+1.   Remove all "virtual" modifiers from all entity properties in this library! see notes Axis.Europa for more information.
+2.	Go through all implementations and ensure that Validate() is called on all Pollux Entities before they interract with
+	the backend.
