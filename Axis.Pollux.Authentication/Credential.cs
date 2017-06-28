@@ -6,66 +6,29 @@ using static Axis.Luna.Extensions.ExceptionExtensions;
 
 namespace Axis.Pollux.Authentication
 {
-    public class Credential: PolluxEntity<long>
+    public class Credential: PolluxModel<long>
     {
-        public virtual CredentialMetadata Metadata
-        {
-            get { return get<CredentialMetadata>(); }
-            set { set(ref value); }
-        }
+        public virtual CredentialMetadata Metadata { get; set; } = CredentialMetadata.Password;
         
-        public byte[] Value
-        {
-            get { return get<byte[]>(); }
-            set { set(ref value); }
-        }
+        public byte[] Value { get; set; }
 
-        public string SecuredHash
-        {
-            get { return get<string>(); }
-            set { set(ref value); }
-        } //hash of data if required is kept here
+        public string SecuredHash { get; set; } //hash of data if required is kept here
 
-        public long? ExpiresIn
-        {
-            get { return Eval(() => Expires?.Ticks, ex => null); }
-            set { Expires = Eval(() => new TimeSpan?(new TimeSpan(value.Value)), ex => null); }
-        }
-
-        public TimeSpan? Expires
-        {
-            get { return get<TimeSpan?>(); }
-            set { set(ref value); }
-        }
+        public DateTime? ExpiresOn { get; set; }
 
         /// <summary>
-        /// At what point does a credential become inactive?
+        /// inline css formatted name/value pairs
         /// </summary>
-        public CredentialStatus Status
-        {
-            get { return get<CredentialStatus>(); }
-            set { set(ref value); }
-        }
+        public string Tags { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public string Tags
-        {
-            get { return get<string>(); }
-            set { set(ref value); }
-        }
 
-        #region navigational properties
-        public virtual User Owner  { get { return get<User>(); } set { set(ref value); } }
-        public virtual string OwnerId  { get { return get<string>(); } set { set(ref value); } }
-        #endregion
+        public virtual User Owner { get; set; }
 
         public Credential()
         { }
     }
 
-    public class CredentialMetadata: IEquatable<CredentialMetadata>
+    public struct CredentialMetadata: IEquatable<CredentialMetadata>
     {
         #region standard credential metadata
         public static readonly CredentialMetadata Password = new CredentialMetadata() { Name = nameof(Password), Access = Access.Secret };
@@ -88,9 +51,6 @@ namespace Axis.Pollux.Authentication
         public static readonly CredentialMetadata Other = new CredentialMetadata() { Name = nameof(Other), Access = Access.Public };
         #endregion
 
-        private CredentialMetadata()
-        { }
-
         public CredentialMetadata(string name, Access access = Access.Secret)
         {
             ThrowNullArguments(() => name);
@@ -104,7 +64,7 @@ namespace Axis.Pollux.Authentication
         public Access Access { get; private set; }
         #endregion
 
-        public override bool Equals(object obj) => Equals(obj.As<CredentialMetadata>());
+        public override bool Equals(object obj) => Equals(obj.Cast<CredentialMetadata>());
         public bool Equals(CredentialMetadata other)
             => other.Name == null ? false :
                this.Name == other.Name &&
@@ -119,11 +79,5 @@ namespace Axis.Pollux.Authentication
     {
         Public,
         Secret
-    }
-
-    public enum CredentialStatus
-    {
-        Active,
-        Inactive
     }
 }

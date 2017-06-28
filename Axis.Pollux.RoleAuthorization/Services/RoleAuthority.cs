@@ -32,7 +32,7 @@ namespace Axis.Pollux.RBAC.Services
                 var userRoleStore = _context.Store<UserRole>();
                 var roleStore = _context.Store<Role>();
                 if(roleStore.Query.Any(r => r.RoleName == role) &&
-                   !userRoleStore.Query.Any(ur => ur.RoleName == role && ur.UserId == user.EntityId))
+                   !userRoleStore.Query.Any(ur => ur.RoleName == role && ur.UserId == user.UniqueId))
                 {
                     var userRole = userRoleStore.NewObject();
                     userRole.RoleName = role;
@@ -45,7 +45,7 @@ namespace Axis.Pollux.RBAC.Services
         public virtual IQueryable<Role> UserRoles(User user)
             => from ur in _context.Store<UserRole>().Query
                join r in _context.Store<Role>().Query on ur.RoleName equals r.EntityId
-               where ur.UserId == user.EntityId
+               where ur.UserId == user.UniqueId
                select r;
         
         public virtual PermissionMap UserPermissions(User user)
@@ -73,7 +73,7 @@ namespace Axis.Pollux.RBAC.Services
             => Operation.Run(() =>
             {
                 var urstore = _context.Store<UserRole>();
-                var ur = urstore.Query.FirstOrDefault(_ur => _ur.UserId == user.EntityId && _ur.RoleName == role.RoleName);
+                var ur = urstore.Query.FirstOrDefault(_ur => _ur.UserId == user.UniqueId && _ur.RoleName == role.RoleName);
                 if (ur != null) urstore.Delete(ur, true);
                 else throw new Exception("Failed");
             });

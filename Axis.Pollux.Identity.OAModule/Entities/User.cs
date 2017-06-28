@@ -1,19 +1,13 @@
 ﻿using System;
 
-namespace Axis.Pollux.Identity.Principal
+namespace Axis.Pollux.Identity.OAModule.Entities
 {
-    public class User: PolluxModel<string>
+    public class UserEntity : PolluxEntity<string>
     {
 
-        public User()
+        public UserEntity()
         {
-            UId = Guid.NewGuid();
-        }
-        
-        public string UserId
-        {
-            get { return this.UniqueId; }
-            set { this.UniqueId = value; }
+            GUId = Guid.NewGuid();
         }
 
         /// <summary>
@@ -34,6 +28,6 @@ namespace Axis.Pollux.Identity.Principal
         /// </summary>
         public int Status { get; set; }
 
-        public Guid UId { get; set; }
+        public Guid GUId { get; set; }
     }
 }

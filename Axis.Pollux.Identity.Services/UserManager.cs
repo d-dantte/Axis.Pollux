@@ -1,9 +1,10 @@
-﻿using Axis.Jupiter.Kore.Command;
+﻿using Axis.Jupiter.Commands;
 using Axis.Luna;
 using Axis.Luna.Extensions;
+using Axis.Luna.Operation;
+using Axis.Pollux.Common.Services;
 using Axis.Pollux.Identity.Principal;
-using Axis.Pollux.Identity.Queries;
-using Axis.Pollux.Owin.Common.Services;
+using Axis.Pollux.Identity.Services.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,86 +28,88 @@ namespace Axis.Pollux.Identity.Services
         }
 
         #region Biodata
-        public Operation<BioData> UpdateBioData(BioData data)
-        => Operation.Try(() =>
+        public IOperation<BioData> UpdateBioData(BioData data)
+        => LazyOp.Try(() =>
         {
             return data?
-            .Validate()
-            .Then(opr =>
-            {
-                var user = _userContext.CurrentUser();
-                var persisted = _query.GetBioData(user.UserId);
-
-                if (persisted != null)
+                .Validate()
+                .Then(() =>
                 {
-                    data.CopyTo(persisted,
-                                nameof(BioData.EntityId),
-                                nameof(BioData.OwnerId),
-                                nameof(BioData.Owner),
-                                nameof(BioData.CreatedOn),
-                                nameof(BioData.ModifiedOn));
+                    var user = _userContext.User();
+                    var persisted = _query.GetBioData(user.UserId);
 
-                    if (persisted.Dob <= DateTime.Parse("1753/1/1")) persisted.Dob = null;
+                    if (persisted != null)
+                    {
+                        data.CopyTo(persisted,
+                                    nameof(ContactData.Owner),
+                                    nameof(ContactData.CreatedOn),
+                                    nameof(ContactData.ModifiedOn));
 
-                    return _pcommand.Update(persisted);
-                }
-                else return _pcommand.Add(data);
-            })
-            ?? Operation.Fail<BioData>(new NullReferenceException());            
+                        if (persisted.Dob <= DateTime.Parse("1753/1/1")) persisted.Dob = null;
+
+                        return _pcommand.Update(persisted);
+                    }
+                    else
+                    {
+                        data.Owner = user;
+                        return _pcommand.Add(data);
+                    }
+                })
+                ?? LazyOp.Fail<BioData>(new NullReferenceException());            
         });
 
-        public Operation<BioData> GetBioData()
-        => Operation.Try(() => _query.GetBioData(_userContext.CurrentUser().UserId));
+        public IOperation<BioData> GetBioData()
+        => LazyOp.Try(() => _query.GetBioData(_userContext.User().UserId));
         #endregion
 
         #region Contact data
-        public Operation<ContactData> AddContactData(ContactData data)
-        => Operation.Try(() =>
+        public IOperation<ContactData> AddContactData(ContactData data)
+        => LazyOp.Try(() =>
         {
             return data?
-            .Validate()
-            .Then(opr =>
-            {
-                var user = _userContext.CurrentUser();
-                data.OwnerId = user.UserId;
-                return _pcommand.Add(data);
-            })
-            ?? Operation.Fail<ContactData>(new NullReferenceException());
-        });
-        public Operation<ContactData> UpdateContactData(ContactData data)
-        => Operation.Try(() =>
-        {
-            return data?
-            .Validate()
-            .Then(opr =>
-            {
-                var user = _userContext.CurrentUser();
-                var persisted = _query.GetContactData(data.EntityId);
-                
-                if (persisted == null) throw new Exception("invalid contact data");
-                else if (persisted.OwnerId != user.UserId) throw new Exception("Access Denied");
-                else
+                .Validate()
+                .Then(() =>
                 {
-                    data.CopyTo(persisted,
-                                nameof(ContactData.OwnerId),
-                                nameof(ContactData.Owner),
-                                nameof(ContactData.CreatedOn),
-                                nameof(ContactData.ModifiedOn));
-
-                    return _pcommand.Update(persisted);
-                }
-            })
-            ?? Operation.Fail<ContactData>(new NullReferenceException());
+                    var user = _userContext.User();
+                    data.Owner = user;
+                    return _pcommand.Add(data);
+                })
+                ?? LazyOp.Fail<ContactData>(new NullReferenceException());
         });
 
-        public Operation<ContactData> ArchiveContactData(long id)
-        => Operation.Try(() =>
+        public IOperation<ContactData> UpdateContactData(ContactData data)
+        => LazyOp.Try(() =>
         {
-            var user = _userContext.CurrentUser();
+            return data?
+                .Validate()
+                .Then(() =>
+                {
+                    var user = _userContext.User();
+                    var persisted = _query.GetContactData(data.UniqueId);
+                    
+                    if (persisted == null) throw new Exception("invalid contact data");
+                    else if (persisted.Owner.UserId != user.UserId) throw new Exception("Access Denied");
+                    else
+                    {
+                        data.CopyTo(persisted,
+                                    nameof(ContactData.Owner),
+                                    nameof(ContactData.CreatedOn),
+                                    nameof(ContactData.ModifiedOn));
+
+                        return _pcommand.Update(persisted);
+                    }
+                })
+                ?? LazyOp.Fail<ContactData>(new NullReferenceException());
+        });
+
+        public IOperation<ContactData> ArchiveContactData(long id)
+        => LazyOp.Try(() =>
+        {
+            var user = _userContext.User();
             var persisted = _query.GetContactData(id);
 
             if (persisted == null) throw new Exception("invalid contact data");
-            else if (persisted.OwnerId != user.UserId) throw new Exception("Access Denied");
+            else if (persisted.Owner.UserId != user.UserId) throw new Exception("Access Denied");
             else
             {
                 persisted.Status = ContactStatus.Archived;
@@ -114,85 +117,79 @@ namespace Axis.Pollux.Identity.Services
             }
         });
 
-        public Operation<SequencePage<ContactData>> GetAllContactData(int pageSize = 500, int pageIndex = 0, bool includeCount = true)
-        => Operation.Try(() => _query.GetContactData(_userContext.CurrentUser().UserId, pageSize, pageIndex, includeCount));
+        public IOperation<SequencePage<ContactData>> GetAllContactData(int pageSize = 500, int pageIndex = 0, bool includeCount = true)
+        => LazyOp.Try(() => _query.GetContactData(_userContext.User().UserId, pageSize, pageIndex, includeCount));
         #endregion
 
         #region User data
-        public Operation<UserData> AddData(UserData data)
-        => Operation.Try(() =>
+        public IOperation<UserData> AddData(UserData data)
+        => LazyOp.Try(() =>
         {
             return data?
-            .Validate()
-            .Then(opr =>
-            {
-                var user = _userContext.CurrentUser();
-                if (_query.GetUserData(user.UserId, data.Name) != null) return null;
+                .Validate()
+                .Then(() =>
+                {
+                    var user = _userContext.User();
+                    if (_query.GetUserData(user.UserId, data.Name) != null) return null;
 
-                data.EntityId = 0;
-                data.Owner = user;
-                data.OwnerId = user.UserId;
+                    data.UniqueId = 0;
+                    data.Owner = user;
 
-                return _pcommand.Add(data);
-            })
-            ?? Operation.Fail<UserData>(new NullReferenceException());
+                    return _pcommand.Add(data);
+                })
+                ?? LazyOp.Fail<UserData>(new NullReferenceException());
         });
 
-        public Operation<UserData> UpdateData(UserData data)
-        => Operation.Try(() =>
+        public IOperation<UserData> UpdateData(UserData data)
+        => LazyOp.Try(() =>
         {
             return data?
-            .Validate()
-            .Then(opr =>
-            {
-                var user = _userContext.CurrentUser();
-                var persisted = _query.GetUserData(user.UserId, data.Name);
-                if (persisted == null) return null;
+                .Validate()
+                .Then(() =>
+                {
+                    var user = _userContext.User();
+                    var persisted = _query.GetUserData(user.UserId, data.Name);
+                    if (persisted == null) return null;
 
-                data.CopyTo(persisted,
-                            nameof(UserData.Owner),
-                            nameof(UserData.OwnerId),
-                            nameof(UserData.CreatedOn),
-                            nameof(UserData.ModifiedOn));
+                    data.CopyTo(persisted,
+                                nameof(UserData.Owner),
+                                nameof(UserData.CreatedOn),
+                                nameof(UserData.ModifiedOn));
 
-                return _pcommand.Update(data).Resolve();
-            })
-            ?? Operation.Fail<UserData>(new NullReferenceException());
+                    return _pcommand.Update(persisted);
+                })
+                ?? LazyOp.Fail<UserData>(new NullReferenceException());
         });
 
-        public Operation<IEnumerable<UserData>> RemoveData(string[] names)
-        => Operation.Try(() =>
+        public IOperation<IEnumerable<UserData>> RemoveData(string[] names)
+        => LazyOp.Try(() =>
         {
-            var user = _userContext.CurrentUser();
-            return names.Select(_name =>
-            {
-                var data = _query.GetUserData(user.UserId, _name);
-                if (data == null) return null;
-                else return _pcommand.Delete(data).Resolve();
-            })
-            .Where(_data => _data != null)
-            .ToArray()
-            .AsEnumerable();
+            var user = _userContext.User();
+            return names
+                .Select(_name => _query.GetUserData(user.UserId, _name))
+                .Pipe(_data => _pcommand
+                .DeleteBatch(_data)
+                .Then(() => _data));
         });
 
-        public Operation<SequencePage<UserData>> GetUserData(int pageSize = 500, int pageIndex = 0, bool includeCount = true)
-        => Operation.Try(() => _query.GetUserData(_userContext.CurrentUser().UserId, pageSize, pageIndex, includeCount));
+        public IOperation<SequencePage<UserData>> GetUserData(int pageSize = 500, int pageIndex = 0, bool includeCount = true)
+        => LazyOp.Try(() => _query.GetUserData(_userContext.User().UserId, pageSize, pageIndex, includeCount));
 
-        public Operation<UserData> GetUserData(string name)
-        => Operation.Try(() => _query.GetUserData(_userContext.CurrentUser().UserId, name));
+        public IOperation<UserData> GetUserData(string name)
+        => LazyOp.Try(() => _query.GetUserData(_userContext.User().UserId, name));
         #endregion
 
-        public Operation<long> UserCount()
-        => Operation.Try(() => _query.GetUserCount());
+        public IOperation<long> UserCount()
+        => LazyOp.Try(() => _query.GetUserCount());
 
-        public Operation<User> CreateUser(string userId, int status)
-        => Operation.Try(() =>
+        public IOperation<User> CreateUser(string userId, int status)
+        => LazyOp.Try(() =>
         {
             if (_query.UserExists(userId)) throw new Exception("the user id already exists in the system");
 
             else return _pcommand.Add(new User
             {
-                EntityId = userId,
+                UniqueId = userId,
                 Status = status
             });            
         });

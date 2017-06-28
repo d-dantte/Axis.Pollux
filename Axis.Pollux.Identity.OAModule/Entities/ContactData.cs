@@ -1,6 +1,8 @@
-﻿namespace Axis.Pollux.Identity.Principal
+﻿using Axis.Pollux.Identity.Principal;
+
+namespace Axis.Pollux.Identity.OAModule.Entities
 {
-    public class ContactData: PolluxModel<long>
+    public class ContactDataEntity : PolluxEntity<long>
     {
         public string Phone { get; set; }
         public string AlternatePhone { get; set; }
@@ -13,17 +15,8 @@
         public ContactStatus Status { get; set; }
 
         #region navigational properties
-        public virtual User Owner { get; set; }
+        public virtual UserEntity Owner { get; set; }
+        public string OwnerId { get; set; }
         #endregion
-
-        public ContactData()
-        {
-        }
-    }
-
-    public enum ContactStatus
-    {
-        Current,
-        Archived
     }
 }

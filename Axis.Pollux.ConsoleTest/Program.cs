@@ -35,7 +35,7 @@ namespace Axis.Pollux.ConsoleTest
                 cxt.Configuration.AutoDetectChangesEnabled = false;
                 var user = new User
                 {
-                    EntityId = "something@thisway.comes",
+                    UniqueId = "something@thisway.comes",
                     Status = 1
                 };
 
@@ -43,7 +43,7 @@ namespace Axis.Pollux.ConsoleTest
 
                 user = new User
                 {
-                    EntityId = "something@thisway.comes",
+                    UniqueId = "something@thisway.comes",
                     Status = 2
                 };
                 cxt.Modify(user).Context.CommitChanges();
@@ -73,7 +73,7 @@ namespace Axis.Pollux.ConsoleTest
 
             this.UsingContext(cxt =>
             {
-                cxt.Store<User>().Add(new User { EntityId = "Senj@k" });
+                cxt.Store<User>().Add(new User { UniqueId = "Senj@k" });
 
                 cxt.CommitChanges();
             });

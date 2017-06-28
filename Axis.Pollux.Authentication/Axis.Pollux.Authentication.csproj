@@ -33,9 +33,6 @@
     <Reference Include="Axis.Luna">
       <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
     </Reference>
-    <Reference Include="Axis.Narvi">
-      <HintPath>..\..\Axis.Narvi\Axis.Narvi\bin\Debug\Axis.Narvi.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,9 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthenticationParameter.cs" />
     <Compile Include="Credential.cs" />
-    <Compile Include="Extensions.cs" />
     <Compile Include="ICredentialHasher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\ICredentialAuthentication.cs" />

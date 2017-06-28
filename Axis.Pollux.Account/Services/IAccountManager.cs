@@ -1,4 +1,4 @@
-﻿using Axis.Luna;
+﻿using Axis.Luna.Operation;
 using Axis.Pollux.Account.Objects;
 using Axis.Pollux.Authentication;
 using Axis.Pollux.Identity.Principal;
@@ -9,37 +9,37 @@ namespace Axis.Pollux.Account
     public interface IAccountManager
     {
         #region Account
-        Operation<User> RegisterUser(string targetUser, int userStatus, Credential secretCredential);
+        IOperation<User> RegisterUser(string targetUser, int userStatus, Credential secretCredential);
 
-        Operation<User> DeactivateUser(string targetUser);
-        Operation<User> ActivateUser(string targetUser);
+        IOperation<User> DeactivateUser(string targetUser);
+        IOperation<User> ActivateUser(string targetUser);
 
         /// <summary>
-        /// Enables an administrator (or @root) to block a target user
+        /// Enables an administrator to block a target user - depending on Domain needs
         /// </summary>
         /// <param name="targetUser"></param>
         /// <returns></returns>
-        Operation<User> BlockUser(string targetUser);
+        IOperation<User> BlockUser(string targetUser);
 
 
-        Operation<ContextVerification> GenerateUserActivationVerification(string targetUser, TimeSpan validityDuration);
+        IOperation<ContextVerification> GenerateUserActivationVerification(string targetUser, TimeSpan validityDuration);
 
-        Operation<User> VerifyUserActivation(string targetUser, string contextToken);
-
-
-        Operation<long> UserCount();
+        IOperation<User> VerifyUserActivation(string targetUser, string contextToken);
 
 
-        Operation<ContextVerification> GenrateCredentialResetVerification(string targetUser, CredentialMetadata credentialMetadata, TimeSpan validityDuration);
+        IOperation<long> UserCount();
 
-        Operation ResetCredential(string targetUser, Credential newCredential, string verificationToken);
+
+        IOperation<ContextVerification> GenrateCredentialResetVerification(string targetUser, CredentialMetadata credentialMetadata, TimeSpan validityDuration);
+
+        IOperation ResetCredential(string targetUser, Credential newCredential, string verificationToken);
 
         #endregion
 
         #region Context Verification
-        Operation<ContextVerification> GenerateContextVerification(string userId, string verificationContext, DateTime expiryDate);
+        IOperation<ContextVerification> GenerateContextVerification(string userId, string verificationContext, DateTime expiresOn);
 
-        Operation VerifyContext(string userId, string verificationContext, string token);
+        IOperation VerifyContext(string userId, string verificationContext, string token);
         #endregion
     }
 }

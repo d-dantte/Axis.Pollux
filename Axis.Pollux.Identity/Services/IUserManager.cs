@@ -1,4 +1,5 @@
 ﻿using Axis.Luna;
+using Axis.Luna.Operation;
 using Axis.Pollux.Identity.Principal;
 using System.Collections.Generic;
 
@@ -7,35 +8,35 @@ namespace Axis.Pollux.Identity.Services
     public interface IUserManager
     {
         #region Biodata
-        Operation<BioData> UpdateBioData(BioData data);
+        IOperation<BioData> UpdateBioData(BioData data);
         
-        Operation<BioData> GetBioData();
+        IOperation<BioData> GetBioData();
         #endregion
 
         #region Contact data
-        Operation<ContactData> AddContactData(ContactData data);
-        Operation<ContactData> UpdateContactData(ContactData data);
+        IOperation<ContactData> AddContactData(ContactData data);
+        IOperation<ContactData> UpdateContactData(ContactData data);
 
-        Operation<ContactData> ArchiveContactData(long id);
+        IOperation<ContactData> ArchiveContactData(long id);
 
-        Operation<SequencePage<ContactData>> GetAllContactData(int pageSize = 500, int pageIndex = 0, bool includeCount = true);
+        IOperation<SequencePage<ContactData>> GetAllContactData(int pageSize = 500, int pageIndex = 0, bool includeCount = true);
         #endregion
 
         #region User data
-        Operation<UserData> AddData(UserData data);
+        IOperation<UserData> AddData(UserData data);
         
-        Operation<UserData> UpdateData(UserData data);
+        IOperation<UserData> UpdateData(UserData data);
         
-        Operation<IEnumerable<UserData>> RemoveData(string[] names);
+        IOperation<IEnumerable<UserData>> RemoveData(string[] names);
         
-        Operation<SequencePage<UserData>> GetUserData(int pageSize=500, int pageIndex=0, bool includeCount = true);
+        IOperation<SequencePage<UserData>> GetUserData(int pageSize=500, int pageIndex=0, bool includeCount = true);
         
-        Operation<UserData> GetUserData(string name);
+        IOperation<UserData> GetUserData(string name);
         #endregion
 
         #region User
-        Operation<long> UserCount();
-        Operation<User> CreateUser(string userId, int status);
+        IOperation<long> UserCount();
+        IOperation<User> CreateUser(string userId, int status);
         #endregion
     }
 }

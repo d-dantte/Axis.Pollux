@@ -1,7 +1,7 @@
 ﻿using Axis.Luna;
 using Axis.Pollux.Identity.Principal;
 
-namespace Axis.Pollux.Identity.Queries
+namespace Axis.Pollux.Identity.Services.Queries
 {
     public interface IUserQuery
     {

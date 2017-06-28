@@ -3,7 +3,7 @@ using System;
 
 namespace Axis.Pollux.Account.Objects
 {
-    public class ContextVerification: PolluxEntity<long>
+    public class ContextVerification: PolluxModel<long>
     {
         private User _target;
         private string _targetId;
@@ -13,7 +13,7 @@ namespace Axis.Pollux.Account.Objects
             set
             {
                 _target = value;
-                if (value != null) _targetId = _target.EntityId;
+                if (value != null) _targetId = _target.UniqueId;
                 else _targetId = null;
             }
         }
@@ -24,7 +24,7 @@ namespace Axis.Pollux.Account.Objects
             {
                 _targetId = value;
                 if (value == null) _target = null;
-                else if (!value.Equals(_target?.EntityId)) _target = null;
+                else if (!value.Equals(_target?.UniqueId)) _target = null;
             }
         }
 

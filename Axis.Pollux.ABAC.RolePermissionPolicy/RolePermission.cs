@@ -2,7 +2,7 @@
 
 namespace Axis.Pollux.ABAC.RolePermissionPolicy
 {
-    public class RolePermission: PolluxEntity<long>
+    public class RolePermission: PolluxModel<long>
     {
         public Sigma.Core.Policy.Effect Effect { get; set; }
         public string IntentDescriptor { get; set; }

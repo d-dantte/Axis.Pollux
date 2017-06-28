@@ -3,9 +3,9 @@ using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
 using System;
 
-namespace Axis.Pollux.Identity.Principal
+namespace Axis.Pollux.Identity.OAModule.Entities
 {
-    public abstract class PolluxModel<Key> : IEquatable<PolluxModel<Key>>
+    public abstract class PolluxEntity<Key> : IEquatable<PolluxEntity<Key>>
     {
         public Key UniqueId { get; set; }
 
@@ -15,13 +15,13 @@ namespace Axis.Pollux.Identity.Principal
 
         public virtual IOperation Validate() => ResolvedOp.Try(() => { });
 
-        public virtual bool Equals(PolluxModel<Key> other) => other?.UniqueId.Equals(UniqueId) ?? false;
+        public virtual bool Equals(PolluxEntity<Key> other) => other?.UniqueId.Equals(UniqueId) ?? false;
 
-        public override bool Equals(object obj) => Equals(obj.Cast<PolluxModel<Key>>());
+        public override bool Equals(object obj) => Equals(obj.Cast<PolluxEntity<Key>>());
         public override int GetHashCode() => ResolvedOp.Try(() => UniqueId.GetHashCode()).Result;
 
 
-        public PolluxModel()
+        public PolluxEntity()
         {
             CreatedOn = DateTime.Now;
         }

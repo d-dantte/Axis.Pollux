@@ -1,6 +1,6 @@
-﻿namespace Axis.Pollux.Identity.Principal
+﻿namespace Axis.Pollux.Identity.OAModule.Entities
 {
-    public class AddressData : PolluxModel<long>
+    public class AddressDataEntity : PolluxEntity<long>
     {
         public string Street { get; set; }
         public string City { get; set; }
@@ -8,10 +8,11 @@
         public string Country { get; set; }
 
         #region navigational properties
-        public virtual User Owner { get; set; }
+        public virtual UserEntity Owner { get; set; }
+        public string OwnerId { get; set; }
         #endregion
 
-        public AddressData()
+        public AddressDataEntity()
         {
         }
     }

@@ -30,14 +30,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Axis.Jupiter.Kore">
-      <HintPath>..\..\Axis.Jupiter\Axis.Jupiter.Kore\bin\Debug\Axis.Jupiter.Kore.dll</HintPath>
+    <Reference Include="Axis.Jupiter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Axis.Jupiter\Axis.Jupiter\bin\Debug\Axis.Jupiter.dll</HintPath>
     </Reference>
-    <Reference Include="Axis.Luna">
-      <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
-    </Reference>
-    <Reference Include="Axis.Narvi">
-      <HintPath>..\..\Axis.Narvi\Axis.Narvi\bin\Debug\Axis.Narvi.dll</HintPath>
+    <Reference Include="Axis.Luna, Version=3.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Axis.Luna.3.0.6\lib\net452\Axis.Luna.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Queries\IUserQuery.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -61,6 +61,13 @@
       <Project>{fd0be16f-6666-40d2-98da-7d8bbd3c3eb4}</Project>
       <Name>Axis.Pollux.Owin.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
+      <Project>{ADD69F52-5EB2-4B5F-B4B1-46943A8F1CB7}</Project>
+      <Name>Axis.Pollux.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

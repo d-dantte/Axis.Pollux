@@ -2,7 +2,7 @@
 
 namespace Axis.Pollux.RBAC.Auth
 {
-    public class Permission: PolluxEntity<long>
+    public class Permission: PolluxModel<long>
     {
         public string ResourceSelector
         {

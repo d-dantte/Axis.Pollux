@@ -8,9 +8,9 @@
         public static readonly int UserStatus_Blocked = 2;
         #endregion
 
-        #region VerificationContext
-        public static readonly string VerificationContext_CredentialResetPrefix = "Axis.Pollux.Account.VerificationContext/";
-        public static readonly string VerificationContext_UserActivation = "Axis.Pollux.Account.UserActivation";
+        #region VerificationContexts
+        public static readonly string VerificationContext_CredentialResetPrefix = "Axis.Pollux.Account.VerificationContext[CredentialReset]";
+        public static readonly string VerificationContext_UserActivation = "Axis.Pollux.Account.VerificationContext[UserActivation]";
         #endregion
     }
 }

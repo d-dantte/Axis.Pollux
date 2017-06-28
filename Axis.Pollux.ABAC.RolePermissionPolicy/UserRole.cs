@@ -2,7 +2,7 @@
 
 namespace Axis.Pollux.ABAC.RolePermissionPolicy
 {
-    public class UserRole: PolluxEntity<long>
+    public class UserRole: PolluxModel<long>
     {
         public string UserId { get; set; }
         public User User { get; set; }

@@ -1,16 +1,18 @@
-﻿using Axis.Pollux.Identity.Principal;
-using System.Data.Entity.ModelConfiguration;
+﻿using Axis.Pollux.Identity.OAModule.Entities;
+using Axis.Pollux.Identity.Principal;
 
 namespace Axis.Pollux.Identity.OAModule.Mappings
 {
-    public abstract class BaseMap<EType, KeyType> : Jupiter.Europa.Mappings.BaseMap<EType>
-    where EType: PolluxEntity<KeyType>
+    public abstract class BaseMap<KeyType, EType, MType> : Jupiter.Europa.Mappings.BaseEntityMapConfig<MType, EType>
+    where EType: PolluxEntity<KeyType>, new()
+    where MType: PolluxModel<KeyType>, new()
     {
         protected BaseMap(bool useDefaultTable)
-        : base(useDefaultTable)
         {
+            if (useDefaultTable) ToTable(typeof(MType).Name);
+
             //configure the primary key
-            this.HasKey(e => e.EntityId);
+            HasKey(e => e.UniqueId);
         }
 
         protected BaseMap():

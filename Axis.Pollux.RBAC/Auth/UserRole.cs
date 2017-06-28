@@ -2,7 +2,7 @@
 
 namespace Axis.Pollux.RBAC.Auth
 {
-    public class UserRole: PolluxEntity<long>
+    public class UserRole: PolluxModel<long>
     {
         public string UserId
         {

@@ -1,4 +1,4 @@
-﻿using Axis.Luna;
+﻿using Axis.Luna.Operation;
 
 namespace Axis.Pollux.Authentication.Service
 {
@@ -6,12 +6,17 @@ namespace Axis.Pollux.Authentication.Service
     {
         ICredentialHasher CredentialHasher { get; }
         
-        Operation VerifyCredential(Credential credential);
+        IOperation VerifyCredential(Credential credential);
         
-        Operation DeleteCredential(Credential credential);
+        IOperation ExpireCredential(Credential credential);
 
-        Operation AssignCredential(string userId, Credential credential);
+        /// <summary>
+        /// Assigns the supplied credential to the user 
+        /// </summary>
+        /// <param name="credential"></param>
+        /// <returns></returns>
+        IOperation AssignCredential(Credential credential);
 
-        Operation ModifyCredential(Credential old, Credential @new);
+        IOperation ModifyCredential(Credential oldValue, Credential newValue);
     }
 }

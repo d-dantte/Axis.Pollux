@@ -3,7 +3,7 @@ using System;
 
 namespace Axis.Pollux.RBAC.Auth
 {
-    public class Resource: PolluxEntity<long>
+    public class Resource: PolluxModel<long>
     {
         public string Path
         {

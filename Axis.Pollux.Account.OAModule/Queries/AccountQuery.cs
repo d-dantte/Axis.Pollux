@@ -40,7 +40,7 @@ namespace Axis.Pollux.AccountManagement.OAModule.Queries
 
         public User GetUser(string userId)
         => _europa.Store<User>().Query
-                  .Where(_u => _u.EntityId == userId)
+                  .Where(_u => _u.UniqueId == userId)
                   .FirstOrDefault();
 
         public SequencePage<UserLogon> GetValidUserLogons(string userId, int pageSize = 0, int pageIndex = 0, bool includeCount = false)

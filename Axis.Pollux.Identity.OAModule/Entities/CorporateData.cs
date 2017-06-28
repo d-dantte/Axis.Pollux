@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Axis.Pollux.Identity.Principal
+namespace Axis.Pollux.Identity.OAModule.Entities
 {
-    public class CorporateData: PolluxModel<long>
+    public class CorporateDataEntity : PolluxEntity<long>
     {
         #region Identity
         public string CorporateName { get; set; }
@@ -17,7 +17,8 @@ namespace Axis.Pollux.Identity.Principal
         #endregion
 
         #region navigational properties
-        public virtual User Owner { get; set; }
+        public virtual UserEntity Owner { get; set; }
+        public string OwnerId { get; set; }
         #endregion
     }
 }

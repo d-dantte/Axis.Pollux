@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Axis.Pollux.Identity.Principal;
+using System;
 
-namespace Axis.Pollux.Identity.Principal
+namespace Axis.Pollux.Identity.OAModule.Entities
 {
-    public class BioData: PolluxModel<long>
+    public class BioDataEntity : PolluxEntity<long>
     {
         #region Names
         public string FirstName { get; set; }
@@ -19,13 +20,12 @@ namespace Axis.Pollux.Identity.Principal
         #endregion
 
         #region navigational properties
-        public virtual User Owner { get; set; }
+        public virtual UserEntity Owner { get; set; }
+        public string OwnerId { get; set; }
         #endregion
 
-        public BioData()
+        public BioDataEntity()
         {
         }
     }
-
-    public enum Gender { Female, Male, Other}
 }

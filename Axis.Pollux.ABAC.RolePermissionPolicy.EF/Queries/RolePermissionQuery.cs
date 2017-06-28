@@ -38,7 +38,7 @@ namespace Axis.Pollux.ABAC.RolePermissionPolicy.EF.Queries
 
         public RolePermission GetRolePermissionById(long id)
         => _dataStore.Store<RolePermission>().Query
-                     .Where(_rp => _rp.EntityId == id)
+                     .Where(_rp => _rp.UniqueId == id)
                      .FirstOrDefault();
 
         public IEnumerable<RolePermission> GetUserPolicyRules(string userId, string policyCode)

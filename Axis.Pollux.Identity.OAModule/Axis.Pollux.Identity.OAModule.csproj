@@ -30,17 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Axis.Jupiter">
+    <Reference Include="Axis.Jupiter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Axis.Jupiter\Axis.Jupiter\bin\Debug\Axis.Jupiter.dll</HintPath>
     </Reference>
-    <Reference Include="Axis.Jupiter.Europa">
+    <Reference Include="Axis.Jupiter.Europa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Axis.Jupiter\Axis.Jupiter.Europa\bin\Debug\Axis.Jupiter.Europa.dll</HintPath>
     </Reference>
     <Reference Include="Axis.Luna">
       <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
-    </Reference>
-    <Reference Include="Axis.Narvi">
-      <HintPath>..\..\Axis.Narvi\Axis.Narvi\bin\Debug\Axis.Narvi.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
@@ -61,8 +60,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContextModuleConfig.cs" />
-    <Compile Include="MappingExtensions.cs" />
+    <Compile Include="Entities\AddressData.cs" />
+    <Compile Include="Entities\Base.cs" />
+    <Compile Include="Entities\BioData.cs" />
+    <Compile Include="Entities\ContactData.cs" />
+    <Compile Include="Entities\CorporateData.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="Entities\UserData.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Mappings\AddressDataMap.cs" />
     <Compile Include="Mappings\BaseMap.cs" />
     <Compile Include="Mappings\BioDataMap.cs" />
@@ -74,6 +79,10 @@
     <Compile Include="Queries\UserQuery.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Axis.Pollux.Identity.Services\Axis.Pollux.Identity.DefaultServices.csproj">
+      <Project>{D2951D96-C918-45A4-BB72-6B5B25C83C2A}</Project>
+      <Name>Axis.Pollux.Identity.DefaultServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
       <Project>{b6fe1b10-92a4-474b-8605-e3d63e491dce}</Project>
       <Name>Axis.Pollux.Identity</Name>

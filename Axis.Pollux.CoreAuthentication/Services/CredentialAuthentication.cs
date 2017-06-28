@@ -1,14 +1,13 @@
 ﻿using static Axis.Luna.Extensions.ExceptionExtensions;
 using static Axis.Luna.Extensions.ObjectExtensions;
-using static Axis.Luna.Extensions.OperationExtensions;
 
 using System;
 using System.Linq;
-using Axis.Luna;
 using Axis.Pollux.Authentication;
 using Axis.Pollux.Authentication.Service;
 using Axis.Pollux.CoreAuthentication.Queries;
 using Axis.Jupiter.Kore.Command;
+using Axis.Luna.Operation;
 
 namespace Axis.Pollux.CoreAuthentication.Services
 {
@@ -31,46 +30,46 @@ namespace Axis.Pollux.CoreAuthentication.Services
         }
 
         #region ICredentialAuthentication
-        public Operation AssignCredential(string userId, Credential credential)
-        => Operation.Run(() =>
+        public IOperation AssignCredential(Credential credential)
+        => LazyOp.Try(() =>
         {
-            if (!_query.UserExists(userId)) throw new Exception("could not find user");
+            if (!_query.UserExists(credential.Owner.UserId)) throw new Exception("could not find user");
             else
             {
-                //find and deactivate any old credentials of the same name and access belonging to the user
-                var oldCred = _query.GetCredential(userId, credential.Metadata);                    
+                //find and Expire any old credentials of the same name and access belonging to the user
+                var oldCred = _query.GetCredential(credential.Owner.UserId, credential.Metadata);                    
                 if (oldCred != null) //deactivate
                 {
-                    oldCred.Status = CredentialStatus.Inactive;
-                    _pcommand.Update(oldCred).Resolve();
+                    ExpireCredential(oldCred);
                 }
 
-                _pcommand.Add(CreateCredential(userId, credential.Value, credential.Metadata, credential.ExpiresIn))
+                else
+                    _pcommand.Add(CreateCredential(credential.Owner.UserId, credential.Value, credential.Metadata))
                          .Resolve();
             }
         });
 
-        private Credential CreateCredential(string userId, byte[] value, CredentialMetadata metadata, long? expiresIn) => CreateCredential(0, userId, value, metadata, expiresIn);
+        private Credential CreateCredential(string userId, byte[] value, CredentialMetadata metadata) => CreateCredential(0, userId, value, metadata);
 
-        private Credential CreateCredential(long entityId, string userId, byte[] value, CredentialMetadata metadata, long? expiresIn)
+        private Credential CreateCredential(long entityId, string userId, byte[] value, CredentialMetadata metadata)
         => new Credential
         {
-            EntityId = entityId,
-            OwnerId = userId,
+            UniqueId = entityId,
+            Owner = new Identity.Principal.User { Un,
             Metadata = metadata.ThrowIfNull(),
             Value = metadata.Access == Access.Public ? value : null,
             SecuredHash = metadata.Access == Access.Secret ? CredentialHasher.CalculateHash(value) : null,
             ExpiresIn = expiresIn
         };
 
-        public Operation DeleteCredential(Credential credential)
-        => Operation.Run(() =>
+        public IOperation ExpireCredential(Credential credential)
+        => LazyOp.Try(() =>
         {
-            _pcommand.Delete(credential).Resolve();
+            throw new NotImplementedException();
         });
 
-        public Operation VerifyCredential(Credential credential)
-        => Operation.Run(() =>
+        public IOperation VerifyCredential(Credential credential)
+        => LazyOp.Try(() =>
         {
             var dbcred = _query
                 .GetCredential(credential.OwnerId, credential.Metadata)
@@ -90,10 +89,10 @@ namespace Axis.Pollux.CoreAuthentication.Services
                     !dbcred.Value.SequenceEqual(credential.Value)) throw new Exception("Invalid Credential");
         });
 
-        public Operation ModifyCredential(Credential old, Credential @new)
+        public IOperation ModifyCredential(Credential old, Credential @new)
         => VerifyCredential(old).Then(_opr =>
         {
-            _pcommand.Update(CreateCredential(old.EntityId, old.OwnerId, @new.Value, old.Metadata, old.ExpiresIn)).Resolve();
+            _pcommand.Update(CreateCredential(old.UniqueId, old.OwnerId, @new.Value, old.Metadata, old.ExpiresIn)).Resolve();
         });
         #endregion
     }

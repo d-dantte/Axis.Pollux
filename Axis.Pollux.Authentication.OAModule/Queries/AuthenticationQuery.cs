@@ -19,7 +19,7 @@ namespace Axis.Pollux.Authentication.OAModule.Queries
         }
 
         public bool UserExists(string userId)
-        => _europa.Store<User>().Query.Any(_u => _u.EntityId == userId);
+        => _europa.Store<User>().Query.Any(_u => _u.UniqueId == userId);
 
         public Credential GetCredential(string userId, CredentialMetadata metadata)
         => _europa.Store<Credential>().Query

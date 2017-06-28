@@ -2,7 +2,7 @@
 
 namespace Axis.Pollux.RBAC.Auth
 {
-    public class Role: PolluxEntity<string>
+    public class Role: PolluxModel<string>
     {
         private static readonly string AttributeName = "Role";
 
@@ -11,8 +11,8 @@ namespace Axis.Pollux.RBAC.Auth
 
         public virtual string RoleName
         {
-            get { return EntityId; }
-            set { EntityId = value; }
+            get { return UniqueId; }
+            set { UniqueId = value; }
         }
 
         public virtual string Name

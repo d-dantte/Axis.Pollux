@@ -2,7 +2,7 @@
 
 namespace Axis.Pollux.Account.Objects
 {
-    public class UserLogon: PolluxEntity<long>
+    public class UserLogon: PolluxModel<long>
     {
         public UserAgent Client { get; set; } = new UserAgent();
         public string Location { get; set; }
@@ -26,7 +26,7 @@ namespace Axis.Pollux.Account.Objects
             set
             {
                 _user = value;
-                if (value != null) _userId = _user.EntityId;
+                if (value != null) _userId = _user.UniqueId;
                 else _userId = null;
             }
         }
@@ -37,7 +37,7 @@ namespace Axis.Pollux.Account.Objects
             {
                 _userId = value;
                 if (value == null) _user = null;
-                else if (!value.Equals(_user?.EntityId)) _user = null;
+                else if (!value.Equals(_user?.UniqueId)) _user = null;
             }
         }
     }

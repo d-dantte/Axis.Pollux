@@ -16,10 +16,10 @@ namespace Axis.Pollux.CoreAuthentication
         public string CalculateHash(byte[] data) => Encode(RawHash(data));
 
         public bool IsValidHash(string data, string hash)
-            => (RawHash(data) == Decode(hash)).UsingValue(bytes => Thread.Sleep(2000)); //<-- waste some time to discourage brute force attacks
+        => (RawHash(data) == Decode(hash)).UsingValue(isValid => Thread.Sleep(2000)); //<-- waste some time to discourage brute force attacks
 
         public bool IsValidHash(byte[] data, string hash)
-            => (RawHash(data) == Decode(hash)).UsingValue(bytes => Thread.Sleep(2000)); //<-- waste some time to discourage brute force attacks
+        => (RawHash(data) == Decode(hash)).UsingValue(isValid => Thread.Sleep(2000)); //<-- waste some time to discourage brute force attacks
 
         /// <summary>
         /// Alter the hash with some reversible encryption
@@ -36,10 +36,12 @@ namespace Axis.Pollux.CoreAuthentication
         private string Decode(string encodedHash) => encodedHash;
 
         private string RawHash(string data)
-            => Encoding.Unicode.GetBytes(data)
-                       .Pipe(bytes => Convert.ToBase64String(hasher.ComputeHash(bytes)));
+        => Encoding.Unicode
+                   .GetBytes(data)
+                   .Pipe(hasher.ComputeHash)
+                   .Pipe(Convert.ToBase64String);
 
         private string RawHash(byte[] data)
-            => Convert.ToBase64String(hasher.ComputeHash(data));
+        => Convert.ToBase64String(hasher.ComputeHash(data));
     }
 }

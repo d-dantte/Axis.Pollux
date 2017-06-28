@@ -1,33 +1,20 @@
-﻿using Axis.Luna;
-using static Axis.Luna.Extensions.ObjectExtensions;
-using System;
+﻿using System;
+using Axis.Luna.Utils;
+using Axis.Luna.Operation;
 
 namespace Axis.Pollux.Identity.Principal
 {
-    public class UserData: PolluxEntity<long>, IDataItem
+    public class UserData: PolluxModel<long>, IDataItem
     {
-        public string Data
-        {
-            get { return get<string>(); }
-            set { set(ref value); }
-        }
+        public string Data { get; set; }
 
-        public string Name
-        {
-            get { return get<string>(); }
-            set { set(ref value); }
-        }
+        public string Name { get; set; }
 
-        public CommonDataType Type
-        {
-            get { return get<CommonDataType>(); }
-            set { set(ref value); }
-        }
+        public CommonDataType Type { get; set; }
 
 
         #region Navigation Properties
-        public virtual User Owner  { get { return get<User>(); } set { set(ref value); } }
-        public virtual string OwnerId  { get { return get<string>(); } set { set(ref value); } }
+        public virtual User Owner { get; set; }
         #endregion
 
 
@@ -50,7 +37,7 @@ namespace Axis.Pollux.Identity.Principal
                 case CommonDataType.IPV6:
                 case CommonDataType.JsonObject: return Data;
 
-                case CommonDataType.DateTime: return Eval(() => DateTime.Parse(Data).ToString(), ex => "");
+                case CommonDataType.DateTime: return ResolvedOp.Try(() => DateTime.Parse(Data).ToString()).Resolve();
 
                 case CommonDataType.Binary: return "Binary-Data";
 
