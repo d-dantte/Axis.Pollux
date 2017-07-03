@@ -1,21 +1,22 @@
-﻿using Axis.Jupiter;
-using System;
-using System.Linq;
+﻿using System.Linq;
 
 using static Axis.Luna.Extensions.ExceptionExtensions;
 using Axis.Luna;
 using Axis.Pollux.Identity.Principal;
 using Axis.Luna.Extensions;
 using Axis.Pollux.AccountManagement.Queries;
-using Axis.Pollux.Account.Objects;
+using Axis.Pollux.Account.Models;
+using Axis.Jupiter.Europa;
+using Axis.Pollux.Account.OAModule.Entities;
+using Axis.Pollux.Identity.OAModule.Entities;
 
 namespace Axis.Pollux.AccountManagement.OAModule.Queries
 {
     public class AccountQuery: IAccountQuery
     {
-        private IDataContext _europa = null;
+        private DataStore _europa = null;
 
-        public AccountQuery(IDataContext context)
+        public AccountQuery(DataStore context)
         {
             ThrowNullArguments(() => context);
 
@@ -23,41 +24,47 @@ namespace Axis.Pollux.AccountManagement.OAModule.Queries
         }
 
         public ContextVerification GetContextVerification(string userId, string context, string token)
-        => _europa.Store<ContextVerification>()
-                  .QueryWith(_cv => _cv.Target)
+        => _europa.Query<ContextVerificationEntity>(_cv => _cv.Target)
                   .Where(_cv => _cv.TargetId == userId)
                   .Where(_cv => _cv.Context == context)
                   .Where(_cv => _cv.VerificationToken == token)
-                  .FirstOrDefault();
+                  .FirstOrDefault()
+                  .Pipe(new ModelConverter(_europa).ToModel<ContextVerification>);
 
         public ContextVerification GetLatestVerification(string userId, string context)
-        => _europa.Store<ContextVerification>()
-                  .QueryWith(_cv => _cv.Target)
+        => _europa.Query<ContextVerificationEntity>(_cv => _cv.Target)
                   .Where(_cv => _cv.TargetId == userId)
                   .Where(_cv => _cv.Context == context)
                   .OrderByDescending(_cv => _cv.CreatedOn)
-                  .FirstOrDefault();
+                  .FirstOrDefault()
+                  .Pipe(new ModelConverter(_europa).ToModel<ContextVerification>);
 
         public User GetUser(string userId)
-        => _europa.Store<User>().Query
+        => _europa.Query<UserEntity>()
                   .Where(_u => _u.UniqueId == userId)
-                  .FirstOrDefault();
+                  .FirstOrDefault()
+                  .Pipe(new ModelConverter(_europa).ToModel<User>);
 
-        public SequencePage<UserLogon> GetValidUserLogons(string userId, int pageSize = 0, int pageIndex = 0, bool includeCount = false)
-        => _europa.Store<UserLogon>().Query
+        public SequencePage<UserLogon> GetValidUserLogons(string userId, int pageSize = -1, int pageIndex = 0, bool includeCount = false)
+        => _europa.Query<UserLogonEntity>()
                   .Where(_u => _u.UserId == userId)
                   .Where(_u => !_u.Invalidated)
                   .OrderByDescending(_u => _u.ModifiedOn)
                   .Pipe(_q =>
                   {
-                      pageIndex = Math.Abs(pageIndex);
-                      var page = _q.Skip(Math.Abs(pageSize) * pageIndex).Take(pageIndex).ToArray(); //else give me the first (pageSize) items from the query
-                      var count = includeCount ? _q.Count() : 0;
+                      var converter = new ModelConverter(_europa);
+                      var d = _q
+                        .Skip(pageSize * pageIndex)
+                        .Take(pageSize)
+                        .AsEnumerable() //<-- pull from DB
+                        .Select(converter.ToModel<UserLogon>)
+                        .ToArray();
 
-                      return new SequencePage<UserLogon>(page, count, pageSize, pageIndex);
+                      var count = includeCount ? _q.Count() : d.Length;
+                      return new SequencePage<UserLogon>(d, count, pageSize, pageIndex);
                   });
 
         public long UserCount()
-        => _europa.Store<User>().Query.Count();
+        => _europa.Query<UserEntity>().LongCount();
     }
 }

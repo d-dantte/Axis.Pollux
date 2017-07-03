@@ -3,7 +3,7 @@ using Axis.Sigma.Core;
 
 using static Axis.Luna.Extensions.ExceptionExtensions;
 
-namespace Axis.Pollux.ABAC.AttributeSources
+namespace Axis.Pollux.ABAC.DAS.Models
 {
     public class AccessIntent
     {
@@ -17,14 +17,14 @@ namespace Axis.Pollux.ABAC.AttributeSources
             ResourceDescriptor = new IntentAuthorizationAttribute
             {
                 Name = CommonAttributeNames.IntentAttribute_ResourceDescriptor,
-                Type = Luna.CommonDataType.String,
+                Type = Luna.Utils.CommonDataType.String,
                 Data = resourceDescriptor
             };
 
             ActionDescriptor = new IntentAuthorizationAttribute
             {
                 Name = CommonAttributeNames.IntentAttribute_ActionDescriptor,
-                Type = Luna.CommonDataType.String,
+                Type = Luna.Utils.CommonDataType.String,
                 Data = actionDescriptor
             };
         }

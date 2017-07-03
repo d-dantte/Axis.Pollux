@@ -1,6 +1,9 @@
-﻿using Axis.Jupiter;
+﻿using Axis.Jupiter.Europa;
+using Axis.Pollux.Authentication.Models;
+using Axis.Pollux.Authentication.OAModule.Entities;
 using Axis.Pollux.CoreAuthentication.Queries;
-using Axis.Pollux.Identity.Principal;
+using Axis.Pollux.Identity.OAModule.Entities;
+using System.Collections.Generic;
 using System.Linq;
 
 using static Axis.Luna.Extensions.ExceptionExtensions;
@@ -9,9 +12,9 @@ namespace Axis.Pollux.Authentication.OAModule.Queries
 {
     public class AuthenticationQuery: IAuthenticationQuery
     {
-        private IDataContext _europa = null;
+        private DataStore _europa = null;
 
-        public AuthenticationQuery(IDataContext context)
+        public AuthenticationQuery(DataStore context)
         {
             ThrowNullArguments(() => context);
 
@@ -19,14 +22,15 @@ namespace Axis.Pollux.Authentication.OAModule.Queries
         }
 
         public bool UserExists(string userId)
-        => _europa.Store<User>().Query.Any(_u => _u.UniqueId == userId);
+        => _europa.Query<UserEntity>().Any(_u => _u.UniqueId == userId);
 
-        public Credential GetCredential(string userId, CredentialMetadata metadata)
-        => _europa.Store<Credential>().Query
+        public IEnumerable<Credential> GetCredentials(string userId, CredentialMetadata metadata)
+        => _europa.Query<CredentialEntity>(_cred => _cred.Owner)
                   .Where(_cred => _cred.Metadata.Name == metadata.Name)
                   .Where(_cred => _cred.Metadata.Access == metadata.Access)
                   .Where(_cred => _cred.OwnerId == userId)
                   .OrderByDescending(_cred => _cred.CreatedOn)
-                  .FirstOrDefault();
+                  .AsEnumerable()
+                  .Select(new ModelConverter(_europa).ToModel<Credential>);
     }
 }

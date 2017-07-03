@@ -33,9 +33,6 @@
     <Reference Include="Axis.Luna">
       <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
     </Reference>
-    <Reference Include="Axis.Narvi">
-      <HintPath>..\..\Axis.Narvi\Axis.Narvi\bin\Debug\Axis.Narvi.dll</HintPath>
-    </Reference>
     <Reference Include="Axis.Sigma.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Axis.Sigma\Axis.Sigma.Core\bin\Debug\Axis.Sigma.Core.dll</HintPath>

@@ -30,15 +30,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Axis.Jupiter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Axis.Jupiter, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Axis.Jupiter\Axis.Jupiter\bin\Debug\Axis.Jupiter.dll</HintPath>
     </Reference>
-    <Reference Include="Axis.Jupiter.Europa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Axis.Jupiter.Europa, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Axis.Jupiter\Axis.Jupiter.Europa\bin\Debug\Axis.Jupiter.Europa.dll</HintPath>
     </Reference>
-    <Reference Include="Axis.Luna">
+    <Reference Include="Axis.Luna, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">

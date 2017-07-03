@@ -18,7 +18,7 @@ namespace Axis.Pollux.Tests
                    .WithInitializer(new DropCreateDatabaseIfModelChanges<EuropaContext>())
                    .UsingModule(new IdentityAccessModuleConfig())
                    .UsingModule(new RBACAccessModuleConfig())
-                   .UsingModule(new Authentication.OAModule.AuthenticationAccessModuleConfig());
+                   .UsingModule(new Authentication.OAModule.Extensions());
 
 
         [TestMethod]

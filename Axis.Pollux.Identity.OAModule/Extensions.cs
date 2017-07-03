@@ -1,6 +1,7 @@
 ﻿using Axis.Jupiter.Europa;
 using Axis.Jupiter.Europa.Module;
 using Axis.Luna.Extensions;
+using Axis.Pollux.Identity.OAModule.Mappings;
 using System;
 using System.Linq;
 
@@ -15,7 +16,7 @@ namespace Axis.Pollux.Identity.OAModule
 
             //Configuration
             var asm = typeof(Extensions).Assembly;
-            var ns = "Axis.Pollux.Identity.OAModule.Mappings";
+            var ns = typeof(UserMap).Namespace;
             asm.GetTypes()
                .Where(t => t.Namespace == ns)
                .Where(t => t.IsEntityMap())

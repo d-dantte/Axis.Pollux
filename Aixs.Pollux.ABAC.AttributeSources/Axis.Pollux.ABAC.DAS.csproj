@@ -7,8 +7,8 @@
     <ProjectGuid>{7B27C921-6644-48EE-8CD3-AC6F1795AA8E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Axis.Pollux.ABAC.AttributeSources</RootNamespace>
-    <AssemblyName>Axis.Pollux.ABAC.AttributeSources</AssemblyName>
+    <RootNamespace>Axis.Pollux.ABAC.DAS</RootNamespace>
+    <AssemblyName>Axis.Pollux.ABAC.DAS</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,11 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Axis.Luna">
-      <HintPath>..\..\..\..\..\Jobs\BitDiamond\Dev\Git\Libs\Axis.Luna.dll</HintPath>
+    <Reference Include="Axis.Jupiter">
+      <HintPath>..\..\Axis.Jupiter\Axis.Jupiter\bin\Debug\Axis.Jupiter.dll</HintPath>
     </Reference>
-    <Reference Include="Axis.Narvi">
-      <HintPath>..\..\..\..\..\Jobs\BitDiamond\Dev\Git\Libs\Axis.Narvi.dll</HintPath>
+    <Reference Include="Axis.Luna, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
     </Reference>
     <Reference Include="Axis.Sigma.Core">
       <HintPath>..\..\Axis.Sigma\Axis.Sigma.Core\bin\Debug\Axis.Sigma.Core.dll</HintPath>
@@ -49,16 +50,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccessIntent.cs" />
-    <Compile Include="CallContextIntentSource.cs" />
+    <Compile Include="Models\AccessIntent.cs" />
+    <Compile Include="Models\RolePermission.cs" />
+    <Compile Include="Models\UserRole.cs" />
+    <Compile Include="Queries\IPrincipalRoleQuery.cs" />
+    <Compile Include="Services\CallContextIntentSource.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="IntentMap.cs" />
+    <Compile Include="Models\IntentMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IntentMapSource.cs" />
+    <Compile Include="Services\PrincipalRoleManager.cs" />
+    <Compile Include="Services\PrincipalRoleSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Axis.Pollux.ABAC\Axis.Pollux.ABAC.csproj">
       <Project>{ad36d2a4-7ed0-4d00-be9b-0dcd70d12390}</Project>
       <Name>Axis.Pollux.ABAC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
+      <Project>{B6FE1B10-92A4-474B-8605-E3D63E491DCE}</Project>
+      <Name>Axis.Pollux.Identity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
+      <Project>{ADD69F52-5EB2-4B5F-B4B1-46943A8F1CB7}</Project>
+      <Name>Axis.Pollux.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

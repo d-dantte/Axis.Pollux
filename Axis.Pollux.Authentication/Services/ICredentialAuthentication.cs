@@ -1,6 +1,7 @@
 ﻿using Axis.Luna.Operation;
+using Axis.Pollux.Authentication.Models;
 
-namespace Axis.Pollux.Authentication.Service
+namespace Axis.Pollux.Authentication.Services
 {
     public interface ICredentialAuthentication
     {
@@ -16,7 +17,5 @@ namespace Axis.Pollux.Authentication.Service
         /// <param name="credential"></param>
         /// <returns></returns>
         IOperation AssignCredential(Credential credential);
-
-        IOperation ModifyCredential(Credential oldValue, Credential newValue);
     }
 }

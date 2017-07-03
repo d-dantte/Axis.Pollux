@@ -3,8 +3,10 @@ using System;
 using Axis.Luna.Extensions;
 using static Axis.Luna.Extensions.ObjectExtensions;
 using static Axis.Luna.Extensions.ExceptionExtensions;
+using Axis.Luna.Operation;
+using Axis.Luna.Utils;
 
-namespace Axis.Pollux.Authentication
+namespace Axis.Pollux.Authentication.Models
 {
     public class Credential: PolluxModel<long>
     {
@@ -26,9 +28,14 @@ namespace Axis.Pollux.Authentication
 
         public Credential()
         { }
+
+        public override IOperation Validate() => LazyOp.Try(() =>
+        {
+
+        });
     }
 
-    public struct CredentialMetadata: IEquatable<CredentialMetadata>
+    public class CredentialMetadata: IValidatable, IEquatable<CredentialMetadata>
     {
         #region standard credential metadata
         public static readonly CredentialMetadata Password = new CredentialMetadata() { Name = nameof(Password), Access = Access.Secret };
@@ -59,9 +66,12 @@ namespace Axis.Pollux.Authentication
             this.Access = access;
         }
 
+        public CredentialMetadata()
+        { }
+
         #region properties
-        public string Name { get; private set; }
-        public Access Access { get; private set; }
+        public string Name { get; set; }
+        public Access Access { get; set; }
         #endregion
 
         public override bool Equals(object obj) => Equals(obj.Cast<CredentialMetadata>());
@@ -73,6 +83,13 @@ namespace Axis.Pollux.Authentication
         public override int GetHashCode() => ValueHash(17, 23, Name, Access);
 
         public override string ToString() => $"{{Name:'{Name}', Access:'{Access}'}}";
+
+        public IOperation Validate()
+        => LazyOp.Try(() =>
+        {
+            string.IsNullOrWhiteSpace(Name)
+                  .ThrowIf(_inws => _inws, "Invalid Metadata Name");
+        });
     }
     
     public enum Access

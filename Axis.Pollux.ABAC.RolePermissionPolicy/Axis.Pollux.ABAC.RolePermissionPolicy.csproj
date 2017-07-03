@@ -30,14 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Axis.Jupiter.Kore">
-      <HintPath>..\..\Axis.Jupiter\Axis.Jupiter.Kore\bin\Debug\Axis.Jupiter.Kore.dll</HintPath>
-    </Reference>
     <Reference Include="Axis.Luna">
       <HintPath>..\..\..\..\..\Jobs\BitDiamond\Dev\Git\Libs\Axis.Luna.dll</HintPath>
-    </Reference>
-    <Reference Include="Axis.Narvi">
-      <HintPath>..\..\..\..\..\Jobs\BitDiamond\Dev\Git\Libs\Axis.Narvi.dll</HintPath>
     </Reference>
     <Reference Include="Axis.Sigma.Core">
       <HintPath>..\..\Axis.Sigma\Axis.Sigma.Core\bin\Debug\Axis.Sigma.Core.dll</HintPath>
@@ -56,14 +50,14 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IntentDescriptor.cs" />
     <Compile Include="Services\Impl\Queries\IRolePolicyQuery.cs" />
-    <Compile Include="RolePermission.cs" />
+    <Compile Include="Models\RolePermission.cs" />
     <Compile Include="Services\Impl\Queries\IUserRoleQuery.cs" />
     <Compile Include="Services\Impl\UserRoleManager.cs" />
     <Compile Include="Services\Impl\UserAttributeSource.cs" />
     <Compile Include="Services\IRolePolicyStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Impl\RolePolicyStore.cs" />
-    <Compile Include="UserRole.cs" />
+    <Compile Include="Models\UserRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Axis.Pollux.ABAC\Axis.Pollux.ABAC.csproj">

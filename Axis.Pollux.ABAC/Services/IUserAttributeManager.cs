@@ -1,12 +1,11 @@
-﻿using Axis.Luna;
-using Axis.Pollux.ABAC.Auth;
+﻿using Axis.Luna.Operation;
 using Axis.Sigma.Core;
 
 namespace Axis.Pollux.ABAC.Services
 {
     public interface IUserAttributeManager
     {
-        Operation<IAttribute> AssignAttribute(string userId, SubjectAuthorizationAttribute attribute);
-        Operation<IAttribute> RemoveAttribute(string userId, string attributeName);
+        IOperation<IAttribute> AssignAttribute(string userId, IAttribute attribute);
+        IOperation<IAttribute> RemoveAttribute(string userId, string attributeName);
     }
 }

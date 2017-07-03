@@ -1,13 +1,14 @@
 ﻿using static Axis.Luna.Extensions.ExceptionExtensions;
-using static Axis.Luna.Extensions.ObjectExtensions;
 
 using System;
 using System.Linq;
 using Axis.Pollux.Authentication;
-using Axis.Pollux.Authentication.Service;
+using Axis.Pollux.Authentication.Services;
 using Axis.Pollux.CoreAuthentication.Queries;
-using Axis.Jupiter.Kore.Command;
 using Axis.Luna.Operation;
+using Axis.Luna.Extensions;
+using Axis.Jupiter.Commands;
+using Axis.Pollux.Authentication.Models;
 
 namespace Axis.Pollux.CoreAuthentication.Services
 {
@@ -26,10 +27,18 @@ namespace Axis.Pollux.CoreAuthentication.Services
 
             _query = query;
             _pcommand = pcommand;
+
             CredentialHasher = hasher ?? new DefaultHasher();
         }
-
+        
         #region ICredentialAuthentication
+        /// <summary>
+        /// NOTE that this method doesn't enforce that the CURRENT user be the one initiating it, thus, this method should not be
+        /// exposed publicly, rather, it should be part of some other business process where the right policy for who can assign
+        /// a credential to whom can be enforced.
+        /// </summary>
+        /// <param name="credential"></param>
+        /// <returns></returns>
         public IOperation AssignCredential(Credential credential)
         => LazyOp.Try(() =>
         {
@@ -37,62 +46,51 @@ namespace Axis.Pollux.CoreAuthentication.Services
             else
             {
                 //find and Expire any old credentials of the same name and access belonging to the user
-                var oldCred = _query.GetCredential(credential.Owner.UserId, credential.Metadata);                    
-                if (oldCred != null) //deactivate
-                {
-                    ExpireCredential(oldCred);
-                }
+                _query.GetCredentials(credential.Owner.UserId, credential.Metadata)
+                      .Where(_cred => DateTime.Now > _cred.ExpiresOn)
+                      .Select(ExpireCredential)
 
-                else
-                    _pcommand.Add(CreateCredential(credential.Owner.UserId, credential.Value, credential.Metadata))
-                         .Resolve();
+                      //add the new credential ONLY after all unexpired credentials of the same metadata type have been expired.
+                      .Then(() => _pcommand.Add(CreateCredential(credential.Owner.UserId, credential.Value, credential.Metadata, credential.ExpiresOn)).Resolve())
+                      .Resolve();
             }
         });
 
-        private Credential CreateCredential(string userId, byte[] value, CredentialMetadata metadata) => CreateCredential(0, userId, value, metadata);
+        private Credential CreateCredential(string userId, byte[] value, CredentialMetadata metadata, DateTime? expiresOn) 
+        => CreateCredential(0, userId, value, metadata, expiresOn);
 
-        private Credential CreateCredential(long entityId, string userId, byte[] value, CredentialMetadata metadata)
+        private Credential CreateCredential(long entityId, string userId, byte[] value, CredentialMetadata metadata, DateTime? expiresOn)
         => new Credential
         {
             UniqueId = entityId,
-            Owner = new Identity.Principal.User { Un,
-            Metadata = metadata.ThrowIfNull(),
+            Owner = new Identity.Principal.User { UniqueId = userId },
+            Metadata = metadata,
             Value = metadata.Access == Access.Public ? value : null,
             SecuredHash = metadata.Access == Access.Secret ? CredentialHasher.CalculateHash(value) : null,
-            ExpiresIn = expiresIn
+            ExpiresOn = expiresOn
         };
 
         public IOperation ExpireCredential(Credential credential)
         => LazyOp.Try(() =>
         {
-            throw new NotImplementedException();
+            credential.ExpiresOn = DateTime.Now;
+            _pcommand.Add(credential)
+                     .Resolve();
         });
 
         public IOperation VerifyCredential(Credential credential)
         => LazyOp.Try(() =>
         {
             var dbcred = _query
-                .GetCredential(credential.OwnerId, credential.Metadata)
-                .ThrowIf(_c => _c.Status != CredentialStatus.Active, "credential is not active")
+                .GetCredentials(credential.Owner.UniqueId, credential.Metadata)
+                .FirstOrDefault(_cred => _cred.ExpiresOn > DateTime.Now)
                 .ThrowIfNull("could not find Credential");
-
-            if (dbcred.ExpiresIn <= (DateTime.Now - dbcred.CreatedOn).Ticks)
-            {
-                _pcommand.Update(dbcred.With(new { Status = CredentialStatus.Inactive })).Resolve();
-                throw new Exception("Credential has expired");
-            }
 
             if (dbcred.Metadata.Access == Access.Secret &&
                !CredentialHasher.IsValidHash(credential.Value, dbcred.SecuredHash)) throw new Exception("Invalid Credential");
 
             else if (dbcred.Metadata.Access == Access.Public &&
                     !dbcred.Value.SequenceEqual(credential.Value)) throw new Exception("Invalid Credential");
-        });
-
-        public IOperation ModifyCredential(Credential old, Credential @new)
-        => VerifyCredential(old).Then(_opr =>
-        {
-            _pcommand.Update(CreateCredential(old.UniqueId, old.OwnerId, @new.Value, old.Metadata, old.ExpiresIn)).Resolve();
         });
         #endregion
     }

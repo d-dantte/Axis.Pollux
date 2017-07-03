@@ -3,14 +3,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Axis.Pollux.ABAC.AttributeSources
+namespace Axis.Pollux.ABAC.DAS
 {
     public static class Extensions
     {
         public static string UniqueSignature(this MethodInfo m)
         {
-            var t = new StringBuilder();
-            t.Append(m.DeclaringType.MinimalAQName()).Append(".")
+            return new StringBuilder()
+                .Append(m.DeclaringType.MinimalAQName()).Append(".")
                 .Append(!m.IsGenericMethod ? "" :
                         "<" + m.GetGenericArguments().Aggregate("", (@params, param) => @params += (@params == "" ? "" : ", ") + "[" + param.MinimalAQName() + "]") + ">")
                 .Append("(")
@@ -18,9 +18,8 @@ namespace Axis.Pollux.ABAC.AttributeSources
                          .Aggregate("", (@params, param) => @params += (@params == "" ? "" : ", ") + "[" + param.ParameterType.MinimalAQName() + "] " + param.Name))
                 .Append(")")
                 .Append("::")
-                .Append("[").Append(m.ReturnType.MinimalAQName()).Append("]");
-
-            return t.ToString();
+                .Append("[").Append(m.ReturnType.MinimalAQName()).Append("]")
+                .ToString();
         }
     }
 }

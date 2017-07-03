@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Axis.Pollux.ABAC.AttributeSources
+namespace Axis.Pollux.ABAC.DAS.Models
 {
     public class OperationIntentMap
     {
@@ -20,7 +20,7 @@ namespace Axis.Pollux.ABAC.AttributeSources
 
         public OperationIntentMap Map<T>(Expression<Action<T>> methodExpression, params AccessIntent[] actionMaps)
         => methodExpression.Body
-            .As<MethodCallExpression>()
+            .Cast<MethodCallExpression>()
             .ThrowIfNull("Expression MUST be a simple method call expression")
             .Pipe(mexp => Map(mexp.Method.UniqueSignature(), actionMaps));
 
@@ -34,7 +34,7 @@ namespace Axis.Pollux.ABAC.AttributeSources
 
         public AccessIntent[] AccessIntentsFor<T>(Expression<Action<T>> methodExpression)
         => methodExpression
-            .As<MethodCallExpression>()
+            .Cast<MethodCallExpression>()
             .ThrowIfNull("Expression MUST be a simple method call expression of the form (t => t.Method())")
             .Pipe(mexp => AccessIntentsFor(mexp.Method));
     }

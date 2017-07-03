@@ -1,11 +1,12 @@
 ﻿
 using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
+using Axis.Luna.Utils;
 using System;
 
 namespace Axis.Pollux.Identity.Principal
 {
-    public abstract class PolluxModel<Key> : IEquatable<PolluxModel<Key>>
+    public abstract class PolluxModel<Key> : IEquatable<PolluxModel<Key>>, IValidatable
     {
         public Key UniqueId { get; set; }
 

@@ -1,15 +1,15 @@
 ﻿using Axis.Pollux.ABAC.Services;
 using System.Collections.Generic;
-using Axis.Luna;
 using Axis.Sigma.Core;
 using System.Runtime.Remoting.Messaging;
 using Axis.Luna.Extensions;
-using Axis.Pollux.ABAC.AttributeSources;
 
 using static Axis.Luna.Extensions.ExceptionExtensions;
 using System.Linq;
+using Axis.Luna.Operation;
+using Axis.Pollux.ABAC.DAS.Models;
 
-namespace Axis.Pollux.ABAC.OperationIntentSource
+namespace Axis.Pollux.ABAC.DAS.Services
 {
     public class CallContextIntentSource : IIntentAttributeSource
     {
@@ -25,12 +25,13 @@ namespace Axis.Pollux.ABAC.OperationIntentSource
         }
 
 
-        public Operation<IEnumerable<IAttribute>> GetAttributes()
-        => Operation.Try(() =>
+        public IOperation<IEnumerable<IAttribute>> GetAttributes()
+        => LazyOp.Try(() =>
         {
-            var intent = CallContext.LogicalGetData(CallContextKey)
-                                    .As<Stack<string>>()?
-                                    .Peek();
+            var intent = CallContext
+                .LogicalGetData(CallContextKey)
+                .Cast<Stack<string>>()?
+                .Peek();
 
             return _intentMap
                 .AccessIntentsFor(intent) //<-- will return an empty array if intent is null

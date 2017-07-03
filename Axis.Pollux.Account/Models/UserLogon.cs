@@ -1,6 +1,6 @@
 ﻿using Axis.Pollux.Identity.Principal;
 
-namespace Axis.Pollux.Account.Objects
+namespace Axis.Pollux.Account.Models
 {
     public class UserLogon: PolluxModel<long>
     {
@@ -17,29 +17,8 @@ namespace Axis.Pollux.Account.Objects
 
         //[MaxLength(20)]
         public string Locale { get; set; }
-
-        private User _user;
-        private string _userId;
-        public virtual User User
-        {
-            get { return _user; }
-            set
-            {
-                _user = value;
-                if (value != null) _userId = _user.UniqueId;
-                else _userId = null;
-            }
-        }
-        public string UserId
-        {
-            get { return _userId; }
-            set
-            {
-                _userId = value;
-                if (value == null) _user = null;
-                else if (!value.Equals(_user?.UniqueId)) _user = null;
-            }
-        }
+        
+        public virtual User User { get; set; }
     }
 
     //[ComplexType]
