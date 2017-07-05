@@ -36,6 +36,9 @@
     <Reference Include="Axis.Jupiter.Europa">
       <HintPath>..\..\Axis.Jupiter\Axis.Jupiter.Europa\bin\Debug\Axis.Jupiter.Europa.dll</HintPath>
     </Reference>
+    <Reference Include="Axis.Luna">
+      <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
+    </Reference>
     <Reference Include="Axis.Sigma.Core">
       <HintPath>..\..\Axis.Sigma\Axis.Sigma.Core\bin\Debug\Axis.Sigma.Core.dll</HintPath>
     </Reference>
@@ -62,11 +65,11 @@
     <Compile Include="Entities\UserRoleEntity.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Mappings\RolePermissionMap.cs" />
+    <Compile Include="Mappings\UserRoleMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\PrincipalRoleQuery.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Aixs.Pollux.ABAC.AttributeSources\Axis.Pollux.ABAC.DAS.csproj">
       <Project>{7B27C921-6644-48EE-8CD3-AC6F1795AA8E}</Project>

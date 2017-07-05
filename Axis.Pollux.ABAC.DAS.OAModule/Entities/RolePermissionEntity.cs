@@ -12,8 +12,12 @@ namespace Axis.Pollux.ABAC.DAS.OAModule.Entities
     {
         public Effect Effect { get; set; }
         public string IntentDescriptor { get; set; }
-        public string RoleName { get; set; }
-        
+
+        /// <summary>
+        /// Note that there is no ForeignKey relationship between this entity and the User Role entity.
+        /// Both are "loosely" linked by this RoleName property and as such, it will be made an Index.
+        /// </summary>
+        public string RoleName { get; set; }        
         public string Label { get; set; }
     }
 }
