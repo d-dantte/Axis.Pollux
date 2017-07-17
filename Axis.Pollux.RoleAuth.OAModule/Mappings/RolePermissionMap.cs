@@ -2,6 +2,7 @@
 using Axis.Jupiter.Europa;
 using Axis.Pollux.RoleAuth.OAModule.Entities;
 using Axis.Pollux.RoleAuth.Models;
+using Axis.Luna.Extensions;
 
 namespace Axis.Pollux.ABAC.DAS.OAModule.Mappings
 {
@@ -9,36 +10,45 @@ namespace Axis.Pollux.ABAC.DAS.OAModule.Mappings
     {
         public RolePermissionMap()
         {
-            this.Property(e => e.RoleName)
-                .HasMaxLength(450)
-                .IsIndex("PermissionRoleName");
+            this.Property(e => e.UUID)
+                .IsIndex("PermissionGuid", true);
 
-            this.Property(e => e.PermissionGuid)
-                .IsIndex("PermissionGuidIndex", true);
+            this.HasOptional(_t => _t.Role)
+                .WithMany()
+                .HasForeignKey(_t => _t.RoleName);
         }
 
         public override void CopyToEntity(RolePermission model, RolePermissionEntity entity, ModelConverter converter)
         {
             entity.CreatedOn = model.CreatedOn;
             entity.Effect = model.Effect;
-            entity.IntentDescriptor = model.IntentDescriptor;
-            entity.PolicyCode = model.Label;
+            entity.Resource = model.Resource;
+            entity.Label = model.Label;
             entity.ModifiedOn = model.ModifiedOn;
-            entity.RoleName = model.RoleName;
             entity.UniqueId = model.UniqueId;
-            entity.PermissionGuid = model.PermissionGuid;
+            entity.UUID = model.UUID;
+
+            if(model.Role != null)
+            {
+                entity.Role = converter.ToEntity(model.Role).Cast<RoleEntity>();
+                entity.RoleName = model.Role.RoleName;
+            }
         }
 
         public override void CopyToModel(RolePermissionEntity entity, RolePermission model, ModelConverter converter)
         {
             model.CreatedOn = entity.CreatedOn;
             model.Effect = entity.Effect;
-            model.IntentDescriptor = entity.IntentDescriptor;
-            model.Label = entity.PolicyCode;
+            model.Resource = entity.Resource;
+            model.Label = entity.Label;
             model.ModifiedOn = entity.ModifiedOn;
-            model.RoleName = entity.RoleName;
             model.UniqueId = entity.UniqueId;
-            model.PermissionGuid = entity.PermissionGuid;
+            model.UUID = entity.UUID;
+
+            if (entity.Role != null)
+                model.Role = converter.ToModel<Role>(entity.Role);
+            else if (!string.IsNullOrWhiteSpace(entity.RoleName))
+                model.Role = new Role { RoleName = entity.RoleName };
         }
     }
 }

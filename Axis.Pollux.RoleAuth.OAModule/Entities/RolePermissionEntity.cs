@@ -6,7 +6,7 @@ namespace Axis.Pollux.RoleAuth.OAModule.Entities
 {
     public class RolePermissionEntity: PolluxEntity<long>
     {
-        public Role Role { get; set; }
+        public RoleEntity Role { get; set; }
         public string RoleName { get; set; }
 
         public PermissionEffect Effect { get; set; }

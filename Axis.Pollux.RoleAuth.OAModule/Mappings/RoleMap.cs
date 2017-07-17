@@ -1,7 +1,6 @@
 ﻿using Axis.Pollux.Identity.OAModule.Mappings;
 using Axis.Pollux.RoleAuth.Models;
 using Axis.Pollux.RoleAuth.OAModule.Entities;
-using System;
 using Axis.Jupiter.Europa;
 
 namespace Axis.Pollux.RoleAuth.OAModule.Mappings

@@ -1,10 +1,11 @@
 ﻿using Axis.Pollux.RoleManagement.Queries;
-using System;
 using System.Collections.Generic;
 using Axis.Pollux.RoleAuth.Models;
 using Axis.Jupiter.Europa;
 
 using static Axis.Luna.Extensions.ExceptionExtensions;
+using System.Linq;
+using Axis.Pollux.RoleAuth.OAModule.Entities;
 
 namespace Axis.Pollux.RoleAuth.OAModule.Queries
 {
@@ -21,30 +22,41 @@ namespace Axis.Pollux.RoleAuth.OAModule.Queries
 
         public IEnumerable<Role> GetAllRoles()
         => _europa
+            .Query<RoleEntity>()
+            .Transform<RoleEntity, Role>(_europa);
+
 
         public IEnumerable<RolePermission> GetPermissionsForLabel(string label)
-        {
-            throw new NotImplementedException();
-        }
+        => _europa
+            .Query<RolePermissionEntity>()
+            .Where(_rp => _rp.Label == label)
+            .Transform<RolePermissionEntity, RolePermission>(_europa);
 
         public IEnumerable<RolePermission> GetPermissionsForResource(string resource)
-        {
-            throw new NotImplementedException();
-        }
+        => _europa
+            .Query<RolePermissionEntity>()
+            .Where(_rp => _rp.Resource == resource)
+            .Transform<RolePermissionEntity, RolePermission>(_europa);
 
         public IEnumerable<RolePermission> GetPermissionsForRole(string roleName)
-        {
-            throw new NotImplementedException();
-        }
+        => _europa
+            .Query<RolePermissionEntity>()
+            .Where(_rp => _rp.RoleName == roleName)
+            .Transform<RolePermissionEntity, RolePermission>(_europa);
 
         public UserRole GetUserRole(string userId, string roleName)
-        {
-            throw new NotImplementedException();
-        }
+        => _europa
+            .Query<UserRoleEntity>(_ur => _ur.Role, _ur => _ur.User)
+            .Where(_ur => _ur.RoleName == roleName)
+            .Where(_ur => _ur.UserId == userId)
+            .FirstOrDefault()
+            .Transform<UserRoleEntity, UserRole>(_europa);
+
 
         public IEnumerable<UserRole> GetUserRolesFor(string userId)
-        {
-            throw new NotImplementedException();
-        }
+        => _europa
+            .Query<UserRoleEntity>(_ur => _ur.Role, _ur => _ur.User)
+            .Where(_ur => _ur.UserId == userId)
+            .Transform<UserRoleEntity, UserRole>(_europa);
     }
 }

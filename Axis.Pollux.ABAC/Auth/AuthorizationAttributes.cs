@@ -32,6 +32,7 @@ namespace Axis.Pollux.ABAC.Auth
         public override int GetHashCode() => this.PropertyHash();
     }
 
+
     /// <summary>
     /// Default implementation of the Subject Authorization Attribute
     /// </summary>
@@ -61,6 +62,7 @@ namespace Axis.Pollux.ABAC.Auth
         }
         #endregion
     }
+
 
     /// <summary>
     /// Default implementation of the Intent Authorization Attribute
@@ -92,6 +94,7 @@ namespace Axis.Pollux.ABAC.Auth
         #endregion
     }
     
+
     /// <summary>
     /// Deafult implementation of the Environment Authorization Attribute
     /// </summary>

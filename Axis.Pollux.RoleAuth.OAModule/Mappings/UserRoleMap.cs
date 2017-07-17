@@ -12,9 +12,13 @@ namespace Axis.Pollux.ABAC.DAS.OAModule.Mappings
     {
         public UserRoleMap()
         {
-            this.Property(e => e.RoleName)
-                .HasMaxLength(450)
-                .IsIndex("UserRoleName");
+            this.HasOptional(_t => _t.Role)
+                .WithMany()
+                .HasForeignKey(_t => _t.RoleName);
+
+            this.HasOptional(_t => _t.User)
+                .WithMany()
+                .HasForeignKey(_t => _t.UserId);
         }
 
         public override void CopyToEntity(UserRole model, UserRoleEntity entity, ModelConverter converter)
