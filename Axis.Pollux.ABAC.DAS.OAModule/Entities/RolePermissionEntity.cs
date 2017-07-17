@@ -1,10 +1,6 @@
 ﻿using Axis.Pollux.Identity.OAModule.Entities;
 using Axis.Sigma.Core.Policy;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Axis.Pollux.ABAC.DAS.OAModule.Entities
 {
@@ -18,6 +14,7 @@ namespace Axis.Pollux.ABAC.DAS.OAModule.Entities
         /// Both are "loosely" linked by this RoleName property and as such, it will be made an Index.
         /// </summary>
         public string RoleName { get; set; }        
-        public string Label { get; set; }
+        public string PolicyCode { get; set; }
+        public Guid PermissionGuid { get; set; }
     }
 }

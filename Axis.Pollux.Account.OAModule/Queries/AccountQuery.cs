@@ -28,7 +28,7 @@ namespace Axis.Pollux.AccountManagement.OAModule.Queries
                   .Where(_cv => _cv.TargetId == userId)
                   .Where(_cv => _cv.Context == context)
                   .Where(_cv => _cv.VerificationToken == token)
-                  .FirstOrDefault()
+                  .FirstOrDefault()?
                   .Pipe(new ModelConverter(_europa).ToModel<ContextVerification>);
 
         public ContextVerification GetLatestVerification(string userId, string context)
@@ -36,13 +36,13 @@ namespace Axis.Pollux.AccountManagement.OAModule.Queries
                   .Where(_cv => _cv.TargetId == userId)
                   .Where(_cv => _cv.Context == context)
                   .OrderByDescending(_cv => _cv.CreatedOn)
-                  .FirstOrDefault()
+                  .FirstOrDefault()?
                   .Pipe(new ModelConverter(_europa).ToModel<ContextVerification>);
 
         public User GetUser(string userId)
         => _europa.Query<UserEntity>()
                   .Where(_u => _u.UniqueId == userId)
-                  .FirstOrDefault()
+                  .FirstOrDefault()?
                   .Pipe(new ModelConverter(_europa).ToModel<User>);
 
         public SequencePage<UserLogon> GetValidUserLogons(string userId, int pageSize = -1, int pageIndex = 0, bool includeCount = false)
@@ -64,7 +64,6 @@ namespace Axis.Pollux.AccountManagement.OAModule.Queries
                       return new SequencePage<UserLogon>(d, count, pageSize, pageIndex);
                   });
 
-        public long UserCount()
-        => _europa.Query<UserEntity>().LongCount();
+        public long UserCount() => _europa.Query<UserEntity>().LongCount();
     }
 }

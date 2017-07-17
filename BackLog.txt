@@ -1,0 +1,16 @@
+
+2017/07/17 #01 ===================================================================================================================================
+
+1.	Axis.Pollux.RBAC is being deleted from the repository
+2.	Axis.Pollux.Identity is having it's Model structure refactored to conform to the new jupiter standards. This invariably affects
+	all other projects.
+3.	Axis.Pollux.ABAC getting major overhaull. The new model/architecture recognizes the AuthorizationRequest, and the Policy Enforcer.
+	a. The AuthorizationRequest is serviced by AttributeSources, for which default implementations for the regular attributes (User, UserRole)
+	are provided in the Axis.Pollux.ABAC.DefaultAttributeSources project.
+
+	b. The Policy Enforcer is serviced by the two PolicyIO services, PolicyReader and PolicyWriter. Both of these have a default implementation
+	Provided in the Axis.Pollux.ABAC.RolePolicyIO project
+
+	c. Both of the above projects will depend on the Axis.Pollux.RoleAuth Project which provides the Role/Permission/UserRole objects and the
+	services needed to manage them.
+4.	

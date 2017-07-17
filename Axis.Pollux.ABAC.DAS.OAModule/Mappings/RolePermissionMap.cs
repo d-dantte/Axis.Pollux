@@ -12,6 +12,9 @@ namespace Axis.Pollux.ABAC.DAS.OAModule.Mappings
             this.Property(e => e.RoleName)
                 .HasMaxLength(450)
                 .IsIndex("PermissionRoleName");
+
+            this.Property(e => e.PermissionGuid)
+                .IsIndex("PermissionGuidIndex", true);
         }
 
         public override void CopyToEntity(RolePermission model, RolePermissionEntity entity, ModelConverter converter)
@@ -19,10 +22,11 @@ namespace Axis.Pollux.ABAC.DAS.OAModule.Mappings
             entity.CreatedOn = model.CreatedOn;
             entity.Effect = model.Effect;
             entity.IntentDescriptor = model.IntentDescriptor;
-            entity.Label = model.Label;
+            entity.PolicyCode = model.Label;
             entity.ModifiedOn = model.ModifiedOn;
             entity.RoleName = model.RoleName;
             entity.UniqueId = model.UniqueId;
+            entity.PermissionGuid = model.PermissionGuid;
         }
 
         public override void CopyToModel(RolePermissionEntity entity, RolePermission model, ModelConverter converter)
@@ -30,10 +34,11 @@ namespace Axis.Pollux.ABAC.DAS.OAModule.Mappings
             model.CreatedOn = entity.CreatedOn;
             model.Effect = entity.Effect;
             model.IntentDescriptor = entity.IntentDescriptor;
-            model.Label = entity.Label;
+            model.Label = entity.PolicyCode;
             model.ModifiedOn = entity.ModifiedOn;
             model.RoleName = entity.RoleName;
             model.UniqueId = entity.UniqueId;
+            model.PermissionGuid = entity.PermissionGuid;
         }
     }
 }

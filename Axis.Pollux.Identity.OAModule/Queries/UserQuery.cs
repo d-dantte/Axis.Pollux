@@ -24,13 +24,13 @@ namespace Axis.Pollux.Identity.OAModule.Queries
         public BioData GetBioData(string userId)
         => _europa.Query<BioDataEntity>(_bd => _bd.Owner)
                   .Where(_bd => _bd.OwnerId == userId)
-                  .FirstOrDefault()
+                  .FirstOrDefault()?
                   .Pipe(new ModelConverter(_europa).ToModel<BioData>);
 
         public ContactData GetContactData(long id)
         => _europa.Query<ContactDataEntity>(_cd => _cd.Owner)
                   .Where(_cd => _cd.UniqueId == id)
-                  .FirstOrDefault()
+                  .FirstOrDefault()?
                   .Pipe(new ModelConverter(_europa).ToModel<ContactData>);
 
         public SequencePage<ContactData> GetContactData(string userId, int pageSize = 500, int pageIndex = 0, bool includeCount = true)

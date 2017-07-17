@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Axis.Luna.Operation;
 using Axis.Sigma.Core;
-using Axis.Pollux.ABAC.DAS.Queries;
 using Axis.Pollux.Common.Services;
 using static Axis.Luna.Extensions.ExceptionExtensions;
+using Axis.Pollux.ABAC.RolePermissionPolicy.Queries;
 
 namespace Axis.Pollux.ABAC.DAS.Services
 {
@@ -17,8 +17,8 @@ namespace Axis.Pollux.ABAC.DAS.Services
         {
             ThrowNullArguments(() => context, () => query);
 
-            this._query = query;
-            this._userContext = context;
+            _query = query;
+            _userContext = context;
         }
 
 
