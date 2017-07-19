@@ -7,18 +7,18 @@ namespace Axis.Pollux.ABAC.Services
 {
     public class AuthorizationRequest : IAuthorizationRequest
     {
-        private List<IUserAttributeSource> _userAttributeSources = new List<IUserAttributeSource>();
-        private List<IEnvironmentAttributeSource> _environmentAttributeSources = new List<IEnvironmentAttributeSource>();
-        private List<IIntentAttributeSource> _intentAttributeSources = new List<IIntentAttributeSource>();
+        private List<IAttributeSource> _subjectAttributeSources = new List<IAttributeSource>();
+        private List<IAttributeSource> _environmentAttributeSources = new List<IAttributeSource>();
+        private List<IAttributeSource> _intentAttributeSources = new List<IAttributeSource>();
 
 
-        public AuthorizationRequest(IEnumerable<IUserAttributeSource> userSources, 
-                                    IEnumerable<IIntentAttributeSource> intentSources,
-                                    IEnumerable<IEnvironmentAttributeSource> environmentSources)
+        public AuthorizationRequest(IEnumerable<IAttributeSource> subjectSources, 
+                                    IEnumerable<IAttributeSource> intentSources,
+                                    IEnumerable<IAttributeSource> environmentSources)
         {
-            _userAttributeSources.AddRange(userSources ?? new IUserAttributeSource[0]);
-            _intentAttributeSources.AddRange(intentSources ?? new IIntentAttributeSource[0]);
-            _environmentAttributeSources.AddRange(environmentSources ?? new IEnvironmentAttributeSource[0]);
+            _subjectAttributeSources.AddRange(subjectSources ?? new IAttributeSource[0]);
+            _intentAttributeSources.AddRange(intentSources ?? new IAttributeSource[0]);
+            _environmentAttributeSources.AddRange(environmentSources ?? new IAttributeSource[0]);
         }
 
         public IEnumerable<IAttribute> EnvironmentAttributes()
@@ -28,6 +28,6 @@ namespace Axis.Pollux.ABAC.Services
         => _intentAttributeSources.SelectMany(_source => _source.GetAttributes().Resolve());
 
         public IEnumerable<IAttribute> SubjectAttributes()
-        => _userAttributeSources.SelectMany(_source => _source.GetAttributes().Resolve());
+        => _subjectAttributeSources.SelectMany(_source => _source.GetAttributes().Resolve());
     }
 }

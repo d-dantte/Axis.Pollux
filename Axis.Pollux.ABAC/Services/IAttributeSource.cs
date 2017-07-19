@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Axis.Pollux.ABAC.Services
 {
-    public interface IUserAttributeSource
+    public interface IAttributeSource
     {
         IOperation<IEnumerable<IAttribute>> GetAttributes();
     }

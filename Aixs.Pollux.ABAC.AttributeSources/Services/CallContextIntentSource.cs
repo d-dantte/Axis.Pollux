@@ -11,7 +11,7 @@ using Axis.Pollux.ABAC.DAS.Models;
 
 namespace Axis.Pollux.ABAC.DAS.Services
 {
-    public class CallContextIntentSource : IIntentAttributeSource
+    public class CallContextIntentSource : IAttributeSource
     {
         public static readonly string CallContextKey = typeof(CallContextIntentSource).FullName;
 

@@ -6,17 +6,17 @@ using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.RoleAuth.OAModule.Entities;
 using Axis.Pollux.RoleAuth.Models;
 
-namespace Axis.Pollux.ABAC.DAS.OAModule.Mappings
+namespace Axis.Pollux.RoleAuth.OAModule.Mappings
 {
     public class UserRoleMap : BaseMap<long, UserRoleEntity, UserRole>
     {
         public UserRoleMap()
         {
-            this.HasOptional(_t => _t.Role)
+            this.HasRequired(_t => _t.Role)
                 .WithMany()
                 .HasForeignKey(_t => _t.RoleName);
 
-            this.HasOptional(_t => _t.User)
+            this.HasRequired(_t => _t.User)
                 .WithMany()
                 .HasForeignKey(_t => _t.UserId);
         }

@@ -1,16 +1,16 @@
 
-2017/07/17 #01 ===================================================================================================================================
+2016/09/03 ===========================================================================================================
 
-1.	Axis.Pollux.RBAC is being deleted from the repository
-2.	Axis.Pollux.Identity is having it's Model structure refactored to conform to the new jupiter standards. This invariably affects
-	all other projects.
-3.	Axis.Pollux.ABAC getting major overhaull. The new model/architecture recognizes the AuthorizationRequest, and the Policy Enforcer.
-	a. The AuthorizationRequest is serviced by AttributeSources, for which default implementations for the regular attributes (User, UserRole)
-	are provided in the Axis.Pollux.ABAC.DefaultAttributeSources project.
+1.   Remove all "virtual" modifiers from all entity properties in this library! see notes Axis.Europa for more information.
+2.	 Go through all implementations and ensure that Validate() is called on all Pollux Entities before they interract with
+	 the backend.
 
-	b. The Policy Enforcer is serviced by the two PolicyIO services, PolicyReader and PolicyWriter. Both of these have a default implementation
-	Provided in the Axis.Pollux.ABAC.RolePolicyIO project
+3.	 Add a AuditAwarePersistenceCommand implementation of the IPersistenceCommand interface that delegates to the Jupiter
+	 implementation. This layer will be responsible for managing the "created by" and "modified by" process for objects
+	 being persisted
 
-	c. Both of the above projects will depend on the Axis.Pollux.RoleAuth Project which provides the Role/Permission/UserRole objects and the
-	services needed to manage them.
-4.	
+
+2017/07/19 #03 ==================================================================================================================
+
+1.	 Changing Axis.Pollux.Identity to now implement "Contacts" with UserData. The reson behind this is phone, email, etc may evolve
+	 into new means of communication, or be changed totally. So to avoid changing the model, i will use the UserData

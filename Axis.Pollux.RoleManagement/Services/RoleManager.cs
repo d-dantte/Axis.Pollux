@@ -138,6 +138,12 @@ namespace Axis.Pollux.RoleManagement.Services
             if (string.IsNullOrWhiteSpace(resource)) throw new Exception("invalid resource");
             return _queries.GetPermissionsForResource(resource);
         });
+
+        public IOperation<RolePermission> GetPermissionForUUID(Guid uuid)
+        => LazyOp.Try(() =>
+        {
+            return _queries.GetPermissionForUUID(uuid);
+        });
         #endregion
 
 

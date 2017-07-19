@@ -16,14 +16,14 @@ namespace Axis.Pollux.ABAC.DAS.Models
 
             ResourceDescriptor = new IntentAuthorizationAttribute
             {
-                Name = CommonAttributeNames.IntentAttribute_ResourceDescriptor,
+                Name = Constants.IntentAttribute_ResourceDescriptor,
                 Type = Luna.Utils.CommonDataType.String,
                 Data = resourceDescriptor
             };
 
             ActionDescriptor = new IntentAuthorizationAttribute
             {
-                Name = CommonAttributeNames.IntentAttribute_ActionDescriptor,
+                Name = Constants.IntentAttribute_ActionDescriptor,
                 Type = Luna.Utils.CommonDataType.String,
                 Data = actionDescriptor
             };
@@ -34,10 +34,10 @@ namespace Axis.Pollux.ABAC.DAS.Models
             ThrowNullArguments(() => resourceDescriptor, () => actionDescriptor);
 
             ResourceDescriptor = new IntentAuthorizationAttribute(resourceDescriptor)
-                .ThrowIf(_att => _att.Name != CommonAttributeNames.IntentAttribute_ResourceDescriptor, "invalid resource descriptor attribute");
+                .ThrowIf(_att => _att.Name != Constants.IntentAttribute_ResourceDescriptor, "invalid resource descriptor attribute");
 
             ActionDescriptor = new IntentAuthorizationAttribute(actionDescriptor)
-                .ThrowIf(_att => _att.Name != CommonAttributeNames.IntentAttribute_ActionDescriptor, "invalid action descriptor attribute");
+                .ThrowIf(_att => _att.Name != Constants.IntentAttribute_ActionDescriptor, "invalid action descriptor attribute");
         }
     }
 }

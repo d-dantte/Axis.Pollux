@@ -8,16 +8,15 @@ using System.Linq;
 
 namespace Axis.Pollux.ABAC.DAS.Services
 {
-    public class IntentMapSource : IIntentAttributeSource
+    public class IntentMapSource : IAttributeSource
     {
         private IOperation<IEnumerable<IAttribute>> _intentAttributes;
 
         public IntentMapSource(OperationIntentMap map, MethodInfo operation)
         {
-            _intentAttributes =
-                LazyOp.Try(() => map
-                                 .AccessIntentsFor(operation)
-                                 .SelectMany(_ai => new[] { _ai.ActionDescriptor, _ai.ResourceDescriptor }));
+            _intentAttributes = LazyOp.Try(() => map
+                .AccessIntentsFor(operation)
+                .SelectMany(_ai => new[] { _ai.ActionDescriptor, _ai.ResourceDescriptor }));
         }
 
         public IOperation<IEnumerable<IAttribute>> GetAttributes() => _intentAttributes;

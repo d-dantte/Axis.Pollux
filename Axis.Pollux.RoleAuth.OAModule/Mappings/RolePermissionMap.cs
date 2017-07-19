@@ -4,7 +4,7 @@ using Axis.Pollux.RoleAuth.OAModule.Entities;
 using Axis.Pollux.RoleAuth.Models;
 using Axis.Luna.Extensions;
 
-namespace Axis.Pollux.ABAC.DAS.OAModule.Mappings
+namespace Axis.Pollux.RoleAuth.OAModule.Mappings
 {
     public class RolePermissionMap : BaseMap<long, RolePermissionEntity, RolePermission>
     {
@@ -13,7 +13,7 @@ namespace Axis.Pollux.ABAC.DAS.OAModule.Mappings
             this.Property(e => e.UUID)
                 .IsIndex("PermissionGuid", true);
 
-            this.HasOptional(_t => _t.Role)
+            this.HasRequired(_t => _t.Role)
                 .WithMany()
                 .HasForeignKey(_t => _t.RoleName);
         }

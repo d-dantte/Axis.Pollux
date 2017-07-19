@@ -6,6 +6,7 @@ using Axis.Jupiter.Europa;
 using static Axis.Luna.Extensions.ExceptionExtensions;
 using System.Linq;
 using Axis.Pollux.RoleAuth.OAModule.Entities;
+using System;
 
 namespace Axis.Pollux.RoleAuth.OAModule.Queries
 {
@@ -25,22 +26,27 @@ namespace Axis.Pollux.RoleAuth.OAModule.Queries
             .Query<RoleEntity>()
             .Transform<RoleEntity, Role>(_europa);
 
+        public RolePermission GetPermissionForUUID(Guid uuid)
+        => _europa
+            .Query<RolePermissionEntity>(_rpe => _rpe.Role)
+            .FirstOrDefault(_rpe => _rpe.UUID == uuid)
+            .Transform<RolePermissionEntity, RolePermission>(_europa);
 
         public IEnumerable<RolePermission> GetPermissionsForLabel(string label)
         => _europa
-            .Query<RolePermissionEntity>()
+            .Query<RolePermissionEntity>(_rpe => _rpe.Role)
             .Where(_rp => _rp.Label == label)
             .Transform<RolePermissionEntity, RolePermission>(_europa);
 
         public IEnumerable<RolePermission> GetPermissionsForResource(string resource)
         => _europa
-            .Query<RolePermissionEntity>()
+            .Query<RolePermissionEntity>(_rpe => _rpe.Role)
             .Where(_rp => _rp.Resource == resource)
             .Transform<RolePermissionEntity, RolePermission>(_europa);
 
         public IEnumerable<RolePermission> GetPermissionsForRole(string roleName)
         => _europa
-            .Query<RolePermissionEntity>()
+            .Query<RolePermissionEntity>(_rpe => _rpe.Role)
             .Where(_rp => _rp.RoleName == roleName)
             .Transform<RolePermissionEntity, RolePermission>(_europa);
 

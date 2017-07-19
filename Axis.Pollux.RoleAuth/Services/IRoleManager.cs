@@ -1,6 +1,7 @@
 ﻿using Axis.Luna.Operation;
 using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.RoleAuth.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Axis.Pollux.RoleAuth.Services
@@ -28,6 +29,7 @@ namespace Axis.Pollux.RoleAuth.Services
         IOperation<RolePermission> DeletePermission(RolePermission permission);
         IOperation<RolePermission> UpdatePermission(RolePermission permission);
 
+        IOperation<RolePermission> GetPermissionForUUID(Guid uuid);
         IOperation<IEnumerable<RolePermission>> GetPermissionsFor(Role role);
         IOperation<IEnumerable<RolePermission>> GetPermissionsForLabel(string label);
         IOperation<IEnumerable<RolePermission>> GetPermissionsForResource(string resource);

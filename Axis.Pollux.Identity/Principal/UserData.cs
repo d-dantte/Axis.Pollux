@@ -1,52 +1,48 @@
-﻿using System;
-using Axis.Luna.Utils;
-using Axis.Luna.Operation;
+﻿using Axis.Luna.Utils;
 
 namespace Axis.Pollux.Identity.Principal
 {
     public class UserData: PolluxModel<long>, IDataItem
     {
-        public string Data { get; set; }
+        public string Data
+        {
+            get { return _dataItem.Data; }
+            set { _dataItem.Data = value; }
+        }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get { return _dataItem.Name; }
+            set { _dataItem.Name = value; }
+        }
 
-        public CommonDataType Type { get; set; }
+        public CommonDataType Type
+        {
+            get { return _dataItem.Type; }
+            set { _dataItem.Type = value; }
+        }
+
+        /// <summary>
+        /// Status of the data. Meaning is given to this field by the application using the data.
+        /// It can be used to implement different status for the various kinds of data stored in here: Active, Enabled,
+        /// Inactive, Deprecated, Expired, etc
+        /// </summary>
+        public int Status { get; set; } = 0;
+
+        /// <summary>
+        /// User defined label for this data. A means to classify/customize/name this data by the user
+        /// </summary>
+        public string Label { get; set; }
 
 
         #region Navigation Properties
         public virtual User Owner { get; set; }
         #endregion
 
-
-        public override string ToString() => $"[{Name}: {DisplayData()}]";
-
-        private string DisplayData()
-        {
-            switch (Type)
-            {
-                case CommonDataType.Boolean:
-                case CommonDataType.Real:
-                case CommonDataType.Integer:
-                case CommonDataType.String:
-                case CommonDataType.Url:
-                case CommonDataType.TimeSpan:
-                case CommonDataType.Email:
-                case CommonDataType.Phone:
-                case CommonDataType.Location:
-                case CommonDataType.IPV4:
-                case CommonDataType.IPV6:
-                case CommonDataType.JsonObject: return Data;
-
-                case CommonDataType.DateTime: return ResolvedOp.Try(() => DateTime.Parse(Data).ToString()).Resolve();
-
-                case CommonDataType.Binary: return "Binary-Data";
-
-                case CommonDataType.UnknownType:
-                default: return "Unknown-Type";
-            }
-        }
+        public override string ToString() => _dataItem.ToString();
 
 
+        private DataItem _dataItem = new DataItem();
         public UserData()
         {
         }
