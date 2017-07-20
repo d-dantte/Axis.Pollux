@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Axis.Pollux.Common;
+using System;
 
 namespace Axis.Pollux.Identity.Principal
 {
-    public class CorporateData: PolluxModel<long>
+    public class CorporateData: PolluxModel<long>, IUserOwned
     {
         #region Identity
         public string CorporateName { get; set; }

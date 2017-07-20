@@ -27,6 +27,7 @@ namespace Axis.Pollux.Identity.OAModule.Mappings
             entity.Country = model.Country;
             entity.CreatedOn = model.CreatedOn;
             entity.ModifiedOn = model.ModifiedOn;
+            entity.Status = model.Status;
             if (model.Owner != null)
             {
                 entity.Owner = converter.ToEntity(model.Owner).Cast<UserEntity>();
@@ -43,6 +44,7 @@ namespace Axis.Pollux.Identity.OAModule.Mappings
             model.Country = entity.Country;
             model.CreatedOn = entity.CreatedOn;
             model.ModifiedOn = entity.ModifiedOn;
+            model.Status = entity.Status;
             if (entity.Owner != null)
                 model.Owner = converter.ToModel<User>(entity.Owner).Cast<User>();
             else if (!string.IsNullOrWhiteSpace(entity.OwnerId))

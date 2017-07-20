@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Axis.Pollux.Common;
+using System;
 
 namespace Axis.Pollux.Identity.Principal
 {
-    public class BioData: PolluxModel<long>
+    public class BioData: PolluxModel<long>, IUserOwned
     {
         #region Names
         public string FirstName { get; set; }

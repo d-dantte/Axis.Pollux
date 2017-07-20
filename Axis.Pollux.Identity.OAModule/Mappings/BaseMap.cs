@@ -1,5 +1,4 @@
-﻿using Axis.Pollux.Identity.OAModule.Entities;
-using Axis.Pollux.Identity.Principal;
+﻿using Axis.Pollux.Common;
 
 namespace Axis.Pollux.Identity.OAModule.Mappings
 {

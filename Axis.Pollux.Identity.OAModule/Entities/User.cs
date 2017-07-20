@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Axis.Pollux.Common;
+using System;
 
 namespace Axis.Pollux.Identity.OAModule.Entities
 {

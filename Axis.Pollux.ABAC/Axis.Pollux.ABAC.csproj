@@ -52,15 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\AuthorizationAttributes.cs" />
-    <Compile Include="CommonAttributeNames.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuthorizationRequest.cs" />
-    <Compile Include="Services\IAuthorizer.cs" />
-    <Compile Include="Services\IEnvironmentAttributeSource.cs" />
-    <Compile Include="Services\IIntentAttributeManager.cs" />
-    <Compile Include="Services\IIntentAttributeSource.cs" />
-    <Compile Include="Services\IUserAttributeManager.cs" />
-    <Compile Include="Services\IUserAttributeSource.cs" />
+    <Compile Include="Services\IAttributeSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">

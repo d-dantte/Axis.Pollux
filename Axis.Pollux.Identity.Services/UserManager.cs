@@ -2,14 +2,15 @@
 using Axis.Luna;
 using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
-using Axis.Pollux.Common.Services;
 using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.Identity.Services.Queries;
+using Axis.Pollux.UserCommon.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using static Axis.Luna.Extensions.ExceptionExtensions;
+using static Axis.Luna.Extensions.ValidatableExtensions;
 
 namespace Axis.Pollux.Identity.Services
 {
@@ -29,33 +30,28 @@ namespace Axis.Pollux.Identity.Services
 
         #region Biodata
         public IOperation<BioData> UpdateBioData(BioData data)
-        => LazyOp.Try(() =>
+        => ValidateModels(data).Then(() =>
         {
-            return data?
-                .Validate()
-                .Then(() =>
-                {
-                    var user = _userContext.User();
-                    var persisted = _query.GetBioData(user.UserId);
+            var user = _userContext.User();
+            var persisted = _query
+                .GetBioData(user.UserId)
+                .ThrowIf(_ => _.Owner.UserId != user.UserId, "Access Denied to data");
 
-                    if (persisted != null)
-                    {
-                        data.CopyTo(persisted,
-                                    nameof(ContactData.Owner),
-                                    nameof(ContactData.CreatedOn),
-                                    nameof(ContactData.ModifiedOn));
+            if (persisted != null)
+            {
+                data.CopyTo(persisted,
+                            nameof(BioData.Owner),
+                            nameof(BioData.CreatedOn));
 
-                        if (persisted.Dob <= DateTime.Parse("1753/1/1")) persisted.Dob = null;
+                if (persisted.Dob <= DateTime.Parse("1753/1/1")) persisted.Dob = null;
 
-                        return _pcommand.Update(persisted);
-                    }
-                    else
-                    {
-                        data.Owner = user;
-                        return _pcommand.Add(data);
-                    }
-                })
-                ?? LazyOp.Fail<BioData>(new NullReferenceException());            
+                return _pcommand.Update(persisted);
+            }
+            else
+            {
+                data.Owner = user;
+                return _pcommand.Add(data);
+            }
         });
 
         public IOperation<BioData> GetBioData()
@@ -63,62 +59,62 @@ namespace Axis.Pollux.Identity.Services
         #endregion
 
         #region Contact data
-        public IOperation<ContactData> AddContactData(ContactData data)
+        public IOperation<UserData> AddContactData(string contactType, string data, string label = null)
         => LazyOp.Try(() =>
         {
-            return data?
-                .Validate()
-                .Then(() =>
-                {
-                    var user = _userContext.User();
-                    data.Owner = user;
-                    return _pcommand.Add(data);
-                })
-                ?? LazyOp.Fail<ContactData>(new NullReferenceException());
-        });
-
-        public IOperation<ContactData> UpdateContactData(ContactData data)
-        => LazyOp.Try(() =>
-        {
-            return data?
-                .Validate()
-                .Then(() =>
-                {
-                    var user = _userContext.User();
-                    var persisted = _query.GetContactData(data.UniqueId);
-                    
-                    if (persisted == null) throw new Exception("invalid contact data");
-                    else if (persisted.Owner.UserId != user.UserId) throw new Exception("Access Denied");
-                    else
-                    {
-                        data.CopyTo(persisted,
-                                    nameof(ContactData.Owner),
-                                    nameof(ContactData.CreatedOn),
-                                    nameof(ContactData.ModifiedOn));
-
-                        return _pcommand.Update(persisted);
-                    }
-                })
-                ?? LazyOp.Fail<ContactData>(new NullReferenceException());
-        });
-
-        public IOperation<ContactData> ArchiveContactData(long id)
-        => LazyOp.Try(() =>
-        {
-            var user = _userContext.User();
-            var persisted = _query.GetContactData(id);
-
-            if (persisted == null) throw new Exception("invalid contact data");
-            else if (persisted.Owner.UserId != user.UserId) throw new Exception("Access Denied");
-            else
+            var userData = new UserData
             {
-                persisted.Status = ContactStatus.Archived;
-                return _pcommand.Update(persisted);
-            }
+                Data = data.ThrowIfNull("invalid data"),
+                Label = label,
+                Name = contactType,
+                Type = contactType == Constants.ContactType_Email? Luna.Utils.CommonDataType.Email:
+                       contactType == Constants.ContactType_Phone? Luna.Utils.CommonDataType.Phone:
+                       Luna.Utils.CommonDataType.String,
+                Status = Constants.ContactStatus_PendingValidation,
+                Owner = _userContext.User()
+            };
+
+            return _pcommand.Add(userData);
         });
 
-        public IOperation<SequencePage<ContactData>> GetAllContactData(int pageSize = 500, int pageIndex = 0, bool includeCount = true)
-        => LazyOp.Try(() => _query.GetContactData(_userContext.User().UserId, pageSize, pageIndex, includeCount));
+        public IOperation<UserData> DeleteContactData(long id)
+        => LazyOp.Try(() =>
+        {
+            var data = _query
+                .GetContactData(id)
+                .ThrowIfNull("data not found")
+                .ThrowIf(IsNotMyOwn, "Access Denied to data");
+
+            return _pcommand.Delete(data);
+        });
+
+        public IOperation<UserData> UpdateContactStatus(long id, int status)
+        => LazyOp.Try(() =>
+        {
+            var data = _query
+                .GetContactData(id)
+                .ThrowIfNull("data not found")
+                .ThrowIf(IsNotMyOwn, "Access Denied to data");
+
+            data.Status = status;
+
+            return _pcommand.Update(data);
+        });
+
+        public IOperation<SequencePage<UserData>> GetContactData(int? status = Constants.ContactStatus_Validated, PageParams pageParams = null)
+        => LazyOp.Try(() =>
+        {
+            return _query.GetContactData(_userContext.User().UserId, status, pageParams);
+        });
+
+        public IOperation<UserData> GetContactData(long id)
+        => LazyOp.Try(() =>
+        {
+            return _query
+                .GetContactData(id)
+                .ThrowIf(IsNotMyOwn, "Access Denied to data");
+        });
+
         #endregion
 
         #region User data
@@ -141,24 +137,18 @@ namespace Axis.Pollux.Identity.Services
         });
 
         public IOperation<UserData> UpdateData(UserData data)
-        => LazyOp.Try(() =>
+        => ValidateModels(data).Then(() =>
         {
-            return data?
-                .Validate()
-                .Then(() =>
-                {
-                    var user = _userContext.User();
-                    var persisted = _query.GetUserData(user.UserId, data.Name);
-                    if (persisted == null) return null;
+            var user = _userContext.User();
+            var persisted = _query.GetUserData(user.UserId, data.Name);
+            if (persisted == null) return null;
 
-                    data.CopyTo(persisted,
-                                nameof(UserData.Owner),
-                                nameof(UserData.CreatedOn),
-                                nameof(UserData.ModifiedOn));
+            data.CopyTo(persisted,
+                        nameof(UserData.Owner),
+                        nameof(UserData.CreatedOn),
+                        nameof(UserData.ModifiedOn));
 
-                    return _pcommand.Update(persisted);
-                })
-                ?? LazyOp.Fail<UserData>(new NullReferenceException());
+            return _pcommand.Update(persisted);
         });
 
         public IOperation<IEnumerable<UserData>> RemoveData(string[] names)
@@ -172,11 +162,79 @@ namespace Axis.Pollux.Identity.Services
                 .Then(() => _data));
         });
 
-        public IOperation<SequencePage<UserData>> GetUserData(int pageSize = 500, int pageIndex = 0, bool includeCount = true)
-        => LazyOp.Try(() => _query.GetUserData(_userContext.User().UserId, pageSize, pageIndex, includeCount));
+        public IOperation<SequencePage<UserData>> GetUserData(PageParams pageParams)
+        => LazyOp.Try(() => _query.GetUserData(_userContext.User().UserId, pageParams));
 
         public IOperation<UserData> GetUserData(string name)
         => LazyOp.Try(() => _query.GetUserData(_userContext.User().UserId, name));
+        #endregion
+
+
+        #region Address data
+        public IOperation<AddressData> AddAddressData(AddressData address)
+        => ValidateModels(address).Then(() =>
+        {
+            address.UniqueId = 0;
+            address.Owner = _userContext.User();
+
+            return _pcommand.Add(address);
+        });
+
+        public IOperation<AddressData> ModifyAddressData(AddressData address)
+        => ValidateModels(address).Then(() =>
+        {
+            var persisted = _query
+                .GetAddressById(address.UniqueId)
+                .ThrowIfNull("invalid address")
+                .ThrowIf(IsNotMyOwn, "Access Denied to data");
+
+            address.CopyTo(persisted,
+                           nameof(AddressData.Status),
+                           nameof(AddressData.CreatedOn),
+                           nameof(AddressData.Owner));
+
+            return _pcommand.Update(persisted);
+        });
+
+        public IOperation<AddressData> ArchiveAddress(long id)
+        => LazyOp.Try(() =>
+        {
+            var currentUser = _userContext.User();
+            var persisted = _query
+                .GetAddressById(id)
+                .ThrowIfNull("invalid id")
+                .ThrowIf(IsNotMyOwn, "Access Denied to data");
+
+            persisted.Status = AddressStatus.Archived;
+            return _pcommand.Update(persisted);
+        });
+
+        public IOperation<AddressData> ActivateAddress(long id)
+        => LazyOp.Try(() =>
+        {
+            var currentUser = _userContext.User();
+            var persisted = _query
+                .GetAddressById(id)
+                .ThrowIfNull("invalid id")
+                .ThrowIf(IsNotMyOwn, "Access Denied to data");
+
+            persisted.Status = AddressStatus.Active;
+            return _pcommand.Update(persisted);
+        });
+
+        public IOperation<SequencePage<AddressData>> GetAddresses(AddressStatus? status, PageParams pageParams = null)
+        => LazyOp.Try(() =>
+        {
+            return _query.GetAddresses(_userContext.User().UserId, status, pageParams);
+        });
+
+        public IOperation<AddressData> GetAddress(long id)
+        => LazyOp.Try(() =>
+        {
+            return _query
+                .GetAddressById(id)
+                .ThrowIf(IsNotMyOwn, "Access Denied to data");
+        });
         #endregion
 
         public IOperation<long> UserCount()
@@ -193,5 +251,7 @@ namespace Axis.Pollux.Identity.Services
                 Status = status
             });            
         });
+
+        private bool IsNotMyOwn(IUserOwned owned) => owned?.Owner?.UserId != _userContext.User().UserId;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Axis.Luna.Utils;
+using Axis.Pollux.Common;
 
 namespace Axis.Pollux.Identity.OAModule.Entities
 {
@@ -9,6 +10,10 @@ namespace Axis.Pollux.Identity.OAModule.Entities
         public string Name { get; set; }
 
         public CommonDataType Type { get; set; }
+
+        public int Status { get; set; }
+
+        public string Label { get; set; }
 
 
         #region Navigation Properties

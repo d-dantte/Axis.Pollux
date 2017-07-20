@@ -43,14 +43,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Base.cs" />
+    <Compile Include="Models\PageParams.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IUserContext.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
-      <Project>{B6FE1B10-92A4-474B-8605-E3D63E491DCE}</Project>
-      <Name>Axis.Pollux.Identity</Name>
-    </ProjectReference>
+    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

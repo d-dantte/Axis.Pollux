@@ -2,7 +2,7 @@
 using Axis.Pollux.Identity.Principal;
 using System.Collections.Generic;
 
-namespace Axis.Pollux.Common.Services
+namespace Axis.Pollux.Identity.Services
 {
     public interface IUserContext
     {

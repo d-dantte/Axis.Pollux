@@ -1,8 +1,9 @@
 ﻿using Axis.Luna.Utils;
+using Axis.Pollux.Common;
 
 namespace Axis.Pollux.Identity.Principal
 {
-    public class UserData: PolluxModel<long>, IDataItem
+    public class UserData: PolluxModel<long>, IDataItem, IUserOwned
     {
         public string Data
         {

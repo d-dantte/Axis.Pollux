@@ -22,6 +22,8 @@ namespace Axis.Pollux.ABAC
         public static readonly string SubjectAttribute_UserDOB = "UserDOB";
 
         //address data
+        public static readonly string SubjectAttribute_User = "UserFirstName";
+
 
         //credentials
         #endregion
