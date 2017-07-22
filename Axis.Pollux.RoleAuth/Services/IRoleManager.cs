@@ -1,6 +1,8 @@
-﻿using Axis.Luna.Operation;
+﻿using Axis.Luna;
+using Axis.Luna.Operation;
 using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.RoleAuth.Models;
+using Axis.Pollux.UserCommon.Models;
 using System;
 using System.Collections.Generic;
 
@@ -14,14 +16,14 @@ namespace Axis.Pollux.RoleAuth.Services
         IOperation<Role> DisableRole(Role role);
         IOperation<Role> EnableRole(Role role);
 
-        IOperation<IEnumerable<Role>> GetAllRoles();
+        IOperation<SequencePage<Role>> GetAllRoles(PageParams pageParams = null);
         #endregion
 
         #region User Role Management
         IOperation<UserRole> AssignRole(User user, Role role);
         IOperation RevokeRole(User user, Role role);
 
-        IOperation<IEnumerable<UserRole>> GetUserRolesFor(User user);
+        IOperation<SequencePage<UserRole>> GetUserRolesFor(User user, PageParams pageParams = null);
         #endregion
 
         #region Permission Management
@@ -30,9 +32,9 @@ namespace Axis.Pollux.RoleAuth.Services
         IOperation<RolePermission> UpdatePermission(RolePermission permission);
 
         IOperation<RolePermission> GetPermissionForUUID(Guid uuid);
-        IOperation<IEnumerable<RolePermission>> GetPermissionsFor(Role role);
-        IOperation<IEnumerable<RolePermission>> GetPermissionsForLabel(string label);
-        IOperation<IEnumerable<RolePermission>> GetPermissionsForResource(string resource);
+        IOperation<SequencePage<RolePermission>> GetPermissionsFor(Role role, PageParams pageParams = null);
+        IOperation<SequencePage<RolePermission>> GetPermissionsForLabel(string label, PageParams pageParams = null);
+        IOperation<SequencePage<RolePermission>> GetPermissionsForResource(string resource, PageParams pageParams = null);
         #endregion
     }
 }

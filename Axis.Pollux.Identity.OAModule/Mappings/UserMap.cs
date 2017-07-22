@@ -8,7 +8,7 @@ namespace Axis.Pollux.Identity.OAModule.Mappings
     {
         public UserMap()
         {
-            Property(e => e.UniqueId).HasMaxLength(250);
+            Property(e => e.UniqueId).HasMaxLength(450);
         }
 
         public override void CopyToEntity(User model, UserEntity entity, ModelConverter converter)

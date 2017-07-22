@@ -88,6 +88,10 @@
       <Project>{b6fe1b10-92a4-474b-8605-e3d63e491dce}</Project>
       <Name>Axis.Pollux.Identity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
+      <Project>{ADD69F52-5EB2-4B5F-B4B1-46943A8F1CB7}</Project>
+      <Name>Axis.Pollux.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

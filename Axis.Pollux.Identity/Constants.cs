@@ -8,8 +8,8 @@
         public const int ContactStatus_Archived = 2;
         public const int ContactStatus_Flagged = 3;
 
-        public const string ContactType_Phone = "Phone";
-        public const string ContactType_Email = "Email";
+        public const string ContactType_Phone = "Contact: Phone";
+        public const string ContactType_Email = "Contact: Email";
         #endregion
     }
 }

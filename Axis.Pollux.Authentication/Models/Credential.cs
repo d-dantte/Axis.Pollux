@@ -5,10 +5,12 @@ using static Axis.Luna.Extensions.ObjectExtensions;
 using static Axis.Luna.Extensions.ExceptionExtensions;
 using Axis.Luna.Operation;
 using Axis.Luna.Utils;
+using Axis.Pollux.Common;
+using Axis.Pollux.Identity;
 
 namespace Axis.Pollux.Authentication.Models
 {
-    public class Credential: PolluxModel<long>
+    public class Credential: PolluxModel<long>, IUserOwned
     {
         public virtual CredentialMetadata Metadata { get; set; } = CredentialMetadata.Password;
         
@@ -54,8 +56,6 @@ namespace Axis.Pollux.Authentication.Models
         public static readonly CredentialMetadata RightMiddle = new CredentialMetadata() { Name = nameof(RightMiddle), Access = Access.Secret };
         public static readonly CredentialMetadata RightRing = new CredentialMetadata() { Name = nameof(RightRing), Access = Access.Secret };
         public static readonly CredentialMetadata RightLittle = new CredentialMetadata() { Name = nameof(RightLittle), Access = Access.Secret };
-        
-        public static readonly CredentialMetadata Other = new CredentialMetadata() { Name = nameof(Other), Access = Access.Public };
         #endregion
 
         public CredentialMetadata(string name, Access access = Access.Secret)

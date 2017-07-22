@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{19200251-9ABD-48EE-9660-5FEAAB931C87}</ProjectGuid>
+    <ProjectGuid>{8F96F60C-4EB1-47B1-86A7-D3334B39916A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Axis.Pollux.Identity.Test</RootNamespace>
-    <AssemblyName>Axis.Pollux.Identity.Test</AssemblyName>
+    <RootNamespace>Axis.Pollux.ABAC.Test</RootNamespace>
+    <AssemblyName>Axis.Pollux.ABAC.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,20 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Axis.Jupiter">
-      <HintPath>..\..\Axis.Jupiter\Axis.Jupiter\bin\Debug\Axis.Jupiter.dll</HintPath>
-    </Reference>
-    <Reference Include="Axis.Luna">
-      <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
-    </Reference>
-    <Reference Include="Castle.Core, Version=4.1.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.1.1\lib\net45\Castle.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Moq, Version=4.7.99.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\packages\Moq.4.7.99\lib\net45\Moq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -59,39 +45,47 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
-          <Private>False</Private>
-        </Reference>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DefaultServices\UserManagerTest.cs" />
+    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Axis.Pollux.Identity.OAModule\Axis.Pollux.Identity.OAModule.csproj">
-      <Project>{972ef5d4-550b-499c-b4e4-90e1d964a0f6}</Project>
-      <Name>Axis.Pollux.Identity.OAModule</Name>
+    <ProjectReference Include="..\Aixs.Pollux.ABAC.AttributeSources\Axis.Pollux.ABAC.DefaultAttributeSources.csproj">
+      <Project>{7b27c921-6644-48ee-8cd3-ac6f1795aa8e}</Project>
+      <Name>Axis.Pollux.ABAC.DefaultAttributeSources</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.Identity.Services\Axis.Pollux.Identity.DefaultServices.csproj">
-      <Project>{d2951d96-c918-45a4-bb72-6b5b25c83c2a}</Project>
-      <Name>Axis.Pollux.Identity.DefaultServices</Name>
+    <ProjectReference Include="..\Axis.Pollux.ABAC.RolePermissionPolicy\Axis.Pollux.ABAC.RolePermissionPolicy.csproj">
+      <Project>{df7c9a73-6ace-4e39-b14e-9fc896b0ceaa}</Project>
+      <Name>Axis.Pollux.ABAC.RolePermissionPolicy</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
-      <Project>{b6fe1b10-92a4-474b-8605-e3d63e491dce}</Project>
-      <Name>Axis.Pollux.Identity</Name>
+    <ProjectReference Include="..\Axis.Pollux.ABAC\Axis.Pollux.ABAC.csproj">
+      <Project>{ad36d2a4-7ed0-4d00-be9b-0dcd70d12390}</Project>
+      <Name>Axis.Pollux.ABAC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.RoleAuth.OAModule\Axis.Pollux.RoleAuth.OAModule.csproj">
+      <Project>{a55f695b-ea37-4bb4-9aae-4c7065d83395}</Project>
+      <Name>Axis.Pollux.RoleAuth.OAModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.RoleAuth.Test\Axis.Pollux.RoleAuth.Test.csproj">
+      <Project>{3b72c927-e482-4c96-847a-f8c4a53520e4}</Project>
+      <Name>Axis.Pollux.RoleAuth.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.RoleAuth\Axis.Pollux.RoleAuth.csproj">
+      <Project>{e41991f6-a249-49e5-9885-ba7e46ce4a13}</Project>
+      <Name>Axis.Pollux.RoleAuth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.RoleManagement\Axis.Pollux.RoleManagement.csproj">
+      <Project>{bb37a1e5-e04d-4edb-8d5f-6287cf5f058f}</Project>
+      <Name>Axis.Pollux.RoleManagement</Name>
     </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
       <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
       <Name>Axis.Pollux.Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="OAModule\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -1,5 +1,4 @@
-﻿using System;
-using Axis.Jupiter.Europa;
+﻿using Axis.Jupiter.Europa;
 using Axis.Pollux.Account.Models;
 using Axis.Pollux.Account.OAModule.Entities;
 using Axis.Pollux.Identity.OAModule.Mappings;

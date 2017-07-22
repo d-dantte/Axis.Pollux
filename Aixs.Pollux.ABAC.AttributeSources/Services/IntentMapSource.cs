@@ -5,6 +5,9 @@ using Axis.Sigma.Core;
 using Axis.Pollux.ABAC.DAS.Models;
 using System.Reflection;
 using System.Linq;
+using System.Linq.Expressions;
+using System;
+using Axis.Luna.Extensions;
 
 namespace Axis.Pollux.ABAC.DAS.Services
 {
@@ -20,5 +23,15 @@ namespace Axis.Pollux.ABAC.DAS.Services
         }
 
         public IOperation<IEnumerable<IAttribute>> GetAttributes() => _intentAttributes;
+    }
+
+    public class IntentMapSource<T>: IntentMapSource
+    {
+        public IntentMapSource(OperationIntentMap map, Expression<Action<T>> methodExpression)
+        : base(map, methodExpression.Body
+                                    .Cast<MethodCallExpression>()
+                                    .ThrowIfNull("Expression MUST be a simple method call expression")
+                                    .Method)
+        { }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Axis.Pollux.Authentication.Models;
+using Axis.Pollux.Common;
 using Axis.Pollux.Identity.OAModule.Entities;
 using System;
 

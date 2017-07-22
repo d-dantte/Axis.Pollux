@@ -9,9 +9,9 @@ namespace Axis.Pollux.ABAC.Auth
     /// </summary>
     public abstract class AuthorizationAttribute : IAttribute
     {
-        public CommonDataType Type { get; set; }
-        public string Name { get; set; }
-        public string Data { get; set; }
+        public CommonDataType Type { get { return _dataItem.Type; } set { _dataItem.Type = value; } }
+        public string Name { get { return _dataItem.Name; } set { _dataItem.Name = value; } }
+        public string Data { get { return _dataItem.Data; } set { _dataItem.Data = value; } }
 
         public R ResolveData<R>() => this.ParseData<R>();
         public object Clone() => Copy();
@@ -20,10 +20,20 @@ namespace Axis.Pollux.ABAC.Auth
         public AttributeCategory Category { get; private set; }
 
         #region init
-        protected AuthorizationAttribute(AttributeCategory category)
+        protected AuthorizationAttribute(AttributeCategory category, IDataItem dataItem = null)
         {
             this.Category = category;
+            _dataItem = new DataItem
+            {
+                Data = dataItem?.Data,
+                Name = dataItem?.Name,
+                Type = dataItem?.Type ?? CommonDataType.String
+            };
         }
+        #endregion
+
+        #region locals
+        private readonly DataItem _dataItem;
         #endregion
 
         public override string ToString()
@@ -54,12 +64,8 @@ namespace Axis.Pollux.ABAC.Auth
         :base(AttributeCategory.Subject)
         { }
         public SubjectAuthorizationAttribute(IDataItem dataItem) //<-- shouldn't this be IAttribute, instead of IDataItem?
-        : base(AttributeCategory.Subject)
-        {
-            Name = dataItem.Name;
-            Type = dataItem.Type;
-            Data = dataItem.Data;
-        }
+        : base(AttributeCategory.Subject, dataItem)
+        { }
         #endregion
     }
 
@@ -84,13 +90,9 @@ namespace Axis.Pollux.ABAC.Auth
         public IntentAuthorizationAttribute()
         : base(AttributeCategory.Intent)
         { }
-        public IntentAuthorizationAttribute(IDataItem dataItem)
-        : base(AttributeCategory.Intent)
-        {
-            Name = dataItem.Name;
-            Type = dataItem.Type;
-            Data = dataItem.Data;
-        }
+        public IntentAuthorizationAttribute(IDataItem dataItem) //<-- shouldn't this be IAttribute, instead of IDataItem?
+        : base(AttributeCategory.Intent, dataItem)
+        { }
         #endregion
     }
     
@@ -115,13 +117,9 @@ namespace Axis.Pollux.ABAC.Auth
         public EnvironmentAuthorizationAttribute()
         : base(AttributeCategory.Environment)
         { }
-        public EnvironmentAuthorizationAttribute(IDataItem dataItem)
-        : base(AttributeCategory.Environment)
-        {
-            Name = dataItem.Name;
-            Type = dataItem.Type;
-            Data = dataItem.Data;
-        }
+        public EnvironmentAuthorizationAttribute(IDataItem dataItem) //<-- shouldn't this be IAttribute, instead of IDataItem?
+        : base(AttributeCategory.Environment, dataItem)
+        { }
         #endregion
     }
 }

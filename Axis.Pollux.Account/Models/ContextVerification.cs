@@ -1,11 +1,13 @@
-﻿using Axis.Pollux.Identity.Principal;
+﻿using Axis.Pollux.Common;
+using Axis.Pollux.Identity;
+using Axis.Pollux.Identity.Principal;
 using System;
 
 namespace Axis.Pollux.Account.Models
 {
-    public class ContextVerification: PolluxModel<long>
+    public class ContextVerification: PolluxModel<long>, IUserTargeted
     {
-        public User Target { get; set; }
+        public virtual User Target { get; set; }
 
         public string VerificationToken { get; set; }
 

@@ -11,18 +11,23 @@ namespace Axis.Pollux.ABAC.DAS.Models
     {
         private readonly Dictionary<string, HashSet<AccessIntent>> _actionMap = new Dictionary<string, HashSet<AccessIntent>>();
 
-        public OperationIntentMap Map(string minfo, params AccessIntent[] actionMaps)
+        public OperationIntentMap Map(MethodInfo minfo, params AccessIntent[] intentMaps)
+        => minfo
+            .ThrowIfNull("Invalid method info")
+            .Pipe(_minfo => Map(_minfo.UniqueSignature(), intentMaps));
+
+        public OperationIntentMap Map<T>(Expression<Action<T>> methodExpression, params AccessIntent[] intentMaps)
+        => methodExpression.Body
+            .Cast<MethodCallExpression>()
+            .ThrowIfNull("Expression MUST be a simple method call expression")
+            .Pipe(mexp => Map(mexp.Method.UniqueSignature(), intentMaps));
+
+        private OperationIntentMap Map(string minfo, params AccessIntent[] actionMaps)
         {
             var mapList = _actionMap.GetOrAdd(minfo, _minfo => new HashSet<AccessIntent>());
             mapList.AddRange(actionMaps);
             return this;
         }
-
-        public OperationIntentMap Map<T>(Expression<Action<T>> methodExpression, params AccessIntent[] actionMaps)
-        => methodExpression.Body
-            .Cast<MethodCallExpression>()
-            .ThrowIfNull("Expression MUST be a simple method call expression")
-            .Pipe(mexp => Map(mexp.Method.UniqueSignature(), actionMaps));
 
 
         public AccessIntent[] AccessIntentsFor(string methodSignature)

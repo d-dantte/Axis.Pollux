@@ -85,6 +85,10 @@
       <Project>{bb37a1e5-e04d-4edb-8d5f-6287cf5f058f}</Project>
       <Name>Axis.Pollux.RoleManagement</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
+      <Project>{ADD69F52-5EB2-4B5F-B4B1-46943A8F1CB7}</Project>
+      <Name>Axis.Pollux.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

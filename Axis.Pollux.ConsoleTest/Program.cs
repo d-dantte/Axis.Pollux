@@ -1,82 +1,120 @@
 ﻿using Axis.Jupiter.Europa;
-using Axis.Luna.Extensions;
+using Axis.Pollux.ABAC.DAS.Models;
+using Axis.Pollux.ABAC.DAS.Services;
+using Axis.Pollux.ABAC.RolePermissionPolicy.Services;
+using Axis.Pollux.ABAC.Services;
+using Axis.Pollux.AccountManagement.OAModule;
+using Axis.Pollux.Authentication.OAModule;
 using Axis.Pollux.Identity.OAModule;
-using Axis.Pollux.Identity.Principal;
-using Axis.Pollux.RBAC.OAModule;
+using Axis.Pollux.Identity.Services;
+using Axis.Pollux.RoleAuth.OAModule;
+using Axis.Pollux.RoleAuth.OAModule.Queries;
+using Axis.Pollux.RoleManagement.Services;
+using Axis.Sigma.Core.Authority;
 using System;
 using System.Configuration;
 using System.Data.Entity;
-using System.IO;
+using static Axis.Luna.Extensions.EnumerableExtensions;
 using System.Linq;
+using Axis.Luna.Extensions;
+using Axis.Luna.Utils;
+using Axis.Pollux.Identity.Principal;
+using System.Collections.Generic;
+using Axis.Pollux.Identity.OAModule.Entities;
 
 namespace Axis.Pollux.ConsoleTest
 {
     class Program
     {
-        public static readonly ContextConfiguration<EuropaContext> Config = new ContextConfiguration<EuropaContext>()
-                .WithConnection(ConfigurationManager.ConnectionStrings["EuropaContext"].ConnectionString)
-                .WithInitializer(new DropCreateDatabaseIfModelChanges<EuropaContext>())
-                .UsingModule(new IdentityAccessModuleConfig())
-                .UsingModule(new RBACAccessModuleConfig())
-                .UsingModule(new Authentication.OAModule.Extensions());
-
-
         static void Main(string[] args)
         {
-            var finfo = new FileInfo("abcd.xyz");
-            var finfo2 = new FileInfo("abcd.xyz");
-            Console.WriteLine(finfo == finfo2);
-            Console.WriteLine(finfo.Equals(finfo2));
+            var cc = new ContextConfiguration<DataStore>()
+                .WithConnection(ConfigurationManager.ConnectionStrings["EuropaContext"].ConnectionString)
+                .WithInitializer(new DropCreateDatabaseIfModelChanges<DataStore>())
+                .UsingPolluxIdentityOAModule()
+                .UsingPolluxAuthenticationOAModule()
+                .UsingPolluxAccountOAModule()
+                .UsingPolluxRoleAuthOAModule();
 
-            var config = Config;
+            var store = new DataStore(cc);
 
-            using (var cxt = new EuropaContext(config))
-            {
-                cxt.Configuration.AutoDetectChangesEnabled = false;
-                var user = new User
-                {
-                    UniqueId = "something@thisway.comes",
-                    Status = 1
-                };
+            //create the database
+            store.Database.CreateIfNotExists();
 
-                //cxt.Add(user).Context.CommitChanges();
+            //build some intent maps
+            var intentMap = new OperationIntentMap()
+                .Map<IUserManager>(um => um.ActivateAddress(0),
+                                        new AccessIntent("oprx://identity/addresses/", "activate"))
+                .Map(typeof(IUserManager).GetMethod(nameof(IUserManager.AddAddressData)),
+                     new AccessIntent("oprx://identity/addresses/", "add"));
+            var intentSource = new IntentMapSource<IUserManager>(intentMap, um => um.ActivateAddress(0)); //<-- the action we are trying to authorize
 
-                user = new User
-                {
-                    UniqueId = "something@thisway.comes",
-                    Status = 2
-                };
-                cxt.Modify(user).Context.CommitChanges();
 
-                var ud = new UserData
-                {
-                    Data = "dafdfa",
-                    Name = "here-it",
-                    Type = Luna.CommonDataType.String,
-                    OwnerId = "something@thisway.comes",
-                    //Owner = new User { EntityId = "something@thisway.comes" }
-                };
-                cxt.Add(ud).Context.CommitChanges();
-            }
+            var roleManager = new RoleManager(store, new RoleManagementQueries(store));
 
+            //subject sources
+            var usercontext = new FakeUserContext("@root", store);
+            var identitySource = new UserIdentitySource(usercontext);
+            var userRoleSource = new UserRoleSource(roleManager, usercontext);
+
+
+            //auth request
+            var authReq = new AuthorizationRequest(Enumerate<IAttributeSource>(identitySource, userRoleSource), 
+                                                   Enumerate(intentSource), null);
+
+            //retrieve the policies
+            var x = roleManager.GetAllRoles(null).Resolve();
+            var policyReader = new RolePolicyReader(roleManager);
+            var authConfig = new AuthorityConfiguration(Enumerate(policyReader));
+            var policyAuthority = new PolicyAuthority(authConfig);
+
+            var started = DateTime.Now;
+            policyAuthority
+                .Authorize(authReq)
+                .Then(() => Console.WriteLine("Access Granted!"),
+                      ex => Console.WriteLine($"Access Denied"))
+                .ResolveSafely();
+            Console.WriteLine($"evaluated in {DateTime.Now - started}");
+
+            started = DateTime.Now;
+            policyAuthority
+                .Authorize(authReq)
+                .Then(() => Console.WriteLine("Access Granted!"),
+                      ex => Console.WriteLine($"Access Denied"))
+                .ResolveSafely();
+            Console.WriteLine($"evaluated in {DateTime.Now - started}");
+
+            started = DateTime.Now;
+            policyAuthority
+                .Authorize(authReq)
+                .Then(() => Console.WriteLine("Access Granted!"),
+                      ex => Console.WriteLine($"Access Denied"))
+                .ResolveSafely();
+            Console.WriteLine($"evaluated in {DateTime.Now - started}");
+
+            started = DateTime.Now;
+            policyAuthority
+                .Authorize(authReq)
+                .Then(() => Console.WriteLine("Access Granted!"),
+                      ex => Console.WriteLine($"Access Denied"))
+                .ResolveSafely();
+            Console.WriteLine($"evaluated in {DateTime.Now - started}");
+
+
+            Console.WriteLine("Done");
             Console.ReadKey();
         }
     }
 
-    public class XyzModule: IdentityAccessModuleConfig
+    public class FakeUserContext : IUserContext
     {
-        protected override void Initialize()
+        private User _user;
+
+        public FakeUserContext(string name, DataStore store)
         {
-            base.Initialize();
-
-            this.WithStoreQueryGenerator(_cxt => _cxt.As<DbContext>().Set<User>().OrderBy(_u => _u.UId));
-
-            this.UsingContext(cxt =>
-            {
-                cxt.Store<User>().Add(new User { UniqueId = "Senj@k" });
-
-                cxt.CommitChanges();
-            });
+            _user = store.Query<UserEntity>().FirstOrDefault(_u => _u.UniqueId == name).Transform<UserEntity, User>(store);
         }
+
+        public User User() => _user;
     }
 }

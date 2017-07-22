@@ -10,9 +10,12 @@ namespace Axis.Pollux.ABAC.DAS
         public static string UniqueSignature(this MethodInfo m)
         {
             return new StringBuilder()
-                .Append(m.DeclaringType.MinimalAQName()).Append(".")
+                .Append("[")
+                .Append(m.DeclaringType.MinimalAQName())
+                .Append("].")
                 .Append(!m.IsGenericMethod ? "" :
                         "<" + m.GetGenericArguments().Aggregate("", (@params, param) => @params += (@params == "" ? "" : ", ") + "[" + param.MinimalAQName() + "]") + ">")
+                .Append(m.Name)
                 .Append("(")
                 .Append(m.GetParameters()
                          .Aggregate("", (@params, param) => @params += (@params == "" ? "" : ", ") + "[" + param.ParameterType.MinimalAQName() + "] " + param.Name))

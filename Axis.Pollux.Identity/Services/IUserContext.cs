@@ -7,8 +7,5 @@ namespace Axis.Pollux.Identity.Services
     public interface IUserContext
     {
         User User();
-
-        IEnumerable<IDataItem> UserAttributes();
-        IDataItem UserAttribute(string name);
     }
 }

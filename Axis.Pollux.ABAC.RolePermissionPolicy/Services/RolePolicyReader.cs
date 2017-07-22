@@ -26,12 +26,12 @@ namespace Axis.Pollux.ABAC.RolePermissionPolicy.Services
         public IOperation<IEnumerable<Policy>> Policies()
         => _manager
             .GetAllRoles()
-            .Then(_roles => _roles
-            .SelectMany(_role => _manager.GetPermissionsFor(_role).Resolve())
+            .Then(_roles => _roles.Page
+            .SelectMany(_role => _manager.GetPermissionsFor(_role).Resolve().Page)
             .Select(_rp =>
             {
-                var policyId = $"{_rp.Label}.PermissionPolicy[{ValueHash(Enumerate(_rp.Label))}]";
-                var ruleId = $"{_rp.Label}.PermissionRule[{ValueHash(Enumerate(_rp.Role.RoleName, _rp.Resource))}]";
+                var policyId = $"{_rp.Label ?? "$$Default"}.PermissionPolicy[{ValueHash(Enumerate(_rp.Label))}]";
+                var ruleId = $"{_rp.Label ?? "$$Default"}.PermissionRule[{ValueHash(Enumerate(_rp.Role.RoleName, _rp.Resource))}]";
                 var policyDescriptor = new IntentDescriptor(_rp.Resource);
                 return new
                 {
@@ -44,7 +44,8 @@ namespace Axis.Pollux.ABAC.RolePermissionPolicy.Services
                         {
                             return _ar.SubjectAttributes().ContainsAttribute(Constants.SubjectAttribute_UserRole, _rp.Role.RoleName) &&
                                    policyDescriptor.IsBaseOf(new IntentDescriptor(_ar.IntentAttributes().GetAttribute(Constants.IntentAttribute_ResourceDescriptor).ResolveData<string>(),
-                                                                                  _ar.IntentAttributes().GetAttribute(Constants.IntentAttribute_ActionDescriptor).ResolveData<string>()));
+                                                                                  _ar.IntentAttributes().GetAttribute(Constants.IntentAttribute_ActionDescriptor).ResolveData<string>())) &&
+                                   _rp.Effect == RoleAuth.Models.PermissionEffect.Grant;
                         }
                     }
                 };

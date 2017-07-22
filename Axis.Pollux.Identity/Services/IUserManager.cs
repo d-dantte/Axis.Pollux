@@ -41,7 +41,7 @@ namespace Axis.Pollux.Identity.Services
         IOperation<AddressData> ArchiveAddress(long id);
         IOperation<AddressData> ActivateAddress(long id);
 
-        IOperation<SequencePage<AddressData>> GetAddresses(AddressStatus? status, PageParams pageParams = null);
+        IOperation<SequencePage<AddressData>> GetAddresses(AddressStatus? status = null, PageParams pageParams = null);
         IOperation<AddressData> GetAddress(long id);
         #endregion
 

@@ -1,4 +1,6 @@
-﻿using Axis.Pollux.RoleAuth.Models;
+﻿using Axis.Luna;
+using Axis.Pollux.RoleAuth.Models;
+using Axis.Pollux.UserCommon.Models;
 using System;
 using System.Collections.Generic;
 
@@ -6,12 +8,12 @@ namespace Axis.Pollux.RoleManagement.Queries
 {
     public interface IRoleManagementQueries
     {
-        IEnumerable<Role> GetAllRoles();
+        SequencePage<Role> GetAllRoles(PageParams pageParams = null);
         UserRole GetUserRole(string userId, string roleName);
-        IEnumerable<UserRole> GetUserRolesFor(string userId);
+        SequencePage<UserRole> GetUserRolesFor(string userId, PageParams pageParams = null);
         RolePermission GetPermissionForUUID(Guid uuid);
-        IEnumerable<RolePermission> GetPermissionsForRole(string roleName);
-        IEnumerable<RolePermission> GetPermissionsForLabel(string label);
-        IEnumerable<RolePermission> GetPermissionsForResource(string resource);
+        SequencePage<RolePermission> GetPermissionsForRole(string roleName, PageParams pageParams = null);
+        SequencePage<RolePermission> GetPermissionsForLabel(string label, PageParams pageParams = null);
+        SequencePage<RolePermission> GetPermissionsForResource(string resource, PageParams pageParams = null);
     }
 }

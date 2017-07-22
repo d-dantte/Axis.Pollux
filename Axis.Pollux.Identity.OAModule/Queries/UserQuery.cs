@@ -36,16 +36,11 @@ namespace Axis.Pollux.Identity.OAModule.Queries
 
             if (status.HasValue) q = q.Where(_ad => _ad.Status == status);
 
-            q = q.OrderBy(_ad => _ad.CreatedOn);
+            var oq = q.OrderBy(_ad => _ad.CreatedOn);
 
-            var d = q
-                .Skip(pageParams.PageSize * pageParams.PageIndex)
-                .Take(pageParams.PageSize)
-                .Transform<AddressDataEntity, AddressData>(_europa)
-                .ToArray();
+            pageParams = pageParams ?? PageParams.EntireSequence();
 
-            var count = pageParams.IncludeCount ? q.Count() : d.Length;
-            return new SequencePage<AddressData>(d, count, pageParams.PageSize, pageParams.PageIndex);
+            return pageParams.Paginate(oq, _q => _q.Transform<AddressDataEntity, AddressData>(_europa));
         }
 
         public BioData GetBioData(string userId)
@@ -66,20 +61,16 @@ namespace Axis.Pollux.Identity.OAModule.Queries
 
             var q = _europa
                 .Query<UserDataEntity>(_cd => _cd.Owner)
-                .Where(_cd => _cd.OwnerId == userId);
+                .Where(_cd => _cd.OwnerId == userId)
+                .Where(_cd => _cd.Name.StartsWith("Contact: "));
 
             if (status.HasValue) q = q.Where(_cd => _cd.Status == status);
 
-            q = q.OrderBy(_ad => _ad.CreatedOn);
+            var oq = q.OrderBy(_ad => _ad.CreatedOn);
 
-            var d = q
-                .Skip(pageParams.PageSize * pageParams.PageIndex)
-                .Take(pageParams.PageSize)
-                .Transform<UserDataEntity, UserData>(_europa)
-                .ToArray();
+            pageParams = pageParams ?? PageParams.EntireSequence();
 
-            var count = pageParams.IncludeCount ? q.Count() : d.Length;
-            return new SequencePage<UserData>(d, count, pageParams.PageSize, pageParams.PageIndex);
+            return pageParams.Paginate(oq, _q => _q.Transform<UserDataEntity, UserData>(_europa));
         }
 
         public long GetUserCount()
@@ -100,16 +91,8 @@ namespace Axis.Pollux.Identity.OAModule.Queries
             .Pipe(_q =>
             {
                 pageParams = pageParams ?? PageParams.EntireSequence();
-                var converter = new ModelConverter(_europa);
-                var d = _q
-                  .Skip(pageParams.PageSize * pageParams.PageIndex)
-                  .Take(pageParams.PageSize)
-                  .AsEnumerable() //<-- pull from DB
-                  .Select(converter.ToModel<UserData>)
-                  .ToArray();
 
-                var count = pageParams.IncludeCount ? _q.Count() : d.Length;
-                return new SequencePage<UserData>(d, count, pageParams.PageSize, pageParams.PageIndex);
+                return pageParams.Paginate(_q, __q => __q.Transform<UserDataEntity, UserData>(_europa));
             });
 
         public bool UserExists(string userId)

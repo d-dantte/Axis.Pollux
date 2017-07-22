@@ -1,4 +1,4 @@
-﻿using Axis.Pollux.Identity.Principal;
+﻿using Axis.Pollux.Common;
 
 namespace Axis.Pollux.RoleAuth.Models
 {

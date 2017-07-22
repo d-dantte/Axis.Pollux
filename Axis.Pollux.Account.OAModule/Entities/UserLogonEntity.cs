@@ -1,5 +1,5 @@
-﻿using Axis.Pollux.Identity.OAModule.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using Axis.Pollux.Common;
+using Axis.Pollux.Identity.OAModule.Entities;
 
 namespace Axis.Pollux.Account.OAModule.Entities
 {

@@ -20,12 +20,15 @@ namespace Axis.Pollux.Identity.Services
         private IPersistenceCommands _pcommand = null;
         private IUserContext _userContext = null;
 
-        public UserManager(IUserQuery query, IPersistenceCommands pcommand)
+        public UserManager(IUserContext userContext, IUserQuery query, IPersistenceCommands pcommand)
         {
-            ThrowNullArguments(() => query, () => pcommand);
+            ThrowNullArguments(() => query, 
+                               () => pcommand,
+                               () => userContext);
 
             _query = query;
             _pcommand = pcommand;
+            _userContext = userContext;
         }
 
         #region Biodata
@@ -40,6 +43,7 @@ namespace Axis.Pollux.Identity.Services
             if (persisted != null)
             {
                 data.CopyTo(persisted,
+                            nameof(BioData.UniqueId),
                             nameof(BioData.Owner),
                             nameof(BioData.CreatedOn));
 
@@ -144,6 +148,7 @@ namespace Axis.Pollux.Identity.Services
             if (persisted == null) return null;
 
             data.CopyTo(persisted,
+                        nameof(UserData.UniqueId),
                         nameof(UserData.Owner),
                         nameof(UserData.CreatedOn),
                         nameof(UserData.ModifiedOn));
@@ -169,7 +174,6 @@ namespace Axis.Pollux.Identity.Services
         => LazyOp.Try(() => _query.GetUserData(_userContext.User().UserId, name));
         #endregion
 
-
         #region Address data
         public IOperation<AddressData> AddAddressData(AddressData address)
         => ValidateModels(address).Then(() =>
@@ -189,6 +193,7 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIf(IsNotMyOwn, "Access Denied to data");
 
             address.CopyTo(persisted,
+                           nameof(AddressData.UniqueId),
                            nameof(AddressData.Status),
                            nameof(AddressData.CreatedOn),
                            nameof(AddressData.Owner));

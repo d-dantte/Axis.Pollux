@@ -1,5 +1,4 @@
 ﻿using Axis.Jupiter.Europa;
-using Axis.Luna.Extensions;
 using Axis.Pollux.Authentication.Models;
 using Axis.Pollux.Authentication.OAModule.Entities;
 using Axis.Pollux.CoreAuthentication.Queries;
@@ -26,14 +25,12 @@ namespace Axis.Pollux.Authentication.OAModule.Queries
         => _europa.Query<UserEntity>().Any(_u => _u.UniqueId == userId);
 
         public IEnumerable<Credential> GetCredentials(string userId, CredentialMetadata metadata)
-        => new ModelConverter(_europa)
-            .Pipe(_c =>_europa
+        => _europa
             .Query<CredentialEntity>(_cred => _cred.Owner)
             .Where(_cred => _cred.Metadata.Name == metadata.Name)
             .Where(_cred => _cred.Metadata.Access == metadata.Access)
             .Where(_cred => _cred.OwnerId == userId)
             .OrderByDescending(_cred => _cred.CreatedOn)
-            .AsEnumerable()
-            .Select(_c.ToModel<Credential>));
+            .Transform<CredentialEntity, Credential>(_europa);
     }
 }

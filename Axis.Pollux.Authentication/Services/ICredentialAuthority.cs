@@ -3,7 +3,7 @@ using Axis.Pollux.Authentication.Models;
 
 namespace Axis.Pollux.Authentication.Services
 {
-    public interface ICredentialAuthentication
+    public interface ICredentialAuthority
     {
         ICredentialHasher CredentialHasher { get; }
         

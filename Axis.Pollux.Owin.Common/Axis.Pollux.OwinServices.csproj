@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7D27A9C4-EADF-4953-B26F-B37AB09F7C38}</ProjectGuid>
+    <ProjectGuid>{FD0BE16F-6666-40D2-98DA-7D8BBD3C3EB4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Axis.Pollux.Account</RootNamespace>
-    <AssemblyName>Axis.Pollux.Account</AssemblyName>
+    <RootNamespace>Axis.Pollux.OwinServices</RootNamespace>
+    <AssemblyName>Axis.Pollux.OwinServices</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,8 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Axis.Luna, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Axis.Luna">
       <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -44,26 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
-    <Compile Include="Models\ContextVerification.cs" />
-    <Compile Include="Models\UserLogon.cs" />
-    <Compile Include="Models\VerificationTokenType.cs" />
-    <Compile Include="Services\IAccountManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Axis.Pollux.Authentication\Axis.Pollux.Authentication.csproj">
-      <Project>{7249EEE1-0390-4D3D-98D1-42E6465D3CFD}</Project>
-      <Name>Axis.Pollux.Authentication</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
-      <Project>{B6FE1B10-92A4-474B-8605-E3D63E491DCE}</Project>
+      <Project>{b6fe1b10-92a4-474b-8605-e3d63e491dce}</Project>
       <Name>Axis.Pollux.Identity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
-      <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
-      <Name>Axis.Pollux.Common</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -12,7 +12,7 @@ using Axis.Pollux.Authentication.Models;
 
 namespace Axis.Pollux.CoreAuthentication.Services
 {
-    public class CredentialAuthentication: ICredentialAuthentication
+    public class CredentialAuthentication: ICredentialAuthority
     {
         private IAuthenticationQuery _query;
         private IPersistenceCommands _pcommand;
@@ -51,7 +51,7 @@ namespace Axis.Pollux.CoreAuthentication.Services
                       .Select(ExpireCredential)
 
                       //add the new credential ONLY after all unexpired credentials of the same metadata type have been expired.
-                      .Then(() => _pcommand.Add(CreateCredential(credential.Owner.UserId, credential.Value, credential.Metadata, credential.ExpiresOn)).Resolve())
+                      .FoldAll(() => _pcommand.Add(CreateCredential(credential.Owner.UserId, credential.Value, credential.Metadata, credential.ExpiresOn)).Resolve())
                       .Resolve();
             }
         });

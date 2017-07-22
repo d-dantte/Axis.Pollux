@@ -14,3 +14,5 @@
 
 1.	 Changing Axis.Pollux.Identity to now implement "Contacts" with UserData. The reson behind this is phone, email, etc may evolve
 	 into new means of communication, or be changed totally. So to avoid changing the model, i will use the UserData
+	 [Done]
+2.	 Add the AuditPersistenceCommands implementation, 

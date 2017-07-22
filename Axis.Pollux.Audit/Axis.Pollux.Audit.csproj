@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FD0BE16F-6666-40D2-98DA-7D8BBD3C3EB4}</ProjectGuid>
+    <ProjectGuid>{C612702E-BAD4-4D05-89F4-97DF82EFCB13}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Axis.Pollux.Owin.Common</RootNamespace>
-    <AssemblyName>Axis.Pollux.Owin.Common</AssemblyName>
+    <RootNamespace>Axis.Pollux.Audit</RootNamespace>
+    <AssemblyName>Axis.Pollux.Audit</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Axis.Luna">
-      <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,12 +43,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
-      <Project>{b6fe1b10-92a4-474b-8605-e3d63e491dce}</Project>
-      <Name>Axis.Pollux.Identity</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <Folder Include="Models\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

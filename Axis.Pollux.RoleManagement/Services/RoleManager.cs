@@ -1,14 +1,15 @@
 ﻿using Axis.Jupiter.Commands;
+using Axis.Luna;
 using Axis.Luna.Operation;
 using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.RoleAuth.Models;
 using Axis.Pollux.RoleAuth.Services;
 using Axis.Pollux.RoleManagement.Queries;
+using Axis.Pollux.UserCommon.Models;
 using System;
-using System.Collections.Generic;
 
 using static Axis.Luna.Extensions.ExceptionExtensions;
-using static Axis.Pollux.Identity.Extensions;
+using static Axis.Luna.Extensions.ValidatableExtensions;
 
 namespace Axis.Pollux.RoleManagement.Services
 {
@@ -44,10 +45,10 @@ namespace Axis.Pollux.RoleManagement.Services
                 return _pcommands.Update(role);
             });
 
-        public IOperation<IEnumerable<Role>> GetAllRoles()
+        public IOperation<SequencePage<Role>> GetAllRoles(PageParams pageParams)
         => LazyOp.Try(() =>
         {
-            return _queries.GetAllRoles();
+            return _queries.GetAllRoles(pageParams);
         });
         #endregion
 
@@ -77,11 +78,11 @@ namespace Axis.Pollux.RoleManagement.Services
                     .Resolve();
             });
 
-        public IOperation<IEnumerable<UserRole>> GetUserRolesFor(User user)
+        public IOperation<SequencePage<UserRole>> GetUserRolesFor(User user, PageParams pageParams = null)
         => ValidateModels(user)
             .Then(() =>
             {
-                return _queries.GetUserRolesFor(user.UserId);
+                return _queries.GetUserRolesFor(user.UserId, pageParams);
             });
         #endregion
 
@@ -118,25 +119,25 @@ namespace Axis.Pollux.RoleManagement.Services
                 return _pcommands.Update(permission);
             });
 
-        public IOperation<IEnumerable<RolePermission>> GetPermissionsFor(Role role)
+        public IOperation<SequencePage<RolePermission>> GetPermissionsFor(Role role, PageParams pageParams)
         => ValidateModels(role)
             .Then(() =>
             {
-                return _queries.GetPermissionsForRole(role.RoleName);
+                return _queries.GetPermissionsForRole(role.RoleName, pageParams);
             });
 
-        public IOperation<IEnumerable<RolePermission>> GetPermissionsForLabel(string label)
+        public IOperation<SequencePage<RolePermission>> GetPermissionsForLabel(string label, PageParams pageParams = null)
         => LazyOp.Try(() =>
         {
             if (string.IsNullOrWhiteSpace(label)) throw new Exception("invalid label");
-            return _queries.GetPermissionsForLabel(label);
+            return _queries.GetPermissionsForLabel(label, pageParams);
         });
 
-        public IOperation<IEnumerable<RolePermission>> GetPermissionsForResource(string resource)
+        public IOperation<SequencePage<RolePermission>> GetPermissionsForResource(string resource, PageParams pageParams = null)
         => LazyOp.Try(() =>
         {
             if (string.IsNullOrWhiteSpace(resource)) throw new Exception("invalid resource");
-            return _queries.GetPermissionsForResource(resource);
+            return _queries.GetPermissionsForResource(resource, pageParams);
         });
 
         public IOperation<RolePermission> GetPermissionForUUID(Guid uuid)

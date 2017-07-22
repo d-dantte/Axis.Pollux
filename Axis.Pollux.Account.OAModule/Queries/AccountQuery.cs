@@ -9,6 +9,7 @@ using Axis.Pollux.Account.Models;
 using Axis.Jupiter.Europa;
 using Axis.Pollux.Account.OAModule.Entities;
 using Axis.Pollux.Identity.OAModule.Entities;
+using Axis.Pollux.UserCommon.Models;
 
 namespace Axis.Pollux.AccountManagement.OAModule.Queries
 {
@@ -45,23 +46,16 @@ namespace Axis.Pollux.AccountManagement.OAModule.Queries
                   .FirstOrDefault()?
                   .Pipe(new ModelConverter(_europa).ToModel<User>);
 
-        public SequencePage<UserLogon> GetValidUserLogons(string userId, int pageSize = -1, int pageIndex = 0, bool includeCount = false)
+        public SequencePage<UserLogon> GetValidUserLogons(string userId, PageParams pageParams = null)
         => _europa.Query<UserLogonEntity>()
                   .Where(_u => _u.UserId == userId)
                   .Where(_u => !_u.Invalidated)
                   .OrderByDescending(_u => _u.ModifiedOn)
                   .Pipe(_q =>
                   {
-                      var converter = new ModelConverter(_europa);
-                      var d = _q
-                        .Skip(pageSize * pageIndex)
-                        .Take(pageSize)
-                        .AsEnumerable() //<-- pull from DB
-                        .Select(converter.ToModel<UserLogon>)
-                        .ToArray();
+                      pageParams = pageParams ?? PageParams.EntireSequence();
 
-                      var count = includeCount ? _q.Count() : d.Length;
-                      return new SequencePage<UserLogon>(d, count, pageSize, pageIndex);
+                      return pageParams.Paginate(_q, __q => __q.Transform<UserLogonEntity, UserLogon>(_europa));
                   });
 
         public long UserCount() => _europa.Query<UserEntity>().LongCount();

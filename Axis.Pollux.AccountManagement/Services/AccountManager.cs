@@ -13,8 +13,8 @@ using Axis.Pollux.Account;
 using Axis.Pollux.Account.Models;
 using Axis.Jupiter.Commands;
 using Axis.Luna.Operation;
-using static Axis.Pollux.Identity.Extensions;
 using Axis.Pollux.Account.Services;
+using static Axis.Luna.Extensions.ValidatableExtensions;
 
 namespace Axis.Pollux.AccountManagement.Services
 {
@@ -22,11 +22,11 @@ namespace Axis.Pollux.AccountManagement.Services
     {
         private IAccountQuery _query;
         private IPersistenceCommands _pcommand;
-        private ICredentialAuthentication _credAuth;
+        private ICredentialAuthority _credAuth;
         private IUserManager _userManager;
 
         public AccountManager(IAccountQuery query, IPersistenceCommands pcommand,
-                              ICredentialAuthentication credentialAuth,
+                              ICredentialAuthority credentialAuth,
                               IUserManager userManager)
         {
             ThrowNullArguments(() => query,
@@ -53,8 +53,9 @@ namespace Axis.Pollux.AccountManagement.Services
         .Then(user =>
         {
             secretCredential.Owner = user;
-            return _credAuth.AssignCredential(secretCredential)
-                            .Then(() => user);
+            return _credAuth
+                .AssignCredential(secretCredential)
+                .Then(() => user);
         });
 
         public virtual IOperation<User> BlockUser(string targetUser)
@@ -64,25 +65,26 @@ namespace Axis.Pollux.AccountManagement.Services
             if (user.Status != Constants.UserStatus_Blocked)
             {
                 //invalidate all user-logons
-                return _query.GetValidUserLogons(targetUser).Page
-                .Select(next =>
-                {
-                    next.Invalidated = true;
-                    return _pcommand.Update(next);
-                })
-                .UsingEach(_op =>
-                {
-                    try
+                return _query
+                    .GetValidUserLogons(targetUser).Page
+                    .Select(next =>
                     {
-                        _op.Resolve();
-                    }
-                    catch { }
-                })
-                .Pipe(_logons =>
-                {
-                    user.Status = Constants.UserStatus_Blocked;
-                    return _pcommand.Update(user).Resolve();
-                });
+                        next.Invalidated = true;
+                        return _pcommand.Update(next);
+                    })
+                    .UsingEach(_op =>
+                    {
+                        try
+                        {
+                            _op.Resolve();
+                        }
+                        catch { }
+                    })
+                    .Pipe(_logons =>
+                    {
+                        user.Status = Constants.UserStatus_Blocked;
+                        return _pcommand.Update(user).Resolve();
+                    });
             }
             else return user;
         });

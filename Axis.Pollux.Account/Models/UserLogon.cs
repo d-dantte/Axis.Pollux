@@ -1,8 +1,10 @@
-﻿using Axis.Pollux.Identity.Principal;
+﻿using Axis.Pollux.Common;
+using Axis.Pollux.Identity;
+using Axis.Pollux.Identity.Principal;
 
 namespace Axis.Pollux.Account.Models
 {
-    public class UserLogon: PolluxModel<long>
+    public class UserLogon: PolluxModel<long>, IUserIdentified
     {
         public UserAgent Client { get; set; } = new UserAgent();
         public string Location { get; set; }
