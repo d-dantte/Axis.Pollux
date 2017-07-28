@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using Axis.Luna.Operation;
 using Axis.Sigma.Core;
-using Axis.Pollux.ABAC.DAS.Models;
+using Axis.Pollux.ABAC.AttributeSources.Models;
 using System.Reflection;
 using System.Linq;
 using System.Linq.Expressions;
 using System;
 using Axis.Luna.Extensions;
 
-namespace Axis.Pollux.ABAC.DAS.Services
+namespace Axis.Pollux.ABAC.AttributeSources.Services
 {
     public class IntentMapSource : IAttributeSource
     {

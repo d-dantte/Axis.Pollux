@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Axis.Pollux.UserCommon.Models
+namespace Axis.Pollux.Common.Models
 {
     public class PageParams
     {

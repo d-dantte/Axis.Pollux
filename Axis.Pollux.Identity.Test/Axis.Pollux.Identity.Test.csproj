@@ -70,21 +70,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Axis.Pollux.Common\Axis.Pollux.Common.csproj">
+      <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
+      <Name>Axis.Pollux.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.Identity.OAModule\Axis.Pollux.Identity.OAModule.csproj">
       <Project>{972ef5d4-550b-499c-b4e4-90e1d964a0f6}</Project>
       <Name>Axis.Pollux.Identity.OAModule</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.Identity.Services\Axis.Pollux.Identity.DefaultServices.csproj">
-      <Project>{d2951d96-c918-45a4-bb72-6b5b25c83c2a}</Project>
-      <Name>Axis.Pollux.Identity.DefaultServices</Name>
+    <ProjectReference Include="..\Axis.Pollux.Identity.Services\Axis.Pollux.Identity.Services.csproj">
+      <Project>{D2951D96-C918-45A4-BB72-6B5B25C83C2A}</Project>
+      <Name>Axis.Pollux.Identity.Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
       <Project>{b6fe1b10-92a4-474b-8605-e3d63e491dce}</Project>
       <Name>Axis.Pollux.Identity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
-      <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
-      <Name>Axis.Pollux.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

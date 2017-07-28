@@ -1,6 +1,6 @@
 ﻿using Axis.Jupiter.Europa;
-using Axis.Pollux.ABAC.DAS.Models;
-using Axis.Pollux.ABAC.DAS.Services;
+using Axis.Pollux.ABAC.AttributeSources.Models;
+using Axis.Pollux.ABAC.AttributeSources.Services;
 using Axis.Pollux.ABAC.RolePermissionPolicy.Services;
 using Axis.Pollux.ABAC.Services;
 using Axis.Pollux.AccountManagement.OAModule;
@@ -17,10 +17,9 @@ using System.Data.Entity;
 using static Axis.Luna.Extensions.EnumerableExtensions;
 using System.Linq;
 using Axis.Luna.Extensions;
-using Axis.Luna.Utils;
 using Axis.Pollux.Identity.Principal;
-using System.Collections.Generic;
 using Axis.Pollux.Identity.OAModule.Entities;
+using Axis.Pollux.ABAC.Auth;
 
 namespace Axis.Pollux.ConsoleTest
 {
@@ -59,7 +58,7 @@ namespace Axis.Pollux.ConsoleTest
 
 
             //auth request
-            var authReq = new AuthorizationRequest(Enumerate<IAttributeSource>(identitySource, userRoleSource), 
+            var authReq = new AuthorizationContext(Enumerate<IAttributeSource>(identitySource, userRoleSource), 
                                                    Enumerate(intentSource), null);
 
             //retrieve the policies

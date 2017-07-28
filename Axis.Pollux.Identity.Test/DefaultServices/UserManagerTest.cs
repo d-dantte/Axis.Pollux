@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Axis.Pollux.Identity.Services.Queries;
 using Moq;
 using Axis.Jupiter.Commands;
 using Axis.Luna.Operation;
 using Axis.Pollux.Identity.Services;
 using Axis.Luna.Extensions;
+using Axis.Pollux.Identity.Services.Queries;
 
 namespace Axis.Pollux.Identity.Test.DefaultServices
 {

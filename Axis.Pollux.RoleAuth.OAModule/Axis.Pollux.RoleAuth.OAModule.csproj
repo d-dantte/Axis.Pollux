@@ -69,6 +69,10 @@
     <Compile Include="Queries\RoleManagementQueries.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Axis.Pollux.Common\Axis.Pollux.Common.csproj">
+      <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
+      <Name>Axis.Pollux.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.Identity.OAModule\Axis.Pollux.Identity.OAModule.csproj">
       <Project>{972ef5d4-550b-499c-b4e4-90e1d964a0f6}</Project>
       <Name>Axis.Pollux.Identity.OAModule</Name>
@@ -84,10 +88,6 @@
     <ProjectReference Include="..\Axis.Pollux.RoleManagement\Axis.Pollux.RoleManagement.csproj">
       <Project>{bb37a1e5-e04d-4edb-8d5f-6287cf5f058f}</Project>
       <Name>Axis.Pollux.RoleManagement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
-      <Project>{ADD69F52-5EB2-4B5F-B4B1-46943A8F1CB7}</Project>
-      <Name>Axis.Pollux.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 ﻿using Axis.Luna;
 using Axis.Pollux.RoleAuth.Models;
-using Axis.Pollux.UserCommon.Models;
+using Axis.Pollux.Common.Models;
 using System;
 using System.Collections.Generic;
 

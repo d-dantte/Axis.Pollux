@@ -6,7 +6,7 @@ using static Axis.Luna.Extensions.ExceptionExtensions;
 using System.Linq;
 using Axis.Pollux.RoleAuth.OAModule.Entities;
 using System;
-using Axis.Pollux.UserCommon.Models;
+using Axis.Pollux.Common.Models;
 using Axis.Luna;
 
 namespace Axis.Pollux.RoleAuth.OAModule.Queries

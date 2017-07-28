@@ -1,7 +1,7 @@
 ﻿using Axis.Luna;
 using Axis.Luna.Operation;
 using Axis.Pollux.Identity.Principal;
-using Axis.Pollux.UserCommon.Models;
+using Axis.Pollux.Common.Models;
 using System.Collections.Generic;
 
 namespace Axis.Pollux.Identity.Services

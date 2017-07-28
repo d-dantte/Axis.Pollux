@@ -1,6 +1,5 @@
-﻿using Axis.Luna.Utils;
+﻿using Axis.Luna.Operation;
 using Axis.Pollux.Identity.Principal;
-using System.Collections.Generic;
 
 namespace Axis.Pollux.Identity.Services
 {

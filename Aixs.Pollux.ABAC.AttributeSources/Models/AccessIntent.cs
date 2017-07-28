@@ -3,7 +3,7 @@ using Axis.Sigma.Core;
 
 using static Axis.Luna.Extensions.ExceptionExtensions;
 
-namespace Axis.Pollux.ABAC.DAS.Models
+namespace Axis.Pollux.ABAC.AttributeSources.Models
 {
     public class AccessIntent
     {

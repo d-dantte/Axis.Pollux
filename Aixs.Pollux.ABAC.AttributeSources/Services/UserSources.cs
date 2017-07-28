@@ -11,7 +11,7 @@ using static Axis.Luna.Extensions.ExceptionExtensions;
 using static Axis.Luna.Extensions.EnumerableExtensions;
 using Axis.Luna.Utils;
 
-namespace Axis.Pollux.ABAC.DAS.Services
+namespace Axis.Pollux.ABAC.AttributeSources.Services
 {
     public class UserRoleSource : IAttributeSource
     {

@@ -56,13 +56,13 @@
       <Project>{7249EEE1-0390-4D3D-98D1-42E6465D3CFD}</Project>
       <Name>Axis.Pollux.Authentication</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.Common\Axis.Pollux.Common.csproj">
+      <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
+      <Name>Axis.Pollux.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
       <Project>{B6FE1B10-92A4-474B-8605-E3D63E491DCE}</Project>
       <Name>Axis.Pollux.Identity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
-      <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
-      <Name>Axis.Pollux.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

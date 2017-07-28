@@ -5,7 +5,7 @@ using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.RoleAuth.Models;
 using Axis.Pollux.RoleAuth.Services;
 using Axis.Pollux.RoleManagement.Queries;
-using Axis.Pollux.UserCommon.Models;
+using Axis.Pollux.Common.Models;
 using System;
 
 using static Axis.Luna.Extensions.ExceptionExtensions;

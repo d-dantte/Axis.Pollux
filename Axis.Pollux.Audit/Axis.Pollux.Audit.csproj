@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Axis.Luna">
+      <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,11 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\AuditEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IAuditManager.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\Axis.Pollux.Common\Axis.Pollux.Common.csproj">
+      <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
+      <Name>Axis.Pollux.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
+      <Project>{B6FE1B10-92A4-474B-8605-E3D63E491DCE}</Project>
+      <Name>Axis.Pollux.Identity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

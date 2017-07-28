@@ -1,6 +1,6 @@
 ﻿using Axis.Luna;
 using Axis.Pollux.Identity.Principal;
-using Axis.Pollux.UserCommon.Models;
+using Axis.Pollux.Common.Models;
 
 namespace Axis.Pollux.Identity.Services.Queries
 {

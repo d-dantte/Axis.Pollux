@@ -7,9 +7,9 @@ using Axis.Luna.Extensions;
 using static Axis.Luna.Extensions.ExceptionExtensions;
 using System.Linq;
 using Axis.Luna.Operation;
-using Axis.Pollux.ABAC.DAS.Models;
+using Axis.Pollux.ABAC.AttributeSources.Models;
 
-namespace Axis.Pollux.ABAC.DAS.Services
+namespace Axis.Pollux.ABAC.AttributeSources.Services
 {
     public class CallContextIntentSource : IAttributeSource
     {

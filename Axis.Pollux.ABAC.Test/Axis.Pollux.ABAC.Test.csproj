@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aixs.Pollux.ABAC.AttributeSources\Axis.Pollux.ABAC.DefaultAttributeSources.csproj">
+    <ProjectReference Include="..\Aixs.Pollux.ABAC.AttributeSources\Axis.Pollux.ABAC.AttributeSources.csproj">
       <Project>{7b27c921-6644-48ee-8cd3-ac6f1795aa8e}</Project>
-      <Name>Axis.Pollux.ABAC.DefaultAttributeSources</Name>
+      <Name>Axis.Pollux.ABAC.AttributeSources</Name>
     </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.ABAC.RolePermissionPolicy\Axis.Pollux.ABAC.RolePermissionPolicy.csproj">
       <Project>{df7c9a73-6ace-4e39-b14e-9fc896b0ceaa}</Project>
@@ -65,6 +65,10 @@
     <ProjectReference Include="..\Axis.Pollux.ABAC\Axis.Pollux.ABAC.csproj">
       <Project>{ad36d2a4-7ed0-4d00-be9b-0dcd70d12390}</Project>
       <Name>Axis.Pollux.ABAC</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.Common\Axis.Pollux.Common.csproj">
+      <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
+      <Name>Axis.Pollux.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.RoleAuth.OAModule\Axis.Pollux.RoleAuth.OAModule.csproj">
       <Project>{a55f695b-ea37-4bb4-9aae-4c7065d83395}</Project>
@@ -81,10 +85,6 @@
     <ProjectReference Include="..\Axis.Pollux.RoleManagement\Axis.Pollux.RoleManagement.csproj">
       <Project>{bb37a1e5-e04d-4edb-8d5f-6287cf5f058f}</Project>
       <Name>Axis.Pollux.RoleManagement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
-      <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
-      <Name>Axis.Pollux.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

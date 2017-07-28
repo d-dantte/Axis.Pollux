@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Axis.Pollux.ABAC.DAS.Models
+namespace Axis.Pollux.ABAC.AttributeSources.Models
 {
     public class OperationIntentMap
     {

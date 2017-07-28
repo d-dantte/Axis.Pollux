@@ -9,7 +9,7 @@ using Axis.Pollux.Account.Models;
 using Axis.Jupiter.Europa;
 using Axis.Pollux.Account.OAModule.Entities;
 using Axis.Pollux.Identity.OAModule.Entities;
-using Axis.Pollux.UserCommon.Models;
+using Axis.Pollux.Common.Models;
 
 namespace Axis.Pollux.AccountManagement.OAModule.Queries
 {

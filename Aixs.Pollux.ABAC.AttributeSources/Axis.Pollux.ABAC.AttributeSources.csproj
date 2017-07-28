@@ -7,8 +7,8 @@
     <ProjectGuid>{7B27C921-6644-48EE-8CD3-AC6F1795AA8E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Axis.Pollux.ABAC.DAS</RootNamespace>
-    <AssemblyName>Axis.Pollux.ABAC.DefaultAttributeSources</AssemblyName>
+    <RootNamespace>Axis.Pollux.ABAC.AttributeSources</RootNamespace>
+    <AssemblyName>Axis.Pollux.ABAC.AttributeSources</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,6 +37,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
     </Reference>
+    <Reference Include="Axis.Proteus">
+      <HintPath>..\..\Axis.Proteus\Axis.Proteus\bin\Debug\Axis.Proteus.dll</HintPath>
+    </Reference>
     <Reference Include="Axis.Sigma.Core">
       <HintPath>..\..\Axis.Sigma\Axis.Sigma.Core\bin\Debug\Axis.Sigma.Core.dll</HintPath>
     </Reference>
@@ -50,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonAuthorizers.cs" />
     <Compile Include="Models\AccessIntent.cs" />
     <Compile Include="Services\CallContextIntentSource.cs" />
     <Compile Include="Extensions.cs" />
@@ -63,9 +67,9 @@
       <Project>{ad36d2a4-7ed0-4d00-be9b-0dcd70d12390}</Project>
       <Name>Axis.Pollux.ABAC</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.Identity.Services\Axis.Pollux.Identity.DefaultServices.csproj">
-      <Project>{d2951d96-c918-45a4-bb72-6b5b25c83c2a}</Project>
-      <Name>Axis.Pollux.Identity.DefaultServices</Name>
+    <ProjectReference Include="..\Axis.Pollux.Common\Axis.Pollux.Common.csproj">
+      <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
+      <Name>Axis.Pollux.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
       <Project>{B6FE1B10-92A4-474B-8605-E3D63E491DCE}</Project>
@@ -78,10 +82,6 @@
     <ProjectReference Include="..\Axis.Pollux.RoleManagement\Axis.Pollux.RoleManagement.csproj">
       <Project>{bb37a1e5-e04d-4edb-8d5f-6287cf5f058f}</Project>
       <Name>Axis.Pollux.RoleManagement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.UserContext\Axis.Pollux.Common.csproj">
-      <Project>{ADD69F52-5EB2-4B5F-B4B1-46943A8F1CB7}</Project>
-      <Name>Axis.Pollux.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

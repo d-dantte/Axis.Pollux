@@ -4,7 +4,7 @@ using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
 using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.Identity.Services.Queries;
-using Axis.Pollux.UserCommon.Models;
+using Axis.Pollux.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

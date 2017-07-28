@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Axis.Pollux.ABAC.DAS
+namespace Axis.Pollux.ABAC.AttributeSources
 {
     public static class Extensions
     {

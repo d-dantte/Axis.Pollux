@@ -1,7 +1,7 @@
 ﻿using Axis.Luna;
 using Axis.Pollux.Account.Models;
 using Axis.Pollux.Identity.Principal;
-using Axis.Pollux.UserCommon.Models;
+using Axis.Pollux.Common.Models;
 
 namespace Axis.Pollux.AccountManagement.Queries
 {

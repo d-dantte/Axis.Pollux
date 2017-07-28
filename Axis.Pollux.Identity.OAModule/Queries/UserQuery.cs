@@ -7,7 +7,7 @@ using Axis.Luna.Extensions;
 using Axis.Pollux.Identity.Services.Queries;
 using Axis.Jupiter.Europa;
 using Axis.Pollux.Identity.OAModule.Entities;
-using Axis.Pollux.UserCommon.Models;
+using Axis.Pollux.Common.Models;
 
 namespace Axis.Pollux.Identity.OAModule.Queries
 {
