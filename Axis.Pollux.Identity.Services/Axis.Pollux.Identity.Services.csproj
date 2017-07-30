@@ -61,10 +61,6 @@
       <Project>{B6FE1B10-92A4-474B-8605-E3D63E491DCE}</Project>
       <Name>Axis.Pollux.Identity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Axis.Pollux.Owin.Common\Axis.Pollux.Owin.Services.csproj">
-      <Project>{fd0be16f-6666-40d2-98da-7d8bbd3c3eb4}</Project>
-      <Name>Axis.Pollux.Owin.Services</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -12,6 +12,7 @@ namespace Axis.Pollux.ABAC
         public static readonly string SubjectAttribute_UserRole = "User: Role";
         public static readonly string SubjectAttribute_UserName = "User: Name";
         public static readonly string SubjectAttribute_UserUUID = "User: UUID";
+        public static readonly string SubjectAttribute_UserStatus = "User: Status";
 
         //bio data
         public static readonly string SubjectAttribute_BioFirstName = "Bio: FirstName";

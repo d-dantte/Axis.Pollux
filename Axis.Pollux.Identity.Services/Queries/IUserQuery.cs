@@ -1,11 +1,15 @@
 ﻿using Axis.Luna;
 using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.Common.Models;
+using System;
 
 namespace Axis.Pollux.Identity.Services.Queries
 {
     public interface IUserQuery
     {
+        User GetUserById(string userId);
+        User GetUserUUID(Guid uuid);
+
         BioData GetBioData(string userId);
 
         UserData GetContactData(long id);

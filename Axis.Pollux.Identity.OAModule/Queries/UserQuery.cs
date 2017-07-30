@@ -8,6 +8,7 @@ using Axis.Pollux.Identity.Services.Queries;
 using Axis.Jupiter.Europa;
 using Axis.Pollux.Identity.OAModule.Entities;
 using Axis.Pollux.Common.Models;
+using System;
 
 namespace Axis.Pollux.Identity.OAModule.Queries
 {
@@ -94,6 +95,18 @@ namespace Axis.Pollux.Identity.OAModule.Queries
 
                 return pageParams.Paginate(_q, __q => __q.Transform<UserDataEntity, UserData>(_europa));
             });
+
+        public User GetUserById(string userId)
+        => _europa
+            .Query<UserEntity>()
+            .FirstOrDefault(_u => _u.UniqueId == userId)
+            .Transform<UserEntity, User>(_europa);
+
+        public User GetUserUUID(Guid uuid)
+        => _europa
+            .Query<UserEntity>()
+            .FirstOrDefault(_u => _u.GUId == uuid)
+            .Transform<UserEntity, User>(_europa);
 
         public bool UserExists(string userId)
         => _europa.Query<UserEntity>().Any(_u => _u.UniqueId == userId);
