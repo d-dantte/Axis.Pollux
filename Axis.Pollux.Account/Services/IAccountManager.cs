@@ -3,6 +3,7 @@ using Axis.Pollux.Account.Models;
 using Axis.Pollux.Authentication.Models;
 using Axis.Pollux.Identity.Principal;
 using System;
+using System.Collections.Generic;
 
 namespace Axis.Pollux.Account.Services
 {
@@ -46,6 +47,13 @@ namespace Axis.Pollux.Account.Services
         IOperation<ContextVerification> GenerateContextVerification(string userId, string verificationContext, VerificationTokenType tokenType, DateTime expiresOn);
 
         IOperation VerifyContext(string userId, string verificationContext, string token);
+        #endregion
+
+        #region Logon
+        IOperation<UserLogon> GetUserLogonWithToken(string userId, string token);
+        IOperation<IEnumerable<UserLogon>> GetUserLogons(string userId, string ipaddress = null, string location = null, string locale = null, string device = null);
+        IOperation<UserLogon> InvalidateUserLogon(string userId, string token);
+        IOperation<UserLogon> AcquireUserLogon(UserLogon logon);
         #endregion
     }
 }

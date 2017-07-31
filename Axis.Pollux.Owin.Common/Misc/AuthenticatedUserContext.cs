@@ -8,7 +8,7 @@ using static Axis.Luna.Extensions.ExceptionExtensions;
 using System.Security.Claims;
 using System;
 
-namespace Axis.Pollux.Owin.Services.Impl
+namespace Axis.Pollux.Owin.Services.Misc
 {
     public class AuthenticatedUserContext : IUserContext
     {

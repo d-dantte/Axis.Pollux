@@ -14,6 +14,8 @@ using Axis.Pollux.Account.Models;
 using Axis.Jupiter.Commands;
 using Axis.Luna.Operation;
 using Axis.Pollux.Account.Services;
+using System.Collections.Generic;
+
 using static Axis.Luna.Extensions.ValidatableExtensions;
 
 namespace Axis.Pollux.AccountManagement.Services
@@ -207,5 +209,29 @@ namespace Axis.Pollux.AccountManagement.Services
                 default: throw new Exception("invalid token type requested");
             }
         }
+
+        public IOperation<UserLogon> GetUserLogonWithToken(string userId, string token) => LazyOp.Try(() => _query.GetUserLogonWithToken(userId, token));
+
+        public IOperation<IEnumerable<UserLogon>> GetUserLogons(string userId, string ipaddress = null, string location = null, string locale = null, string device = null)
+        => LazyOp.Try(() => _query.GetUserLogons(userId, ipaddress, location, locale, device));
+
+
+        public IOperation<UserLogon> InvalidateUserLogon(string userId, string token)
+        => LazyOp.Try(() =>
+        {
+            var logon = _query
+                .GetUserLogonWithToken(userId, token)
+                .ThrowIfNull("No logon found for the given user & token");
+
+            logon.Invalidated = true;
+
+            return _pcommand.Update(logon);
+        });
+
+        public IOperation<UserLogon> AcquireUserLogon(UserLogon logon)
+        => ValidateModels(logon).Then(() =>
+        {
+            return _pcommand.Update(logon);
+        });
     }
 }

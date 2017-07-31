@@ -3,7 +3,7 @@ using Microsoft.Owin;
 using Owin;
 using System.Runtime.Remoting.Messaging;
 
-namespace Axis.Pollux.Owin.Services.Impl
+namespace Axis.Pollux.Owin.Services.Misc
 {
     public class CallContextOwinProvider: IOwinContextProvider
     {

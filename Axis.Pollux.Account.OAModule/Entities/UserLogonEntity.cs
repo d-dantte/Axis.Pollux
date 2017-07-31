@@ -9,6 +9,7 @@ namespace Axis.Pollux.Account.OAModule.Entities
         public string Location { get; set; }
         public string SecurityToken { get; set; }
         public bool Invalidated { get; set; }
+        public string IPAddress { get; set; }
 
         /// <summary>
         /// </summary>

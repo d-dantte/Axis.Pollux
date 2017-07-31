@@ -10,6 +10,7 @@ using Axis.Jupiter.Europa;
 using Axis.Pollux.Account.OAModule.Entities;
 using Axis.Pollux.Identity.OAModule.Entities;
 using Axis.Pollux.Common.Models;
+using System.Collections.Generic;
 
 namespace Axis.Pollux.AccountManagement.OAModule.Queries
 {
@@ -45,6 +46,29 @@ namespace Axis.Pollux.AccountManagement.OAModule.Queries
                   .Where(_u => _u.UniqueId == userId)
                   .FirstOrDefault()?
                   .Pipe(new ModelConverter(_europa).ToModel<User>);
+
+        public IEnumerable<UserLogon> GetUserLogons(string userId, string ipaddress = null, string location = null, string locale = null, string device = null)
+        {
+            var q = _europa
+                .Query<UserLogonEntity>(_ => _.User)
+                .Where(_ule => _ule.UserId == userId);
+
+            if (!string.IsNullOrWhiteSpace(ipaddress)) q = q.Where(_ule => _ule.IPAddress == ipaddress);
+            if (!string.IsNullOrWhiteSpace(location)) q = q.Where(_ule => _ule.Location == location);
+            if (!string.IsNullOrWhiteSpace(locale)) q = q.Where(_ule => _ule.Locale == locale);
+            if (!string.IsNullOrWhiteSpace(device)) q = q.Where(_ule => _ule.Client.Device == device);
+
+            return q
+                .AsEnumerable()
+                .Transform<UserLogonEntity, UserLogon>(_europa);
+        }
+
+        public UserLogon GetUserLogonWithToken(string userId, string token)
+        => _europa.Query<UserLogonEntity>(_ => _.User)
+                  .Where(_ule => _ule.UserId == userId)
+                  .Where(_ule => _ule.SecurityToken == token)
+                  .FirstOrDefault()
+                  .Transform<UserLogonEntity, UserLogon>(_europa);
 
         public SequencePage<UserLogon> GetValidUserLogons(string userId, PageParams pageParams = null)
         => _europa.Query<UserLogonEntity>()

@@ -1,5 +1,4 @@
 ﻿using Axis.Jupiter.Commands;
-using Axis.Jupiter.Query;
 using Axis.Luna;
 using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
@@ -10,12 +9,10 @@ using Axis.Pollux.Authentication.Models;
 using Axis.Pollux.Authentication.Services;
 using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.Identity.Services.Queries;
-using Axis.Pollux.RoleAuth.Models;
 using Axis.Pollux.RoleManagement.Queries;
 using Axis.Proteus;
 using Microsoft.Owin.Security.OAuth;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -23,16 +20,19 @@ using System.Threading.Tasks;
 using UAParser;
 using static Axis.Luna.Extensions.ExceptionExtensions;
 
-namespace Axis.Pollux.Owin.Services.Impl
+namespace Axis.Pollux.Owin.Services.OAuth
 {
     /// <summary>
     /// This server depends on Axis.Account, Axis.Identity, Axis.Authentication, and Axis.RoleManagement modules.
+    /// 
+    /// I will explore the option of depending ONLY on the IServiceResolver service here, and then subsequently create any service i need, when i need it.
+    /// This is because 
     /// </summary>
-    public class OAuthAuthorizationServer : OAuthAuthorizationServerProvider, IDisposable//, IAuthenticationTokenProvider
+    public class ClientCredentialAuthorizationServer : OAuthAuthorizationServerProvider, IDisposable//, Microsoft.Owin.Security.Infrastructure.IAuthenticationTokenProvider
     {
         public static readonly string OAuthCustomHeaders_OldToken = "AxisPollux-OldOAuthToken";
 
-        private WeakCache _cache = null;
+        private WeakCache _userLogonCache = null;
         private Parser Parser = Parser.GetDefault();
         private ICredentialAuthority _credAuthority;
         private IAccountManager _accountManager;
@@ -41,12 +41,12 @@ namespace Axis.Pollux.Owin.Services.Impl
         private IRoleManagementQueries _roleQuery;
         private IServiceResolver _resolver;
 
-        public OAuthAuthorizationServer(ICredentialAuthority credentialAuthority, IAccountManager accountManager,
+        public ClientCredentialAuthorizationServer(ICredentialAuthority credentialAuthority, IAccountManager accountManager,
                                         IPersistenceCommands pcommands, IUserQuery userQuery, IRoleManagementQueries roleQuery,
                                         IAccountQuery accountQuery, IServiceResolver resolver,
-                                        WeakCache cache)
+                                        WeakCache userLogonCache)
         {
-            ThrowNullArguments(() => cache, 
+            ThrowNullArguments(() => userLogonCache, 
                                () => credentialAuthority,
                                () => accountManager,
                                () => pcommands,
@@ -54,7 +54,7 @@ namespace Axis.Pollux.Owin.Services.Impl
                                () => roleQuery,
                                () => resolver);
 
-            _cache = cache;
+            _userLogonCache = userLogonCache;
             _credAuthority = credentialAuthority;
             _accountManager = accountManager;
             _pcommands = pcommands;
@@ -67,19 +67,14 @@ namespace Axis.Pollux.Owin.Services.Impl
         public override Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         => Task.Run(() =>
         {
-            #region delete old logons if they exist
+            #region invalidate old logons if they exist
             LazyOp.Try(() =>
             {
                 var oldToken = context.Request.Headers.GetValues(OAuthCustomHeaders_OldToken)?.FirstOrDefault() ?? null;
                 if (oldToken != null)
                 {
-                    var logon = _cache.GetOrRefresh<UserLogon>(oldToken);
-                    if (logon != null)
-                    {
-                        logon.Invalidated = true;
-                        _pcommands.Update(logon).Resolve();
-                        _cache.Invalidate(oldToken);
-                    }
+                    var logon = _userLogonCache.GetOrRefresh<UserLogon>(oldToken);
+                    if (logon != null) _accountManager.InvalidateUserLogon(logon.User.UserId, logon.SecurityToken).Resolve();
                 }
             })
             #endregion
@@ -147,46 +142,39 @@ namespace Axis.Pollux.Owin.Services.Impl
         public override Task TokenEndpointResponse(OAuthTokenEndpointResponseContext context)
         => Task.Run(() =>
         {
-            //potential bug: capturing this datacontext is dangerous because if the cache gets invalidated and this logon is requested,
-            //the datacontext will MOST LIKELY be disposed when it is queried for the logon.
-            //The solution is to find a way to get at the current owin context, to get a fresh db context from there.
-
             //cache the logon associated to the given token
-            _cache.GetOrAdd(context.AccessToken, _token =>
+            _userLogonCache.GetOrAdd(context.AccessToken, _token =>
             {
                 var agent = Parser.Parse(context.Request.Headers.Get("User-Agent"));
 
-                var _l = _dataContext.Store<UserLogon>()
-                    .QueryWith(_ul => _ul.User)
-                    .Where(_ul => _ul.User.EntityId == context.Identity.Name)
-                    .Where(_ul => _ul.OwinToken == _token) //get the bearer token from the header
-                    .FirstOrDefault();
+                var _logon = _accountManager
+                    .GetUserLogonWithToken(context.Identity.Name, _token)
+                    .Resolve();
 
-                if (_l != null) return _l;
+                if (_logon != null) return _logon;
                 else
                 {
-                    _l = new UserLogon
-                    {
-                        UserId = context.Identity.Name,
-                        Client = new Core.Models.UserAgent
+                    return _accountManager
+                        .AcquireUserLogon(new UserLogon
                         {
-                            OS = agent.OS.Family,
-                            OSVersion = $"{agent.OS.Major}.{agent.OS.Minor}",
+                            User = new User { UserId = context.Identity.Name },
+                            Client = new Account.Models.UserAgent
+                            {
+                                OS = agent.OS.Family,
+                                OSVersion = $"{agent.OS.Major}.{agent.OS.Minor}",
 
-                            Browser = agent.UserAgent.Family,
-                            BrowserVersion = $"{agent.UserAgent.Major}.{agent.UserAgent.Minor}",
+                                Browser = agent.UserAgent.Family,
+                                BrowserVersion = $"{agent.UserAgent.Major}.{agent.UserAgent.Minor}",
 
-                            Device = $"{agent.Device.Family}"
-                        },
-                        OwinToken = _token,
-                        Location = null,
+                                Device = $"{agent.Device.Family}"
+                            },
+                            SecurityToken = _token,
+                            Location = null,
+                            IPAddress = null, //eventually find a way to get at the ipaddress
 
-                        ModifiedOn = DateTime.Now
-                    };
-
-                    _dataContext.Store<UserLogon>().Add(_l).Context.CommitChanges();
-
-                    return _l;
+                            ModifiedOn = DateTime.Now
+                        })
+                        .Resolve();
                 }
             });
         });
@@ -197,7 +185,8 @@ namespace Axis.Pollux.Owin.Services.Impl
         /// <param name="context"></param>
         /// <returns></returns>
         public override Task GrantCustomExtension(OAuthGrantCustomExtensionContext context) => base.GrantCustomExtension(context);
-        public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context) => Task.Run(() => context.Validated());
+
+        //public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context) => Task.Run(() => context.Validated());
 
 
         /// <summary>

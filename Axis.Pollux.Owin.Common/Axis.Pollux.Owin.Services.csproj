@@ -76,9 +76,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Impl\AuthenticatedUserContext.cs" />
-    <Compile Include="Impl\CallContextOwinProvider.cs" />
-    <Compile Include="Impl\OAuthAuthorizationServer.cs" />
+    <Compile Include="Misc\AuthenticatedUserContext.cs" />
+    <Compile Include="Misc\CallContextOwinProvider.cs" />
+    <Compile Include="OAuth\ClientCredentialAuthorizationServer.cs" />
+    <Compile Include="OAuth\BearerAuthenticationProvider.cs" />
     <Compile Include="IOwinContextProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -14,7 +14,8 @@ namespace Axis.Pollux.AccountManagement.OAModule.Mappings
         public UserLogonMap()
         {
             this.Property(e => e.Locale).HasMaxLength(20);
-            this.Property(e => e.SecurityToken).HasMaxLength(100);
+            this.Property(e => e.SecurityToken).HasMaxLength(250);
+            this.Property(e => e.IPAddress).HasMaxLength(250);
 
             this.HasRequired(e => e.User)
                 .WithMany()
@@ -32,6 +33,7 @@ namespace Axis.Pollux.AccountManagement.OAModule.Mappings
             entity.SecurityToken = model.SecurityToken;
             entity.TimeZoneOffset = model.TimeZoneOffset;
             entity.UniqueId = model.UniqueId;
+            entity.IPAddress = model.IPAddress;
             
             if(model.User != null)
             {
@@ -51,6 +53,7 @@ namespace Axis.Pollux.AccountManagement.OAModule.Mappings
             model.SecurityToken = entity.SecurityToken;
             model.TimeZoneOffset = entity.TimeZoneOffset;
             model.UniqueId = entity.UniqueId;
+            model.IPAddress = entity.IPAddress;
 
             if (entity.User != null)
                 model.User = converter.ToModel<User>(entity.User);
