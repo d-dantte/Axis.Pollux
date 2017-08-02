@@ -15,3 +15,8 @@
 1.	 Changing Axis.Pollux.Identity to now implement "Contacts" with UserData. The reson behind this is phone, email, etc may evolve
 	 into new means of communication, or be changed totally. So to avoid changing the model, i will use the UserData
 	 [Done]
+
+2.	 Implement PolluxException through out the entire project. All Pollux processes will throw pollux exceptions. All Pollux projects
+     will have a static "ExceptionCodes" class where their exception codes are kept, so external user code can use the codes to decide
+	 what to do based on the exceptions
+	 

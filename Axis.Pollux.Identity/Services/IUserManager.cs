@@ -48,6 +48,7 @@ namespace Axis.Pollux.Identity.Services
         #region User
         IOperation<long> UserCount();
         IOperation<User> CreateUser(string userId, int status);
+        IOperation<bool> UserIs(string userId, int status);
         #endregion
     }
 }

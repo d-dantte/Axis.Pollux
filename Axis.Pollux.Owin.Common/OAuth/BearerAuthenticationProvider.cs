@@ -28,7 +28,15 @@ namespace Axis.Pollux.Owin.Services.Impl
         public override async Task RequestToken(OAuthRequestTokenContext context)
         {
             await _tokenAcquirers
-                .Aggregate(AsyncOp.Try(() => { }), (_op, _acq) => _op.Then(() => _acq.Invoke(context)) as AsyncOperation)
+                .Aggregate(AsyncOp.Fail(new Exception()), (_op, _acq) =>
+                {
+                    return _op.ContinueWith(_prev =>
+                    {
+                        if (_prev.Succeeded == false) return _acq.Invoke(context) as AsyncOperation;
+                        else return _prev as AsyncOperation;
+                    })
+                    as AsyncOperation;
+                })
                 .Then(() => base.RequestToken(context))
                 .Cast<AsyncOperation>();
         }
@@ -36,7 +44,15 @@ namespace Axis.Pollux.Owin.Services.Impl
         public override async Task ValidateIdentity(OAuthValidateIdentityContext context)
         {
             await _identityValidators
-                .Aggregate(AsyncOp.Try(() => { }), (_op, _vid) => _op.Then(() => _vid.Invoke(context)) as AsyncOperation)
+                .Aggregate(AsyncOp.Fail(new Exception()), (_op, _vid) =>
+                {
+                    return _op.ContinueWith(_prev =>
+                    {
+                        if (_prev.Succeeded == false) return _vid.Invoke(context) as AsyncOperation;
+                        else return _prev as AsyncOperation;
+                    })
+                    as AsyncOperation;
+                })
                 .Then(() => base.ValidateIdentity(context))
                 .Cast<AsyncOperation>();
         }

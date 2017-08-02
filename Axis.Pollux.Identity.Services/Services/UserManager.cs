@@ -258,5 +258,11 @@ namespace Axis.Pollux.Identity.Services
         });
 
         private bool IsNotMyOwn(IUserOwned owned) => owned?.Owner?.UserId != _userContext.User().UserId;
+
+        public IOperation<bool> UserIs(string userId, int status)
+        => LazyOp.Try(() =>
+        {
+            return _query.UserIs(userId, status);
+        });
     }
 }

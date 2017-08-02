@@ -23,5 +23,6 @@ namespace Axis.Pollux.Identity.Services.Queries
 
         AddressData GetAddressById(long id);
         SequencePage<AddressData> GetAddresses(string userId, AddressStatus? status, PageParams pageParams = null);
+        bool UserIs(string userId, int status);
     }
 }

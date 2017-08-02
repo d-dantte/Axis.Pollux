@@ -26,7 +26,8 @@ namespace Axis.Pollux.Owin.Services.OAuth
     /// This server depends on Axis.Account, Axis.Identity, Axis.Authentication, and Axis.RoleManagement modules.
     /// 
     /// I will explore the option of depending ONLY on the IServiceResolver service here, and then subsequently create any service i need, when i need it.
-    /// This is because 
+    /// This is because this class is a singleton class, and the services are usually registered as per-request. So its either i create a new ServiceResolver
+    /// specifically for this server, or i resolve them when i need them.
     /// </summary>
     public class ClientCredentialAuthorizationServer : OAuthAuthorizationServerProvider, IDisposable//, Microsoft.Owin.Security.Infrastructure.IAuthenticationTokenProvider
     {
@@ -42,9 +43,9 @@ namespace Axis.Pollux.Owin.Services.OAuth
         private IServiceResolver _resolver;
 
         public ClientCredentialAuthorizationServer(ICredentialAuthority credentialAuthority, IAccountManager accountManager,
-                                        IPersistenceCommands pcommands, IUserQuery userQuery, IRoleManagementQueries roleQuery,
-                                        IAccountQuery accountQuery, IServiceResolver resolver,
-                                        WeakCache userLogonCache)
+                                                   IPersistenceCommands pcommands, IUserQuery userQuery, IRoleManagementQueries roleQuery,
+                                                   IAccountQuery accountQuery, IServiceResolver resolver,
+                                                   WeakCache userLogonCache)
         {
             ThrowNullArguments(() => userLogonCache, 
                                () => credentialAuthority,
@@ -117,14 +118,6 @@ namespace Axis.Pollux.Owin.Services.OAuth
                     .ForAll((_cnt, _next) => identity.AddClaim(new Claim(ClaimTypes.Role, _next.Role.RoleName)));
 
                 return identity.ValuePair(_user);
-            },
-            #endregion
-
-            #region if any of the above failed...
-            err =>
-            {
-                context.SetError("invalid_grant", err.Message);
-                context.Rejected();
             })
             #endregion
 
@@ -133,7 +126,15 @@ namespace Axis.Pollux.Owin.Services.OAuth
             #endregion
 
             #region Finally
-            .Then(_identity => context.Validated(new Microsoft.Owin.Security.AuthenticationTicket(_identity, null)))
+            .Then(_identity => context.Validated(new Microsoft.Owin.Security.AuthenticationTicket(_identity, null)),
+            #endregion
+            
+            #region if any of the above failed...
+            err =>
+            {
+                context.SetError("invalid_grant", err.Message);
+                context.Rejected();
+            })
             #endregion
 
             .Resolve();

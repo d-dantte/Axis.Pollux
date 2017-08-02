@@ -110,5 +110,8 @@ namespace Axis.Pollux.Identity.OAModule.Queries
 
         public bool UserExists(string userId)
         => _europa.Query<UserEntity>().Any(_u => _u.UniqueId == userId);
+
+        public bool UserIs(string userId, int status)
+        => _europa.Query<UserEntity>().Any(_u => _u.UniqueId == userId && _u.Status == status);
     }
 }

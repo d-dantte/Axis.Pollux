@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Models\Base.cs" />
     <Compile Include="Models\PageParams.cs" />
+    <Compile Include="PolluxException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

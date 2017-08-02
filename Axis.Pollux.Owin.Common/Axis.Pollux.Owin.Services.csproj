@@ -81,6 +81,7 @@
     <Compile Include="OAuth\ClientCredentialAuthorizationServer.cs" />
     <Compile Include="OAuth\BearerAuthenticationProvider.cs" />
     <Compile Include="IOwinContextProvider.cs" />
+    <Compile Include="OAuth\BearerTokenAcquirers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
