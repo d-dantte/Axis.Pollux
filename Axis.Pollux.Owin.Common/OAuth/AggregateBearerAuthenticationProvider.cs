@@ -14,12 +14,12 @@ namespace Axis.Pollux.Owin.Services.Impl
         private List<Func<OAuthRequestTokenContext, AsyncOperation>> _tokenAcquirers = new List<Func<OAuthRequestTokenContext, AsyncOperation>>();
         private List<Func<OAuthValidateIdentityContext, AsyncOperation>> _identityValidators = new List<Func<OAuthValidateIdentityContext, AsyncOperation>>();
 
-        public AggregateBearerAuthenticationProvider AddTokenAcquirer(Func<OAuthRequestTokenContext, AsyncOperation> acquirer)
+        public AggregateBearerAuthenticationProvider UseTokenAcquirer(Func<OAuthRequestTokenContext, AsyncOperation> acquirer)
         {
             _tokenAcquirers.Add(acquirer);
             return this;
         }
-        public AggregateBearerAuthenticationProvider AddIdentityValidator(Func<OAuthValidateIdentityContext, AsyncOperation> validator)
+        public AggregateBearerAuthenticationProvider UseIdentityValidator(Func<OAuthValidateIdentityContext, AsyncOperation> validator)
         {
             _identityValidators.Add(validator);
             return this;
@@ -28,6 +28,7 @@ namespace Axis.Pollux.Owin.Services.Impl
         public override async Task RequestToken(OAuthRequestTokenContext context)
         {
             await _tokenAcquirers
+                .ToArray()
                 .Aggregate(AsyncOp.Fail(new Exception()), (_op, _acq) =>
                 {
                     return _op.ContinueWith(_prev =>
@@ -37,13 +38,14 @@ namespace Axis.Pollux.Owin.Services.Impl
                     })
                     as AsyncOperation;
                 })
-                .Then(() => base.RequestToken(context))
+                .Then(() => AsyncOp.Try(base.RequestToken(context)))
                 .Cast<AsyncOperation>();
         }
 
         public override async Task ValidateIdentity(OAuthValidateIdentityContext context)
         {
             await _identityValidators
+                .ToArray()
                 .Aggregate(AsyncOp.Fail(new Exception()), (_op, _vid) =>
                 {
                     return _op.ContinueWith(_prev =>
@@ -53,7 +55,7 @@ namespace Axis.Pollux.Owin.Services.Impl
                     })
                     as AsyncOperation;
                 })
-                .Then(() => base.ValidateIdentity(context))
+                .Then(() => AsyncOp.Try(base.ValidateIdentity(context)))
                 .Cast<AsyncOperation>();
         }
     }

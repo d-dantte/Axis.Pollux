@@ -8,10 +8,10 @@ namespace Axis.Pollux.Owin.Services.Misc
     public class CallContextOwinProvider: IOwinContextProvider
     {
         public IOperation<IOwinContext> Owin()
-        => LazyOp.Try(() => CallContext.LogicalGetData(OwinContextProviderExtension.CallContextOwinKey) as IOwinContext);
+        => LazyOp.Try(() => CallContext.LogicalGetData(CallContextOwinProviderExtension.CallContextOwinKey) as IOwinContext);
     }
 
-    public static class OwinContextProviderExtension
+    public static class CallContextOwinProviderExtension
     {
         public static readonly string CallContextOwinKey = "Axis.Pollux.Owin.Services.CallContext.OwinContext";
 

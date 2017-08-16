@@ -38,8 +38,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Axis.Jupiter\Axis.Jupiter.Europa\bin\Debug\Axis.Jupiter.Europa.dll</HintPath>
     </Reference>
-    <Reference Include="Axis.Luna, Version=3.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Axis.Luna">
       <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">

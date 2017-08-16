@@ -1,4 +1,5 @@
 ﻿using static Axis.Luna.Extensions.ExceptionExtensions;
+using static Axis.Luna.Extensions.OperationExtensions;
 
 using System;
 using System.Linq;
@@ -51,7 +52,8 @@ namespace Axis.Pollux.CoreAuthentication.Services
                       .Select(ExpireCredential)
 
                       //add the new credential ONLY after all unexpired credentials of the same metadata type have been expired.
-                      .FoldAll(() => _pcommand.Add(CreateCredential(credential.Owner.UserId, credential.Value, credential.Metadata, credential.ExpiresOn)).Resolve())
+                      .Chain()
+                      .Then(() => _pcommand.Add(CreateCredential(credential.Owner.UserId, credential.Value, credential.Metadata, credential.ExpiresOn)))
                       .Resolve();
             }
         });

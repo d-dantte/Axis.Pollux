@@ -34,7 +34,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Axis.Jupiter\Axis.Jupiter\bin\Debug\Axis.Jupiter.dll</HintPath>
     </Reference>
-    <Reference Include="Axis.Luna, Version=3.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Axis.Luna, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
     </Reference>
@@ -61,9 +61,6 @@
       <Project>{B6FE1B10-92A4-474B-8605-E3D63E491DCE}</Project>
       <Name>Axis.Pollux.Identity</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

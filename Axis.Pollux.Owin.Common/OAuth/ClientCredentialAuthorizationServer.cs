@@ -26,12 +26,12 @@ namespace Axis.Pollux.Owin.Services.OAuth
     /// This server depends on Axis.Account, Axis.Identity, Axis.Authentication, and Axis.RoleManagement modules.
     /// 
     /// I will explore the option of depending ONLY on the IServiceResolver service here, and then subsequently create any service i need, when i need it.
-    /// This is because this class is a singleton class, and the services are usually registered as per-request. So its either i create a new ServiceResolver
-    /// specifically for this server, or i resolve them when i need them.
+    /// This is because THIS class is a singleton class, and the services are usually registered as per-request, thus the services injected inside HAVE TO BE SINGLETON also. 
+    /// So its either i create a new ServiceResolver with the appropriate registrations specifically for this server, or i resolve them when i need them.
     /// </summary>
     public class ClientCredentialAuthorizationServer : OAuthAuthorizationServerProvider, IDisposable//, Microsoft.Owin.Security.Infrastructure.IAuthenticationTokenProvider
     {
-        public static readonly string OAuthCustomHeaders_OldToken = "AxisPollux-OldOAuthToken";
+        public static readonly string OAuthCustomHeaders_OldToken = "X-AxisPollux-OldOAuthToken";
 
         private WeakCache _userLogonCache = null;
         private Parser Parser = Parser.GetDefault();
@@ -74,8 +74,11 @@ namespace Axis.Pollux.Owin.Services.OAuth
                 var oldToken = context.Request.Headers.GetValues(OAuthCustomHeaders_OldToken)?.FirstOrDefault() ?? null;
                 if (oldToken != null)
                 {
-                    var logon = _userLogonCache.GetOrRefresh<UserLogon>(oldToken);
-                    if (logon != null) _accountManager.InvalidateUserLogon(logon.User.UserId, logon.SecurityToken).Resolve();
+                    var logon = _userLogonCache.GetOrRefresh<UserLogon>(oldToken); //<-- refresh will pull it from the DB if it had been invalidated
+                    if (logon != null) _accountManager
+                        .InvalidateUserLogon(logon.User.UserId, logon.SecurityToken)
+                        .Then(_logon => _userLogonCache.Invalidate(oldToken))
+                        .Resolve();
                 }
             })
             #endregion
@@ -90,17 +93,13 @@ namespace Axis.Pollux.Owin.Services.OAuth
             #endregion
 
             #region verify credentials with the credential authority
-            .Then(_user =>
+            .Then(_user => _credAuthority.VerifyCredential(new Credential
             {
-                _credAuthority.VerifyCredential(new Credential
-                {
-                    Owner = _user,
-                    Metadata = CredentialMetadata.Password,
-                    Value = Encoding.UTF8.GetBytes(context.Password)
-                })
-                .Resolve();
-                return _user;
+                Owner = _user,
+                Metadata = CredentialMetadata.Password,
+                Value = Encoding.UTF8.GetBytes(context.Password)
             })
+            .Then(() => _user))
             #endregion
 
             #region aggregate the claims that makeup the token
@@ -115,7 +114,7 @@ namespace Axis.Pollux.Owin.Services.OAuth
                 //roles
                 _roleQuery
                     .GetUserRolesFor(context.UserName).Page
-                    .ForAll((_cnt, _next) => identity.AddClaim(new Claim(ClaimTypes.Role, _next.Role.RoleName)));
+                    .ForAll(_next => identity.AddClaim(new Claim(ClaimTypes.Role, _next.Role.RoleName)));
 
                 return identity.ValuePair(_user);
             })
@@ -143,7 +142,7 @@ namespace Axis.Pollux.Owin.Services.OAuth
         public override Task TokenEndpointResponse(OAuthTokenEndpointResponseContext context)
         => Task.Run(() =>
         {
-            //cache the logon associated to the given token
+            //cache the logon associated with the given token
             _userLogonCache.GetOrAdd(context.AccessToken, _token =>
             {
                 var agent = Parser.Parse(context.Request.Headers.Get("User-Agent"));
