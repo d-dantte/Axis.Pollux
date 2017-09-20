@@ -1,8 +1,6 @@
 ﻿using Axis.Pollux.Identity.OAModule.Mappings;
-using System.Collections.Generic;
 using Axis.Jupiter.Europa;
 using Axis.Luna.Extensions;
-using Newtonsoft.Json;
 using Axis.Pollux.Identity.Principal;
 using Axis.Pollux.Identity.OAModule.Entities;
 using Axis.Pollux.Notification.Client.EF.Entities;
@@ -34,7 +32,7 @@ namespace Axis.Pollux.Notification.Client.EF.Mappings
         {
             entity.Channels = model.Channels?.JoinUsing(",");
             entity.CreatedOn = model.CreatedOn;
-            entity.Data = JsonConvert.SerializeObject(model.Data, Constants.NotificationDataSerializationSettings);
+            entity.Data = model.Data;
             entity.ModifiedOn = model.ModifiedOn;
             entity.Origin = model.Origin;
             entity.Status = model.Status;
@@ -53,7 +51,7 @@ namespace Axis.Pollux.Notification.Client.EF.Mappings
         {
             model.Channels = entity.Channels?.Split(',') ?? new string[0];
             model.CreatedOn = entity.CreatedOn;
-            model.Data = JsonConvert.DeserializeObject<Dictionary<string, object>>(entity.Data, Constants.NotificationDataSerializationSettings);
+            model.Data = entity.Data;
             model.ModifiedOn = entity.ModifiedOn;
             model.Origin = entity.Origin;
             model.Status = entity.Status;

@@ -169,14 +169,14 @@ namespace Axis.Pollux.AccountManagement.Services
             _pcommand.Update(cv).Resolve();
         });
 
-        public virtual IOperation<ContextVerification> GenrateCredentialResetVerification(string targetUser, CredentialMetadata meta, TimeSpan validityDuration)
+        public virtual IOperation<ContextVerification> RequestCredentialResetVerification(string targetUser, CredentialMetadata meta, TimeSpan validityDuration)
         => ValidateModels(meta)
         .Then(() => GenerateContextVerification(targetUser, 
                                                 Constants.VerificationContext_CredentialResetPrefix + $".{meta.Access}-{meta.Name}", 
                                                 VerificationTokenType.RandomString,
                                                 DateTime.Now - validityDuration));
 
-        public virtual IOperation<ContextVerification> GenerateUserActivationVerification(string targetUser, TimeSpan validityDuration)
+        public virtual IOperation<ContextVerification> RequestUserActivationVerification(string targetUser, TimeSpan validityDuration)
         => GenerateContextVerification(targetUser,
                                        Constants.VerificationContext_UserActivation,
                                        VerificationTokenType.RandomString,

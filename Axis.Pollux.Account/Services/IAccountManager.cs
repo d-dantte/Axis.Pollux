@@ -29,7 +29,7 @@ namespace Axis.Pollux.Account.Services
         IOperation<User> ActivateUser(string targetUser);
 
 
-        IOperation<ContextVerification> GenerateUserActivationVerification(string targetUser, TimeSpan validityDuration);
+        IOperation<ContextVerification> RequestUserActivationVerification(string targetUser, TimeSpan validityDuration);
 
         IOperation<User> VerifyUserActivation(string targetUser, string contextToken);
 
@@ -37,7 +37,7 @@ namespace Axis.Pollux.Account.Services
         IOperation<long> UserCount();
 
 
-        IOperation<ContextVerification> GenrateCredentialResetVerification(string targetUser, CredentialMetadata credentialMetadata, TimeSpan validityDuration);
+        IOperation<ContextVerification> RequestCredentialResetVerification(string targetUser, CredentialMetadata credentialMetadata, TimeSpan validityDuration);
 
         IOperation ResetCredential(Credential newCredential, string verificationToken);
 

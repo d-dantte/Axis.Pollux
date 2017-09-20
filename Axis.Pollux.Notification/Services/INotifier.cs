@@ -6,6 +6,6 @@ namespace Axis.Pollux.Notification.Services
 {
     public interface INotifier
     {
-        IOperation<IEnumerable<KeyValuePair<string, Guid>>> NotifyTarget(string targetUser, Models.Notification notification);
+        IOperation<IEnumerable<KeyValuePair<string, Guid>>> NotifyTarget<Data>(string origin, string targetUser, string title, Data data, params string[] channels);
     }
 }

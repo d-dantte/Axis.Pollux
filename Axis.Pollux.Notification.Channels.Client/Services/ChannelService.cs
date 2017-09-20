@@ -12,7 +12,7 @@ using Axis.Pollux.Identity.Services;
 
 namespace Axis.Pollux.Notification.Client.Services
 {
-    public class ChannelService : IClientNotification
+    public class ChannelService : IClientNotifier
     {
         private IPersistenceCommands _pcommands;
         private IChannelQuery _query;
@@ -32,12 +32,12 @@ namespace Axis.Pollux.Notification.Client.Services
             _userContext = userContext;
         }
 
-        public IOperation<Guid> PushNotification(Models.Notification notification)
+        public IOperation<Guid> PushNotification<D>(Models.Notification<D> notification)
         => ValidateModels(notification)
         .Then(() =>
         {
             notification.Status = NotificationStatus.Delivered;
-            return _pcommands.Add(notification);
+            return _pcommands.Add(notification as Models.Notification);
         })
         .Then(_ => _.UUId);
 

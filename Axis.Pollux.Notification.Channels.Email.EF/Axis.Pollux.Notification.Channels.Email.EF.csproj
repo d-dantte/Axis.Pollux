@@ -47,10 +47,6 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -62,7 +58,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="Entities\EmailNotificationEntity.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Mappings\NotificationMapping.cs" />
@@ -82,6 +77,10 @@
       <Project>{b6fe1b10-92a4-474b-8605-e3d63e491dce}</Project>
       <Name>Axis.Pollux.Identity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.Notification.Channels.Email\Axis.Pollux.Notification.Channels.Email.csproj">
+      <Project>{d1e8e844-fe42-4267-ab7f-4cc1a0261e2d}</Project>
+      <Name>Axis.Pollux.Notification.Channels.Email</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Axis.Pollux.Notification\Axis.Pollux.Notification.csproj">
       <Project>{51e7b89f-cfc8-4f97-91e1-08c914bf1201}</Project>
       <Name>Axis.Pollux.Notification</Name>
@@ -89,10 +88,6 @@
     <ProjectReference Include="..\Axis.Pollux.Utils\Axis.Pollux.Utils.csproj">
       <Project>{2451680b-3a46-4904-b359-4b9af9bb3774}</Project>
       <Name>Axis.Pollux.Utils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ElasticMailChannel\Axis.Pollux.Notification.Channels.Email.csproj">
-      <Project>{D1E8E844-FE42-4267-AB7F-4CC1A0261E2D}</Project>
-      <Name>Axis.Pollux.Notification.Channels.Email</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

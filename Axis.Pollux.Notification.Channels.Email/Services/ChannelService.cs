@@ -15,7 +15,7 @@ using Axis.Pollux.Notification.Email.Queries;
 
 namespace Axis.Pollux.Notification.Email.Services
 {
-    public class ChannelService : INotifierChannel
+    public class ChannelService : IEmailNotifier
     {
         private IEmailClient _emailClient;
         private IHtmlEmailRenderer _renderer;
@@ -38,7 +38,7 @@ namespace Axis.Pollux.Notification.Email.Services
             _query = query;
         }
 
-        public IOperation<Guid> PushNotification(Models.Notification notification)
+        public IOperation<Guid> PushNotification<D>(Models.Notification<D> notification)
         => ValidateModels(notification)
         .Then(() => _renderer.RenderHtml(notification.Data))
         .Then(_html =>
@@ -55,7 +55,7 @@ namespace Axis.Pollux.Notification.Email.Services
                 }
             };
 
-            return _pcommands.Add(notification) //<-- persist the notification first
+            return _pcommands.Add(notification as Models.Notification) //<-- persist the notification first
                 .Then(_ => _emailClient.Send(payload))
                 .Then(_ =>
                 {

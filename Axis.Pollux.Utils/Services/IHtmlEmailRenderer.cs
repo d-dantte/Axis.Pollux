@@ -5,6 +5,6 @@ namespace Axis.Pollux.Utils.Services
 {
     public interface IHtmlEmailRenderer
     {
-        IOperation<string> RenderHtml(IDictionary<string, object> emailModel);
+        IOperation<string> RenderHtml<Model>(Model emailModel);
     }
 }

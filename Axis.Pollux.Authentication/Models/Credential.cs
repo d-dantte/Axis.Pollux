@@ -76,9 +76,9 @@ namespace Axis.Pollux.Authentication.Models
 
         public override bool Equals(object obj) => Equals(obj.Cast<CredentialMetadata>());
         public bool Equals(CredentialMetadata other)
-            => other.Name == null ? false :
-               this.Name == other.Name &&
-               this.Access == other.Access;
+        => other.Name == null ? false :
+           this.Name == other.Name &&
+           this.Access == other.Access;
 
         public override int GetHashCode() => ValueHash(17, 23, Name, Access);
 

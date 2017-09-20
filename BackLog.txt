@@ -16,5 +16,7 @@
 	 into new means of communication, or be changed totally. So to avoid changing the model, i will use the UserData
 	 [Done]
 
-2.	  
+2.	 Convert all DateTime to DateTimeOffset.
+
+3.	 Implement the UserLogon with DateTimeOffset in mind
 	 

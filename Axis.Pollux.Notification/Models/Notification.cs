@@ -1,7 +1,7 @@
 ﻿using Axis.Pollux.Identity;
 using Axis.Pollux.Identity.Principal;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace Axis.Pollux.Notification.Models
 {
@@ -15,10 +15,26 @@ namespace Axis.Pollux.Notification.Models
 
         public string[] Channels { get; set; }
 
-        public IDictionary<string, object> Data { get; set; }
+        public string Data { get; set; }
 
         public string Title { get; set; }
 
         public NotificationStatus Status { get; set; }
+    }
+
+
+    public class Notification<D> : Notification
+    {
+        private D _data;
+        new public D Data
+        {
+            get { return _data; }
+            set
+            {
+                _data = value;
+                if (value == null) base.Data = null;
+                else base.Data = JsonConvert.SerializeObject(value);
+            }
+        }
     }
 }

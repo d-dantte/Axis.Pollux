@@ -25,6 +25,7 @@ namespace Axis.Pollux.AuditService.Services
                                () => userContext);
 
             _pcommand = persistenceCommands;
+            _userContext = userContext;
             _query = query;
         }
 

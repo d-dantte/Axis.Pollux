@@ -13,7 +13,7 @@ namespace Axis.Pollux.Notification.Services
         /// </summary>
         /// <param name="notification"></param>
         /// <returns></returns>
-        IOperation<Guid> PushNotification(Models.Notification notification);
+        IOperation<Guid> PushNotification<D>(Models.Notification<D> notification);
 
         IOperation<Models.Notification> GetNotification(Guid notificationId);
     }

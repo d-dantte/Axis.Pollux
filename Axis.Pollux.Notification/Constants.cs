@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Axis.Pollux.Notification.Email.EF
+namespace Axis.Pollux.Notification
 {
     public static class Constants
     {

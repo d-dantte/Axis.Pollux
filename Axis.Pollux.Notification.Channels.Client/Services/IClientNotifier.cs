@@ -7,7 +7,7 @@ using System;
 
 namespace Axis.Pollux.Notification.Client.Services
 {
-    public interface IClientNotification: INotifierChannel
+    public interface IClientNotifier: INotifierChannel
     {
         IOperation<Models.Notification> UpdateStatus(Guid notificationId, NotificationStatus status);
 
