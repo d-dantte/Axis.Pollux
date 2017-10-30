@@ -130,7 +130,6 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIf(IsNotMyOwn, "Access Denied to data");
         });
 
-
         public IOperation<SequencePage<ContactData>> GetContactDataOfType(ContactChannel channel, ContactStatus? status = null, PageParams pageParams = null)
         => LazyOp.Try(() =>
         {

@@ -26,5 +26,10 @@
 	 c. UserId will be changed to UserName. This field should still be indexed at the back end, but it will no longer "EXCLUSIVELY" contain an "email".
 	 d. Upon user creation, an email is supplied, as well as a user-name for the targeted user: these values may be identical; the email however, will
 	    be stored in the "UserData" store/table along with other "contact data".
-5.	Add Identity server implementation to this.
+5.	Add Identity server implementation to this: Break this appart into another Project repository on it's own. This Server should be flexible enough to accept
+	Services registration dynamically - thus a new microservice system can join in this server's realm on the fly.
+	- Off the top of my head, this will require the services to host their own permission to avoid packing too much information into the token that is generated.
+	- This will mean that each microservice system will have to expose certain endpoints (invalidate-logon, disable-role, etc) using a laid-down interface as
+	  provided by the identity server. Thus changes in the identity server can be broadcast to all connected/registered microservice-systems.
+
 6.	Add Execution Context that functions like the CallContext class. One can drop Key-Value pairs in it for acces by other processes down the execution chain
