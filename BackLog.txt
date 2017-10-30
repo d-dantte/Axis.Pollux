@@ -19,4 +19,12 @@
 2.	 Convert all DateTime to DateTimeOffset.
 
 3.	 Implement the UserLogon with DateTimeOffset in mind
-	 
+	
+4.	 Modify the User object:
+	 a. UniqueId will no more be a string, but a Guid.
+	 b. all "foreign keys" pointing to this object will be modified to reflect the new Guid
+	 c. UserId will be changed to UserName. This field should still be indexed at the back end, but it will no longer "EXCLUSIVELY" contain an "email".
+	 d. Upon user creation, an email is supplied, as well as a user-name for the targeted user: these values may be identical; the email however, will
+	    be stored in the "UserData" store/table along with other "contact data".
+5.	Add Identity server implementation to this.
+6.	Add Execution Context that functions like the CallContext class. One can drop Key-Value pairs in it for acces by other processes down the execution chain

@@ -18,7 +18,7 @@ namespace Axis.Pollux.Common.Models
 
             var _query = query.Skip(psize * pindex);
 
-            if (psize != 0) _query = _query.Take(psize);
+            if (psize >= 0) _query = _query.Take(psize);
 
             var d = transformer
                 .Invoke(_query)
@@ -32,7 +32,7 @@ namespace Axis.Pollux.Common.Models
         public static PageParams EntireSequence(bool includeCount = true)
         => new PageParams
         {
-            PageSize = 0, //meaning assume the size of the array returned,
+            PageSize = -1, //meaning assume the size of the array returned,
             PageIndex = 0,
             IncludeCount = includeCount
         };

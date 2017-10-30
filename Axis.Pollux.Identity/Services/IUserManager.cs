@@ -15,12 +15,17 @@ namespace Axis.Pollux.Identity.Services
         #endregion
 
         #region Contact data
-        IOperation<UserData> AddContactData(string contactType, string data, string label = null);
-        IOperation<UserData> DeleteContactData(long id);
-        IOperation<UserData> UpdateContactStatus(long id, int status);
+        IOperation<ContactData> AddContactData(ContactChannel channel, string data);
+        IOperation DeleteContactData(long id);
 
-        IOperation<SequencePage<UserData>> GetContactData(int? status = Constants.ContactStatus_Validated, PageParams pageParams = null);
-        IOperation<UserData> GetContactData(long id);
+        IOperation VerifyContactData(long contactId);
+        IOperation ArchiveContactData(long contactId);
+
+
+        IOperation<SequencePage<ContactData>> GetContactData(ContactStatus? status = null, PageParams pageParams = null);
+        IOperation<ContactData> GetContactData(long contactId);
+
+        IOperation<SequencePage<ContactData>> GetContactDataOfType(ContactChannel channel, ContactStatus? status = null, PageParams pageParams = null);
         #endregion
 
         #region User data
@@ -47,8 +52,8 @@ namespace Axis.Pollux.Identity.Services
 
         #region User
         IOperation<long> UserCount();
-        IOperation<User> CreateUser(string userId, int status);
-        IOperation<bool> UserIs(string userId, int status);
+        IOperation<User> CreateUser(string userName, int status);
+        IOperation<bool> UserIs(long userId, int status);
         #endregion
     }
 }

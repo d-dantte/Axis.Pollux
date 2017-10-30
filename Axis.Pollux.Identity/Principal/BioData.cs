@@ -20,12 +20,8 @@ namespace Axis.Pollux.Identity.Principal
         #endregion
 
         #region navigational properties
-        public virtual User Owner { get; set; }
+        public User Owner { get; set; }
         #endregion
-
-        public BioData()
-        {
-        }
     }
 
     public enum Gender { Female, Male, Other}

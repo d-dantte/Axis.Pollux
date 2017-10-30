@@ -12,12 +12,8 @@ namespace Axis.Pollux.Identity.Principal
         public AddressStatus Status { get; set; }
 
         #region navigational properties
-        public virtual User Owner { get; set; }
+        public User Owner { get; set; }
         #endregion
-
-        public AddressData()
-        {
-        }
     }
 
     public enum AddressStatus

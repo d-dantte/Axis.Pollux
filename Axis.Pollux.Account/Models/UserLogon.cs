@@ -2,6 +2,7 @@
 using Axis.Pollux.Common;
 using Axis.Pollux.Identity;
 using Axis.Pollux.Identity.Principal;
+using System.ComponentModel.DataAnnotations;
 
 namespace Axis.Pollux.Account.Models
 {
@@ -28,6 +29,8 @@ namespace Axis.Pollux.Account.Models
         public override IOperation Validate()
         => LazyOp.Try(() =>
         {
+            Validator.ValidateObject(this, new ValidationContext(this), true);
+            
             if (User == null ||
                string.IsNullOrWhiteSpace(User.UserId)) throw new System.Exception("Invalid Logon User");
             if (string.IsNullOrWhiteSpace(SecurityToken)) throw new System.Exception("Invalid Security Token");

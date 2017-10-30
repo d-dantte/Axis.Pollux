@@ -47,6 +47,7 @@
     <Compile Include="Email\Payload.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IEmailClient.cs" />
+    <Compile Include="Services\IExecutionContext.cs" />
     <Compile Include="Services\IHtmlEmailRenderer.cs" />
     <Compile Include="Services\ISmsClient.cs" />
   </ItemGroup>

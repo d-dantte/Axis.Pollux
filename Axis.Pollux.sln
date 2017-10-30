@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{92D5A5DA-E27F-4718-B901-B5465B8D9C6C}"
 EndProject
@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.CoreAuthenticat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.ABAC", "Axis.Pollux.ABAC\Axis.Pollux.ABAC.csproj", "{AD36D2A4-7ED0-4D00-BE9B-0DCD70D12390}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0CFFDE1F-79D4-477B-B86B-78F2E0B69521}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Solution Items", ".Solution Items", "{0CFFDE1F-79D4-477B-B86B-78F2E0B69521}"
 	ProjectSection(SolutionItems) = preProject
 		Backlog.txt = Backlog.txt
 	EndProjectSection
@@ -115,6 +115,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Notification.Channels.Email.EF", "Axis.Pollux.Notification.Channels.Email.EF\Axis.Pollux.Notification.Channels.Email.EF.csproj", "{4D693359-8209-4C62-A4DA-673E8EBD499C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Notification.Channels.Email", "Axis.Pollux.Notification.Channels.Email\Axis.Pollux.Notification.Channels.Email.csproj", "{D1E8E844-FE42-4267-AB7F-4CC1A0261E2D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils.ExecutionContext", "Utils.ExecutionContext", "{52640526-A061-4B60-85B8-E94011A577E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Utils.ExecutionContext", "Axis.Pollux.Utils.ExecutionContext\Axis.Pollux.Utils.ExecutionContext.csproj", "{96BF5DB3-E7A5-440D-8FA8-3B1DF5143214}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -262,6 +266,10 @@ Global
 		{D1E8E844-FE42-4267-AB7F-4CC1A0261E2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1E8E844-FE42-4267-AB7F-4CC1A0261E2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1E8E844-FE42-4267-AB7F-4CC1A0261E2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96BF5DB3-E7A5-440D-8FA8-3B1DF5143214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96BF5DB3-E7A5-440D-8FA8-3B1DF5143214}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96BF5DB3-E7A5-440D-8FA8-3B1DF5143214}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96BF5DB3-E7A5-440D-8FA8-3B1DF5143214}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -311,5 +319,10 @@ Global
 		{AEC8589C-B4C1-4C2E-BAAE-291B1A4362C5} = {947D6878-F8E8-443F-B42C-EFC72F972DD4}
 		{4D693359-8209-4C62-A4DA-673E8EBD499C} = {4E76D3B2-7AC5-40E7-8342-98ECC9DBB160}
 		{D1E8E844-FE42-4267-AB7F-4CC1A0261E2D} = {4E76D3B2-7AC5-40E7-8342-98ECC9DBB160}
+		{52640526-A061-4B60-85B8-E94011A577E1} = {2C178FA7-12D3-498E-836D-EB461745C5C2}
+		{96BF5DB3-E7A5-440D-8FA8-3B1DF5143214} = {52640526-A061-4B60-85B8-E94011A577E1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {45D6FF47-3E34-4640-A170-15C3D58BED2F}
 	EndGlobalSection
 EndGlobal

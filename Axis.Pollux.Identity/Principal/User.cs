@@ -3,19 +3,14 @@ using System;
 
 namespace Axis.Pollux.Identity.Principal
 {
-    public class User: PolluxModel<string>
+    public class User: PolluxModel<long>
     {
 
         public User()
         {
-            UId = Guid.NewGuid();
         }
         
-        public string UserId
-        {
-            get { return this.UniqueId; }
-            set { this.UniqueId = value; }
-        }
+        public string UserName { get; set; }
 
         /// <summary>
         /// Account Status
@@ -35,6 +30,11 @@ namespace Axis.Pollux.Identity.Principal
         /// </summary>
         public int Status { get; set; }
 
-        public Guid UId { get; set; }
+        public Guid UId { get; set; } = Guid.NewGuid();
+
+
+        public BioData BioData { get; set; }
+        public ContactData[] ContactData { get; set; }
+        public UserData[] UserData { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace Axis.Pollux.Identity.Principal
         #endregion
 
         #region navigational properties
-        public virtual User Owner { get; set; }
+        public User Owner { get; set; }
         #endregion
     }
 }

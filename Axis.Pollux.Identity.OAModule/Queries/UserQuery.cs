@@ -113,5 +113,20 @@ namespace Axis.Pollux.Identity.OAModule.Queries
 
         public bool UserIs(string userId, int status)
         => _europa.Query<UserEntity>().Any(_u => _u.UniqueId == userId && _u.Status == status);
+
+        public SequencePage<UserData> GetContactDataOfType(string userId, string contactType, int? status, PageParams pageParams = null)
+        => _europa
+            .Query<UserDataEntity>(_ud => _ud.Owner)
+            .Where(_ud => _ud.OwnerId == userId)
+            .Where(_ud => _ud.Name == contactType)
+            .Pipe(_uds =>
+            {
+                if (status != null) _uds = _uds.Where(_ud => _ud.Status == status);
+                var ordered = _uds.OrderBy(_ud => _ud.CreatedOn);
+
+                pageParams = pageParams ?? PageParams.EntireSequence();
+
+                return pageParams.Paginate(ordered, __uds => __uds.Transform<UserDataEntity, UserData>(_europa));
+            });
     }
 }

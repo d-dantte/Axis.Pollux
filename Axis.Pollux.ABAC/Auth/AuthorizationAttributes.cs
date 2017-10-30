@@ -39,7 +39,7 @@ namespace Axis.Pollux.ABAC.Auth
         public override string ToString()
         => $"[Name: {Name}, Type: {Type}, Data: {Data}]";
 
-        public override int GetHashCode() => this.PropertyHash();
+        public override int GetHashCode() => ObjectExtensions.ValueHash(Type, Name, Data);
     }
 
 

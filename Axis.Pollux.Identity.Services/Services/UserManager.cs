@@ -37,18 +37,19 @@ namespace Axis.Pollux.Identity.Services
         {
             var user = _userContext.User();
             var persisted = _query
-                .GetBioData(user.UserId)
-                .ThrowIf(_ => _.Owner.UserId != user.UserId, "Access Denied to data");
+                .GetBioData(user.UniqueId)
+                .ThrowIf(_ => _.Owner.UniqueId != user.UniqueId, "Access Denied to data");
 
             if (persisted != null)
             {
-                data.CopyTo(persisted,
-                            nameof(BioData.UniqueId),
-                            nameof(BioData.Owner),
-                            nameof(BioData.CreatedOn));
-
-                if (persisted.Dob <= DateTime.Parse("1753/1/1")) persisted.Dob = null;
-
+                persisted.Dob = data.Dob;
+                persisted.FirstName = data.FirstName;
+                persisted.Gender = data.Gender;
+                persisted.LastName = data.LastName;
+                persisted.MiddleName = data.MiddleName;
+                persisted.Nationality = data.Nationality;
+                persisted.StateOfOrigin = data.StateOfOrigin;
+                
                 return _pcommand.Update(persisted);
             }
             else
@@ -59,64 +60,81 @@ namespace Axis.Pollux.Identity.Services
         });
 
         public IOperation<BioData> GetBioData()
-        => LazyOp.Try(() => _query.GetBioData(_userContext.User().UserId));
+        => LazyOp.Try(() => _query.GetBioData(_userContext.User().UniqueId));
         #endregion
 
         #region Contact data
-        public IOperation<UserData> AddContactData(string contactType, string data, string label = null)
+        public IOperation<ContactData> AddContactData(ContactChannel channel, string data)
         => LazyOp.Try(() =>
         {
-            var userData = new UserData
+            var contact = new ContactData
             {
-                Data = data.ThrowIfNull("invalid data"),
-                Label = label,
-                Name = contactType,
-                Type = contactType == Constants.ContactType_Email? Luna.Utils.CommonDataType.Email:
-                       contactType == Constants.ContactType_Phone? Luna.Utils.CommonDataType.Phone:
-                       Luna.Utils.CommonDataType.String,
-                Status = Constants.ContactStatus_PendingValidation,
+                Value = data.ThrowIfNull("invalid data"),
+                Channel = channel,
+                Status = ContactStatus.Unverified,
                 Owner = _userContext.User()
             };
 
-            return _pcommand.Add(userData);
+            return _pcommand.Add(contact);
         });
 
-        public IOperation<UserData> DeleteContactData(long id)
+        public IOperation DeleteContactData(long contactId)
         => LazyOp.Try(() =>
         {
             var data = _query
-                .GetContactData(id)
+                .GetContactData(contactId)
                 .ThrowIfNull("data not found")
                 .ThrowIf(IsNotMyOwn, "Access Denied to data");
 
-            return _pcommand.Delete(data);
+            _pcommand.Delete(data).Resolve();
         });
 
-        public IOperation<UserData> UpdateContactStatus(long id, int status)
+        public IOperation VerifyContactData(long contactId)
         => LazyOp.Try(() =>
         {
             var data = _query
-                .GetContactData(id)
+                .GetContactData(contactId)
+                .ThrowIfNull("data not found")
+                .ThrowIf(IsNotMyOwn, "Access Denied to data")
+                .ThrowIf(_c => _c.Status != ContactStatus.Unverified, "Invalid Contact status");
+
+            data.Status = ContactStatus.Active;
+
+            _pcommand.Update(data).Resolve();
+        });
+
+        public IOperation ArchiveContactData(long contactId)
+        => LazyOp.Try(() =>
+        {
+            var data = _query
+                .GetContactData(contactId)
                 .ThrowIfNull("data not found")
                 .ThrowIf(IsNotMyOwn, "Access Denied to data");
 
-            data.Status = status;
+            data.Status = ContactStatus.Archived;
 
-            return _pcommand.Update(data);
+            _pcommand.Update(data).Resolve();
         });
 
-        public IOperation<SequencePage<UserData>> GetContactData(int? status = Constants.ContactStatus_Validated, PageParams pageParams = null)
+        public IOperation<SequencePage<ContactData>> GetContactData(ContactStatus? status = null, PageParams pageParams = null)
         => LazyOp.Try(() =>
         {
-            return _query.GetContactData(_userContext.User().UserId, status, pageParams);
+            return _query.GetContactData(_userContext.User().UniqueId, status, pageParams);
         });
 
-        public IOperation<UserData> GetContactData(long id)
+        public IOperation<ContactData> GetContactData(long id)
         => LazyOp.Try(() =>
         {
             return _query
                 .GetContactData(id)
                 .ThrowIf(IsNotMyOwn, "Access Denied to data");
+        });
+
+
+        public IOperation<SequencePage<ContactData>> GetContactDataOfType(ContactChannel channel, ContactStatus? status = null, PageParams pageParams = null)
+        => LazyOp.Try(() =>
+        {
+            return _query.GetContactDataOfType(_userContext.User().UniqueId, channel, status, pageParams);
         });
 
         #endregion
@@ -130,7 +148,7 @@ namespace Axis.Pollux.Identity.Services
                 .Then(() =>
                 {
                     var user = _userContext.User();
-                    if (_query.GetUserData(user.UserId, data.Name) != null) return null;
+                    if (_query.GetUserData(user.UniqueId, data.Name) != null) return null;
 
                     data.UniqueId = 0;
                     data.Owner = user;
@@ -144,7 +162,7 @@ namespace Axis.Pollux.Identity.Services
         => ValidateModels(data).Then(() =>
         {
             var user = _userContext.User();
-            var persisted = _query.GetUserData(user.UserId, data.Name);
+            var persisted = _query.GetUserData(user.UniqueId, data.Name);
             if (persisted == null) return null;
 
             data.CopyTo(persisted,
@@ -161,17 +179,17 @@ namespace Axis.Pollux.Identity.Services
         {
             var user = _userContext.User();
             return names
-                .Select(_name => _query.GetUserData(user.UserId, _name))
+                .Select(_name => _query.GetUserData(user.UniqueId, _name))
                 .Pipe(_data => _pcommand
                 .DeleteBatch(_data)
                 .Then(() => _data));
         });
 
         public IOperation<SequencePage<UserData>> GetUserData(PageParams pageParams)
-        => LazyOp.Try(() => _query.GetUserData(_userContext.User().UserId, pageParams));
+        => LazyOp.Try(() => _query.GetUserData(_userContext.User().UniqueId, pageParams));
 
         public IOperation<UserData> GetUserData(string name)
-        => LazyOp.Try(() => _query.GetUserData(_userContext.User().UserId, name));
+        => LazyOp.Try(() => _query.GetUserData(_userContext.User().UniqueId, name));
         #endregion
 
         #region Address data
@@ -230,7 +248,7 @@ namespace Axis.Pollux.Identity.Services
         public IOperation<SequencePage<AddressData>> GetAddresses(AddressStatus? status, PageParams pageParams = null)
         => LazyOp.Try(() =>
         {
-            return _query.GetAddresses(_userContext.User().UserId, status, pageParams);
+            return _query.GetAddresses(_userContext.User().UniqueId, status, pageParams);
         });
 
         public IOperation<AddressData> GetAddress(long id)
@@ -245,21 +263,21 @@ namespace Axis.Pollux.Identity.Services
         public IOperation<long> UserCount()
         => LazyOp.Try(() => _query.GetUserCount());
 
-        public IOperation<User> CreateUser(string userId, int status)
+        public IOperation<User> CreateUser(string userName, int status)
         => LazyOp.Try(() =>
         {
-            if (_query.UserExists(userId)) throw new Exception("the user id already exists in the system");
+            if (_query.UserExists(userName)) throw new Exception("the user name already exists in the system");
 
             else return _pcommand.Add(new User
             {
-                UniqueId = userId,
+                UserName = userName,
                 Status = status
             });            
         });
 
-        private bool IsNotMyOwn(IUserOwned owned) => owned?.Owner?.UserId != _userContext.User().UserId;
+        private bool IsNotMyOwn(IUserOwned owned) => owned?.Owner?.UniqueId != _userContext.User().UniqueId;
 
-        public IOperation<bool> UserIs(string userId, int status)
+        public IOperation<bool> UserIs(long userId, int status)
         => LazyOp.Try(() =>
         {
             return _query.UserIs(userId, status);

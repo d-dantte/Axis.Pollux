@@ -1,29 +1,36 @@
-﻿namespace Axis.Pollux.Identity.Principal
+﻿using Axis.Pollux.Common;
+
+namespace Axis.Pollux.Identity.Principal
 {
-    //public class ContactData: PolluxModel<long>
-    //{
-    //    public string Phone { get; set; }
-    //    public string AlternatePhone { get; set; }
-    //    public bool PhoneConfirmed { get; set; }
+    public class ContactData : PolluxModel<long>, IUserOwned
+    {
+        public User Owner { get; set; }
 
-    //    public string Email { get; set; }
-    //    public string AlternateEmail { get; set; }
-    //    public bool EmailConfirmed { get; set; }
+        public ContactChannel Channel { get; set; }
+        public string Value { get; set; }
+        public ContactStatus Status { get; set; }
+        public bool IsPrimary { get; set; }
+    }
 
-    //    public ContactStatus Status { get; set; }
+    public enum ContactChannel
+    {
+        Mobile,
+        Fax,
+        Email,
+        POBox,
+        PMBox,
 
-    //    #region navigational properties
-    //    public virtual User Owner { get; set; }
-    //    #endregion
+        /// <summary>
+        /// A Special contact-channel representing the system.
+        /// Notifications sent to this channel will show up as SystemNotifications
+        /// </summary>
+        System
+    }
 
-    //    public ContactData()
-    //    {
-    //    }
-    //}
-
-    //public enum ContactStatus
-    //{
-    //    Current,
-    //    Archived
-    //}
+    public enum ContactStatus
+    {
+        Unverified,
+        Active,
+        Archived
+    }
 }

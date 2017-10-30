@@ -6,7 +6,6 @@ using System.Linq;
 namespace Axis.Pollux.ABAC.Auth
 {
     /// <summary>
-    /// 
     /// </summary>
     public class AuthorizationContext : IAuthorizationContext
     {

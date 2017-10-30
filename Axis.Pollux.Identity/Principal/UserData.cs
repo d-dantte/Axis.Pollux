@@ -37,15 +37,12 @@ namespace Axis.Pollux.Identity.Principal
 
 
         #region Navigation Properties
-        public virtual User Owner { get; set; }
+        public User Owner { get; set; }
         #endregion
 
         public override string ToString() => _dataItem.ToString();
 
 
-        private DataItem _dataItem = new DataItem();
-        public UserData()
-        {
-        }
+        private DataItem _dataItem = new DataItem();\
     }
 }

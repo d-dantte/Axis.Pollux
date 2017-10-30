@@ -2,6 +2,7 @@
 using Axis.Pollux.Identity.OAModule.Entities;
 using Axis.Pollux.Identity.Principal;
 using Axis.Luna.Extensions;
+using System;
 
 namespace Axis.Pollux.Identity.OAModule.Mappings
 {
@@ -25,7 +26,7 @@ namespace Axis.Pollux.Identity.OAModule.Mappings
         public override void CopyToEntity(BioData model, BioDataEntity entity, ModelConverter converter)
         {
             entity.CreatedOn = model.CreatedOn;
-            entity.Dob = model.Dob;
+            entity.Dob = model.Dob <= DateTime.Parse("1753/1/1") ? null : model.Dob;
             entity.FirstName = model.FirstName;
             entity.Gender = model.Gender;
             entity.LastName = model.LastName;
@@ -53,7 +54,7 @@ namespace Axis.Pollux.Identity.OAModule.Mappings
             model.Nationality = entity.Nationality;
             if (entity.Owner != null)
                 model.Owner = converter.ToModel<User>(entity.Owner);
-            else if (!string.IsNullOrWhiteSpace(entity.OwnerId))
+            else if (entity.OwnerId > 0)
                 model.Owner = new User { UniqueId = entity.OwnerId };
 
             model.StateOfOrigin = entity.StateOfOrigin;

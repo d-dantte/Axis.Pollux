@@ -22,7 +22,7 @@ namespace Axis.Pollux.Identity.OAModule.Entities
 
         #region navigational properties
         public virtual UserEntity Owner { get; set; }
-        public string OwnerId { get; set; }
+        public long OwnerId { get; set; }
         #endregion
 
         public BioDataEntity()

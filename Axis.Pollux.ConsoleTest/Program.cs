@@ -43,7 +43,7 @@ namespace Axis.Pollux.ConsoleTest
             //build some intent maps
             var intentMap = new OperationIntentMap()
                 .Map<IUserManager>(um => um.ActivateAddress(0),
-                                        new AccessIntent("oprx://identity/addresses/", "activate"))
+                                   new AccessIntent("oprx://identity/addresses/", "activate"))
                 .Map(typeof(IUserManager).GetMethod(nameof(IUserManager.AddAddressData)),
                      new AccessIntent("oprx://identity/addresses/", "add"));
             var intentSource = new IntentMapSource<IUserManager>(intentMap, um => um.ActivateAddress(0)); //<-- the action we are trying to authorize
@@ -59,7 +59,8 @@ namespace Axis.Pollux.ConsoleTest
 
             //auth request
             var authReq = new AuthorizationContext(Enumerate<IAttributeSource>(identitySource, userRoleSource), 
-                                                   Enumerate(intentSource), null);
+                                                   Enumerate(intentSource), 
+                                                   null);
 
             //retrieve the policies
             var x = roleManager.GetAllRoles(null).Resolve();

@@ -1,4 +1,5 @@
-﻿using Axis.Pollux.ABAC.Auth;
+﻿using Axis.Luna.Extensions;
+using Axis.Pollux.ABAC.Auth;
 using Axis.Sigma.Core;
 
 using static Axis.Luna.Extensions.ExceptionExtensions;
@@ -38,6 +39,16 @@ namespace Axis.Pollux.ABAC.AttributeSources.Models
 
             ActionDescriptor = new IntentAuthorizationAttribute(actionDescriptor)
                 .ThrowIf(_att => _att.Name != Constants.IntentAttribute_ActionDescriptor, "invalid action descriptor attribute");
+        }
+
+        public override int GetHashCode() => ObjectExtensions.ValueHash(ResourceDescriptor, ActionDescriptor);
+
+        public override bool Equals(object obj)
+        {
+            var intent = obj.Cast<AccessIntent>();
+            return intent != null &&
+                   ResourceDescriptor.Equals(intent.ResourceDescriptor) &&
+                   ActionDescriptor.Equals(intent.ActionDescriptor);
         }
     }
 }
