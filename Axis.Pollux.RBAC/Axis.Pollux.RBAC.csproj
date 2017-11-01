@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2451680B-3A46-4904-B359-4B9AF9BB3774}</ProjectGuid>
+    <ProjectGuid>{5448239A-0BC5-4583-8A2F-3B0CE18B573F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Axis.Pollux.Utils</RootNamespace>
-    <AssemblyName>Axis.Pollux.Utils</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>Axis.Pollux.RBAC</RootNamespace>
+    <AssemblyName>Axis.Pollux.RBAC</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -33,6 +33,9 @@
     <Reference Include="Axis.Luna">
       <HintPath>..\..\Axis.Luna\Axis.Luna\bin\Debug\Axis.Luna.dll</HintPath>
     </Reference>
+    <Reference Include="Axis.Proteus">
+      <HintPath>..\..\Axis.Proteus\Axis.Proteus\bin\Debug\Axis.Proteus.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,24 +46,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Email\Message.cs" />
-    <Compile Include="Email\Payload.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ICache.cs" />
-    <Compile Include="Services\IEmailClient.cs" />
-    <Compile Include="Services\IExecutionContext.cs" />
-    <Compile Include="Services\IHtmlEmailRenderer.cs" />
-    <Compile Include="Services\ISmsClient.cs" />
+    <Compile Include="Services\DataAccessAuthority.cs" />
+    <Compile Include="Services\OperationAuthority.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Sms\" />
+    <ProjectReference Include="..\Axis.Pollux.AccessAuthority\Axis.Pollux.AccessAuthority.csproj">
+      <Project>{f8f5090b-a2bc-4831-b28a-4b60a405907a}</Project>
+      <Name>Axis.Pollux.AccessAuthority</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.Common\Axis.Pollux.Common.csproj">
+      <Project>{add69f52-5eb2-4b5f-b4b1-46943a8f1cb7}</Project>
+      <Name>Axis.Pollux.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj">
+      <Project>{b6fe1b10-92a4-474b-8605-e3d63e491dce}</Project>
+      <Name>Axis.Pollux.Identity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.RoleAuth\Axis.Pollux.RoleAuth.csproj">
+      <Project>{e41991f6-a249-49e5-9885-ba7e46ce4a13}</Project>
+      <Name>Axis.Pollux.RoleAuth</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Axis.Pollux.Utils\Axis.Pollux.Utils.csproj">
+      <Project>{2451680B-3A46-4904-B359-4B9AF9BB3774}</Project>
+      <Name>Axis.Pollux.Utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

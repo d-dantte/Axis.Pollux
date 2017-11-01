@@ -19,19 +19,19 @@ namespace Axis.Pollux.RoleAuth.Services
         #endregion
 
         #region User Role Management
-        IOperation<UserRole> AssignRole(User user, Role role);
-        IOperation RevokeRole(User user, Role role);
+        IOperation<UserRole> AssignRole(long userId, Role role);
+        IOperation RevokeRole(long userId, Role role);
 
-        IOperation<SequencePage<UserRole>> GetUserRolesFor(User user, PageParams pageParams = null);
+        IOperation<SequencePage<UserRole>> GetUserRolesFor(long userId, PageParams pageParams = null);
         #endregion
 
         #region Permission Management
-        IOperation<RolePermission> CreatePermission(Role role, string resource, string label, PermissionEffect effect);
+        IOperation<RolePermission> CreatePermission(long roleId, string resource, string label, PermissionEffect effect);
         IOperation<RolePermission> DeletePermission(RolePermission permission);
         IOperation<RolePermission> UpdatePermission(RolePermission permission);
 
         IOperation<RolePermission> GetPermissionForUUID(Guid uuid);
-        IOperation<SequencePage<RolePermission>> GetPermissionsFor(Role role, PageParams pageParams = null);
+        IOperation<SequencePage<RolePermission>> GetPermissionsFor(long roleId, PageParams pageParams = null);
         IOperation<SequencePage<RolePermission>> GetPermissionsForLabel(string label, PageParams pageParams = null);
         IOperation<SequencePage<RolePermission>> GetPermissionsForResource(string resource, PageParams pageParams = null);
         #endregion

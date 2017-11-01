@@ -24,7 +24,7 @@ namespace Axis.Pollux.Common.Models
                 .Invoke(_query)
                 .ToArray();
 
-            var count = IncludeCount ? query.Count() : d.Length;
+            var count = IncludeCount ? query.LongCount() : d.Length;
             return new SequencePage<Model>(d, count, psize, pindex);
         }
 

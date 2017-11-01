@@ -43,9 +43,9 @@ namespace Axis.Pollux.Identity.Services
             if (persisted != null)
             {
                 persisted.Dob = data.Dob;
-                persisted.FirstName = data.FirstName;
                 persisted.Gender = data.Gender;
                 persisted.LastName = data.LastName;
+                persisted.FirstName = data.FirstName;
                 persisted.MiddleName = data.MiddleName;
                 persisted.Nationality = data.Nationality;
                 persisted.StateOfOrigin = data.StateOfOrigin;
@@ -140,35 +140,31 @@ namespace Axis.Pollux.Identity.Services
 
         #region User data
         public IOperation<UserData> AddData(UserData data)
-        => LazyOp.Try(() =>
+        => ValidateModels(data).Then(() =>
         {
-            return data?
-                .Validate()
-                .Then(() =>
-                {
-                    var user = _userContext.User();
-                    if (_query.GetUserData(user.UniqueId, data.Name) != null) return null;
+            var user = _userContext.User();
+            _query
+                .GetUserData(user.UniqueId, data.Name)
+                .ThrowIfNull("Data already exists");
 
-                    data.UniqueId = 0;
-                    data.Owner = user;
+            data.UniqueId = 0;
+            data.Owner = user;
 
-                    return _pcommand.Add(data);
-                })
-                ?? LazyOp.Fail<UserData>(new NullReferenceException());
+            return _pcommand.Add(data);
         });
 
         public IOperation<UserData> UpdateData(UserData data)
         => ValidateModels(data).Then(() =>
         {
             var user = _userContext.User();
-            var persisted = _query.GetUserData(user.UniqueId, data.Name);
-            if (persisted == null) return null;
+            var persisted = _query
+                .GetUserData(user.UniqueId, data.Name)
+                .ThrowIfNull("Invalid user data");
 
-            data.CopyTo(persisted,
-                        nameof(UserData.UniqueId),
-                        nameof(UserData.Owner),
-                        nameof(UserData.CreatedOn),
-                        nameof(UserData.ModifiedOn));
+            persisted.Data = data.Data;
+            persisted.Label = data.Label;
+            persisted.Status = data.Status;
+            persisted.Type = data.Type;
 
             return _pcommand.Update(persisted);
         });
