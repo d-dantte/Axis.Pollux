@@ -10,11 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Axis.Jupiter" Version="4.0.0" />
     <PackageReference Include="Axis.Luna.Common" Version="4.2.0" />
+    <PackageReference Include="Axis.Luna.Extensions" Version="4.2.0" />
+    <PackageReference Include="Axis.Luna.Operation" Version="4.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Axis.Pollux.Common\Axis.Pollux.Common.csproj" />
+    <ProjectReference Include="..\Axis.Pollux.Authorization\Axis.Pollux.Authorization.csproj" />
+    <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj" />
   </ItemGroup>
 
 </Project>

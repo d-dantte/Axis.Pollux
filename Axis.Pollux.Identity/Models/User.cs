@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Axis.Pollux.Common.Models;
 
 namespace Axis.Pollux.Identity.Models
@@ -8,11 +6,6 @@ namespace Axis.Pollux.Identity.Models
     public class User: BaseModel<Guid>
     {
         public int Status { get; set; }
-
-        public BioData Bio { get; set; }
-        public ContactData[] ContactInfo { get; set; }
-        public NameInfo[] Names { get; set; }
-        public UserData[] Data { get; set; }
     }
 
     /// <summary>
@@ -23,5 +16,21 @@ namespace Axis.Pollux.Identity.Models
         Inactive = 0,
         Active = 1,
         Blocked = 2
+    }
+
+
+    /// <summary>
+    /// This represents a user profile. It is not a "BaseModel" descendant, and as such, not expected to exist in the
+    /// Data-Store
+    /// </summary>
+    public class UserProfile
+    {
+        public User User { get; set; }
+
+        public BioData Bio { get; set; }
+        public AddressData[] Addresses { get; set; }
+        public ContactData[] ContactInfo { get; set; }
+        public NameData[] Names { get; set; }
+        public UserData[] Data { get; set; }
     }
 }

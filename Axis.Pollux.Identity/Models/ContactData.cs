@@ -12,7 +12,6 @@ namespace Axis.Pollux.Identity.Models
 
         public bool IsPrimary { get; set; }
         public bool IsVerified { get; set; }
-
         public int Status { get; set; }
 
         public User Owner { get; set; }
@@ -27,7 +26,6 @@ namespace Axis.Pollux.Identity.Models
         Phone,
         Email,
         Fax,
-        Address,
         Post
     }
 

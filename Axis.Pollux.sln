@@ -5,10 +5,6 @@ VisualStudioVersion = 15.0.28307.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{92D5A5DA-E27F-4718-B901-B5465B8D9C6C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ABAC", "ABAC", "{819BC025-2D32-4CC8-A49B-A2E81C31B3AC}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RBAC", "RBAC", "{5475CA52-2D0E-4382-97E5-DB2D6607B622}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Authentication", "Authentication", "{0CCC3585-FB1B-41BD-B78F-4BFBADBF491D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Authorization", "Authorization", "{9DE0EEF0-1558-4587-B2E7-E75D2A472092}"
@@ -28,7 +24,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{2C178F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Identity", "Axis.Pollux.Identity\Axis.Pollux.Identity.csproj", "{A2094E54-8A23-4EBD-93C5-72E0BA5ADC0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Common", "Axis.Pollux.Common\Axis.Pollux.Common.csproj", "{9602B636-45F8-4309-9B83-E754481AD5FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Common", "Axis.Pollux.Common\Axis.Pollux.Common.csproj", "{9602B636-45F8-4309-9B83-E754481AD5FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Identity.Services", "Axis.Pollux.Identity.Services\Axis.Pollux.Identity.Services.csproj", "{72C05029-299C-4EF3-8583-C9273C08CDBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Authorization", "Axis.Pollux.Authorization\Axis.Pollux.Authorization.csproj", "{AB5BE718-E21B-4485-84BB-A26ABE02B15E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,15 +44,23 @@ Global
 		{9602B636-45F8-4309-9B83-E754481AD5FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9602B636-45F8-4309-9B83-E754481AD5FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9602B636-45F8-4309-9B83-E754481AD5FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72C05029-299C-4EF3-8583-C9273C08CDBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72C05029-299C-4EF3-8583-C9273C08CDBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72C05029-299C-4EF3-8583-C9273C08CDBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72C05029-299C-4EF3-8583-C9273C08CDBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB5BE718-E21B-4485-84BB-A26ABE02B15E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB5BE718-E21B-4485-84BB-A26ABE02B15E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB5BE718-E21B-4485-84BB-A26ABE02B15E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB5BE718-E21B-4485-84BB-A26ABE02B15E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{819BC025-2D32-4CC8-A49B-A2E81C31B3AC} = {9DE0EEF0-1558-4587-B2E7-E75D2A472092}
-		{5475CA52-2D0E-4382-97E5-DB2D6607B622} = {9DE0EEF0-1558-4587-B2E7-E75D2A472092}
 		{A2094E54-8A23-4EBD-93C5-72E0BA5ADC0D} = {92D5A5DA-E27F-4718-B901-B5465B8D9C6C}
 		{9602B636-45F8-4309-9B83-E754481AD5FC} = {2C178FA7-12D3-498E-836D-EB461745C5C2}
+		{72C05029-299C-4EF3-8583-C9273C08CDBC} = {92D5A5DA-E27F-4718-B901-B5465B8D9C6C}
+		{AB5BE718-E21B-4485-84BB-A26ABE02B15E} = {9DE0EEF0-1558-4587-B2E7-E75D2A472092}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC2C5339-00F9-4F63-AEB2-C38276295EAE}

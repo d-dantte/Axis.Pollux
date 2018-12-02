@@ -1,16 +1,53 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Axis.Jupiter;
 using Axis.Luna.Operation;
+using Axis.Pollux.Authorization.Contracts;
 using Axis.Pollux.Common.Utils;
+using Axis.Pollux.Identity.Contracts;
 using Axis.Pollux.Identity.Models;
+using Axis.Pollux.Identity.Services.Queries;
 
-namespace Axis.Pollux.Identity.Contracts
+using static Axis.Luna.Extensions.ExceptionExtension;
+
+namespace Axis.Pollux.Identity.Services
 {
-    public interface IUserManager
+    public class UserManager: IUserManager
     {
+        private readonly StoreProvider _storeProvider;
+        private readonly IUserQueries _userQueries;
+        private readonly IUserContext _userContext;
+        private readonly IDataAccessAuthorizer _dataAccessAuthorizer;
+
+
+        public UserManager(IUserContext userContext, IUserQueries userQueries, 
+                           IDataAccessAuthorizer dataAuthorizer, StoreProvider storeProvider)
+        {
+            ThrowNullArguments(() => userContext,
+                               () => userQueries,
+                               () => dataAuthorizer,
+                               () => storeProvider);
+
+            _userContext = userContext;
+            _userQueries = userQueries;
+            _storeProvider = storeProvider;
+            _dataAccessAuthorizer = dataAuthorizer;
+        }
+
+
+
         #region User
 
-        Operation<User> CreateUser(int? status = null);
-        Operation<User> DeleteUser(Guid userId);
+        public Operation<User> CreateUser(int? status = null)
+        => Operation.Try(async () =>
+        {
+            var user = new User { Status =  status ?? 0 };
+            var storeCommand = _storeProvider.CommandFor(typeof(User).FullName);
+            return await storeCommand.Add(user);
+        });
+
+        Operation<User> DeleteUser(Guid userId)
         Operation UpdateUserStatus(Guid userId, int status);
 
         Operation<User> GetUser(Guid userId);
@@ -77,6 +114,5 @@ namespace Axis.Pollux.Identity.Contracts
         Operation<ArrayPage<UserData>> GetUserUser(Guid userId, ArrayPageRequest request = null);
 
         #endregion
-
     }
 }
