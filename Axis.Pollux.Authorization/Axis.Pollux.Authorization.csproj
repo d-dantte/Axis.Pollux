@@ -10,7 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Reference Include="Axis.Luna.Operation">
+      <HintPath>..\..\..\..\..\Users\stda01\.nuget\packages\axis.luna.operation\4.2.0\lib\netstandard2.0\Axis.Luna.Operation.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

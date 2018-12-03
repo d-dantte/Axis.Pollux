@@ -6,6 +6,7 @@ using Axis.Luna.Operation;
 using Axis.Pollux.Authorization.Contracts;
 using Axis.Pollux.Common.Utils;
 using Axis.Pollux.Identity.Contracts;
+using Axis.Pollux.Identity.Exceptions;
 using Axis.Pollux.Identity.Models;
 using Axis.Pollux.Identity.Services.Queries;
 
@@ -13,7 +14,7 @@ using static Axis.Luna.Extensions.ExceptionExtension;
 
 namespace Axis.Pollux.Identity.Services
 {
-    public class UserManager: IUserManager
+    public class ProfileManager: IProfileManager
     {
         private readonly StoreProvider _storeProvider;
         private readonly IUserQueries _userQueries;
@@ -21,8 +22,8 @@ namespace Axis.Pollux.Identity.Services
         private readonly IDataAccessAuthorizer _dataAccessAuthorizer;
 
 
-        public UserManager(IUserContext userContext, IUserQueries userQueries, 
-                           IDataAccessAuthorizer dataAuthorizer, StoreProvider storeProvider)
+        public ProfileManager(IUserContext userContext, IUserQueries userQueries, 
+                              IDataAccessAuthorizer dataAuthorizer, StoreProvider storeProvider)
         {
             ThrowNullArguments(() => userContext,
                                () => userQueries,
@@ -36,7 +37,6 @@ namespace Axis.Pollux.Identity.Services
         }
 
 
-
         #region User
 
         public Operation<User> CreateUser(int? status = null)
@@ -47,12 +47,67 @@ namespace Axis.Pollux.Identity.Services
             return await storeCommand.Add(user);
         });
 
-        Operation<User> DeleteUser(Guid userId)
-        Operation UpdateUserStatus(Guid userId, int status);
+        public Operation<User> DeleteUser(Guid userId)
+        => Operation.Try(async () =>
+        {
+            if (userId == default(Guid))
+                throw new ArgumentException("Invalid id specified");
 
-        Operation<User> GetUser(Guid userId);
-        Operation<UserProfile> GetUserProfile(Guid userId);
-        Operation<long> UserCount();
+            //Ensure that the right principal has access to this data
+            await _dataAccessAuthorizer.AuthorizeAccess(typeof(User).FullName, userId.ToString(), userId);
+
+            var user = await _userQueries.GetUserById(userId);
+            var storeCommand = _storeProvider.CommandFor(typeof(User).FullName);
+            user = await storeCommand.Delete(user);
+
+            return user ?? throw new IdentityException(ErrorCodes.InvalidStoreCommandResult);
+        });
+        
+        public Operation UpdateUserStatus(Guid userId, int status)
+        => Operation.Try(async () =>
+        {
+            if (userId == default(Guid))
+                throw new ArgumentException("Invalid id specified");
+
+            //Ensure that the right principal has access to this data
+            await _dataAccessAuthorizer.AuthorizeAccess(typeof(User).FullName, userId.ToString(), userId);
+
+            var user = await _userQueries.GetUserById(userId);
+            user.Status = status;
+            var storeCommand = _storeProvider.CommandFor(typeof(User).FullName);
+            user = await storeCommand.Update(user);
+
+            if(user == null)
+                throw new IdentityException(ErrorCodes.InvalidStoreCommandResult);
+        });
+
+        public Operation<User> GetUser(Guid userId)
+        => Operation.Try(async () =>
+        {
+            if (userId == default(Guid))
+                throw new ArgumentException("Invalid id specified");
+
+            //Ensure that the right principal has access to this data
+            await _dataAccessAuthorizer.AuthorizeAccess(typeof(User).FullName, userId.ToString(), userId);
+
+            var user = await _userQueries.GetUserById(userId);
+
+            return user ?? throw new IdentityException(ErrorCodes.InvalidStoreCommandResult);
+        });
+
+
+        public Operation<UserProfile> GetUserProfile(Guid userId)
+        => Operation.Try(async () =>
+        {
+            //retrieve the object, then one by one, retrieve it's constituents
+        });
+
+        public Operation<long> UserCount()
+        => Operation.Try(async () =>
+        {
+            var count = await _userQueries.UserCount();
+            return count.ThrowIf(c => c < 0, new IdentityException(ErrorCodes.InvalidStoreQueryResult));
+        });
 
         #endregion
 
