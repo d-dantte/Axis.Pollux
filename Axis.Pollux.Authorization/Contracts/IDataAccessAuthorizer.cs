@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Axis.Luna.Operation;
 
 namespace Axis.Pollux.Authorization.Contracts
@@ -8,12 +6,35 @@ namespace Axis.Pollux.Authorization.Contracts
     public interface IDataAccessAuthorizer
     {
         /// <summary>
+        /// Attempt to ascertain if the user found in IUserContext.CurrentUserId() has the permission to access any data of the specified type.
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <returns></returns>
+        Operation AuthorizeAccess(string dataType);
+
+        /// <summary>
+        /// Attempt to ascertain if the user found in IUserContext.CurrentUserId() has the permission to access data identified by "uniqueId" of the specified type.
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <param name="uniqueId"></param>
+        /// <returns></returns>
+        Operation AuthorizeAccess(string dataType, string uniqueId);
+
+        /// <summary>
+        /// Attempt to ascertain if the user found in IUserContext.CurrentUserId() has the permission to access any data of the specified type, owned by the specified owner.
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <param name="ownerId"></param>
+        /// <returns></returns>
+        Operation AuthorizeAccess(string dataType, Guid ownerId);
+
+        /// <summary>
         /// Attempt to ascertain if the user found in IUserContext.CurrentUserId() has the permission to access the specified data.
         /// </summary>
         /// <param name="dataType">A unique string label signifying the root data-type being accessed. Typically, this will be Type.FullName, but can be anything at all.</param>
-        /// <param name="uniqueId">When present, a unique value signifying that access to a specific object is requested. If absent, means access to any object of the specified data type is requested</param>
-        /// <param name="ownerId">When present, compared with the IUserContext.CurrentUserId() to determine automatic access to the data, else is ignored</param>
+        /// <param name="ownerId"> a unique value signifying that access to a specific object is requested.</param>
+        /// <param name="uniqueId"> compared with the IUserContext.CurrentUserId() to determine automatic access to the data</param>
         /// <returns></returns>
-        Operation AuthorizeAccess(string dataType, string uniqueId, Guid ownerId = default(Guid));
+        Operation AuthorizeAccess(string dataType, Guid ownerId, string uniqueId);
     }
 }

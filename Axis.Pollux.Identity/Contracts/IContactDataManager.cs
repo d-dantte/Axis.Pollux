@@ -16,6 +16,7 @@ namespace Axis.Pollux.Identity.Contracts
         Operation<ContactData> DeleteContactData(Guid contactDataId);
         Operation<ContactData> UpdateContactData(ContactData contactData);
         Operation UpdateContactDataStatus(Guid contactDataId, int status);
+        Operation VerifyContactData(Guid contactDataId);
 
         Operation<ContactData> GetContactData(Guid contactDataId);
         Operation<ArrayPage<ContactData>> GetUserContact(Guid userId, ArrayPageRequest request = null);

@@ -1,5 +1,6 @@
 ﻿using System;
 using Axis.Pollux.Common.Models;
+using Axis.Pollux.Common.Utils;
 
 namespace Axis.Pollux.Identity.Models
 {
@@ -28,9 +29,9 @@ namespace Axis.Pollux.Identity.Models
         public User User { get; set; }
 
         public BioData Bio { get; set; }
-        public AddressData[] Addresses { get; set; }
-        public ContactData[] ContactInfo { get; set; }
-        public NameData[] Names { get; set; }
-        public UserData[] Data { get; set; }
+        public ArrayPage<AddressData> Addresses { get; set; }
+        public ArrayPage<ContactData> ContactInfo { get; set; }
+        public ArrayPage<NameData> Names { get; set; }
+        public ArrayPage<UserData> Data { get; set; }
     }
 }

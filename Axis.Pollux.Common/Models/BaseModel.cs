@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Axis.Luna.Operation;
+using Axis.Pollux.Common.Exceptions;
 
 namespace Axis.Pollux.Common.Models
 {
@@ -28,15 +29,7 @@ namespace Axis.Pollux.Common.Models
                 return;
 
             else
-            {
-                var error = new OperationError
-                {
-                    Message = "Model Validation Error",
-                    Data = results.ToArray()
-                };
-
-                error.Throw();
-            }
+                throw new CommonException(ErrorCodes.ModelValidationError, results);
         });
     }
 }
