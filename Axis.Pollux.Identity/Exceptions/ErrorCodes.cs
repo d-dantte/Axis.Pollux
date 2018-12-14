@@ -15,15 +15,5 @@ namespace Axis.Pollux.Identity.Exceptions
         /// When the result of a store query is null or invalid
         /// </summary>
         public static readonly string InvalidStoreQueryResult = "Pollux.Identity.Error.1";
-
-        /// <summary>
-        /// When a contract params Validate method fails
-        /// </summary>
-        public static readonly string InvalidContractParamState = "Pollux.Identity.Error.2";
-
-        /// <summary>
-        /// When an invalid argument (nulls, etc) is passed into a method
-        /// </summary>
-        public static readonly string InvalidArgument = "Pollux.Identity.Error.3";
     }
 }

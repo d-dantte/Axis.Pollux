@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{78CF0C7F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Account", "Account", "{758DD22C-EEE8-4B00-93AF-13AA890A183F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notification", "Notification", "{53D6054A-0973-4464-835B-67CDC0DD0361}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Communication", "Communication", "{53D6054A-0973-4464-835B-67CDC0DD0361}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{2C178FA7-12D3-498E-836D-EB461745C5C2}"
 EndProject
@@ -28,7 +28,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Common", "Axis.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Identity.Services", "Axis.Pollux.Identity.Services\Axis.Pollux.Identity.Services.csproj", "{72C05029-299C-4EF3-8583-C9273C08CDBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Authorization", "Axis.Pollux.Authorization\Axis.Pollux.Authorization.csproj", "{AB5BE718-E21B-4485-84BB-A26ABE02B15E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Authorization", "Axis.Pollux.Authorization\Axis.Pollux.Authorization.csproj", "{AB5BE718-E21B-4485-84BB-A26ABE02B15E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Identity.Tests", "Axis.Pollux.Identity.Tests\Axis.Pollux.Identity.Tests.csproj", "{9BC0F450-3C56-4AAC-9924-84805E04E154}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Authorization.Abac", "Axis.Pollux.Authorization.Abac\Axis.Pollux.Authorization.Abac.csproj", "{FC7CE0FB-76C5-43DF-89B4-B4A3F3C60410}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Authentication", "Axis.Pollux.Authentication\Axis.Pollux.Authentication.csproj", "{524BFB44-ED83-41BA-9E79-FB7EB180574F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Authentication.Services", "Axis.Pollux.Authentication.Services\Axis.Pollux.Authentication.Services.csproj", "{3C44A2B6-49C4-42A6-B5BB-DCA3537358F6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Communication", "Axis.Pollux.Communication\Axis.Pollux.Communication.csproj", "{8EEF3614-322A-46A5-B3F9-CC342563FDAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Authentication.UnitTests", "Axis.Pollux.Authentication.UnitTests\Axis.Pollux.Authentication.UnitTests.csproj", "{F9D44908-0CC4-43AF-87B5-32F10EC81F92}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Authorization.UnitTests", "Axis.Pollux.Authorization.UnitTests\Axis.Pollux.Authorization.UnitTests.csproj", "{B4362832-8B95-4721-892F-ED2AEC0A84A6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Caching", "Caching", "{C07A94BD-84B4-4181-9B6E-8877E2CB4D3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Common.Caching.Castor", "Axis.Pollux.Common.Caching.Castor\Axis.Pollux.Common.Caching.Castor.csproj", "{B8BA58E4-1B73-48B7-98D0-00283381EE16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +70,38 @@ Global
 		{AB5BE718-E21B-4485-84BB-A26ABE02B15E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB5BE718-E21B-4485-84BB-A26ABE02B15E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB5BE718-E21B-4485-84BB-A26ABE02B15E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BC0F450-3C56-4AAC-9924-84805E04E154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BC0F450-3C56-4AAC-9924-84805E04E154}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BC0F450-3C56-4AAC-9924-84805E04E154}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BC0F450-3C56-4AAC-9924-84805E04E154}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC7CE0FB-76C5-43DF-89B4-B4A3F3C60410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC7CE0FB-76C5-43DF-89B4-B4A3F3C60410}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC7CE0FB-76C5-43DF-89B4-B4A3F3C60410}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC7CE0FB-76C5-43DF-89B4-B4A3F3C60410}.Release|Any CPU.Build.0 = Release|Any CPU
+		{524BFB44-ED83-41BA-9E79-FB7EB180574F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{524BFB44-ED83-41BA-9E79-FB7EB180574F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{524BFB44-ED83-41BA-9E79-FB7EB180574F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{524BFB44-ED83-41BA-9E79-FB7EB180574F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C44A2B6-49C4-42A6-B5BB-DCA3537358F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C44A2B6-49C4-42A6-B5BB-DCA3537358F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C44A2B6-49C4-42A6-B5BB-DCA3537358F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C44A2B6-49C4-42A6-B5BB-DCA3537358F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EEF3614-322A-46A5-B3F9-CC342563FDAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EEF3614-322A-46A5-B3F9-CC342563FDAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EEF3614-322A-46A5-B3F9-CC342563FDAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EEF3614-322A-46A5-B3F9-CC342563FDAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9D44908-0CC4-43AF-87B5-32F10EC81F92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D44908-0CC4-43AF-87B5-32F10EC81F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D44908-0CC4-43AF-87B5-32F10EC81F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D44908-0CC4-43AF-87B5-32F10EC81F92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4362832-8B95-4721-892F-ED2AEC0A84A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4362832-8B95-4721-892F-ED2AEC0A84A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4362832-8B95-4721-892F-ED2AEC0A84A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4362832-8B95-4721-892F-ED2AEC0A84A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8BA58E4-1B73-48B7-98D0-00283381EE16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8BA58E4-1B73-48B7-98D0-00283381EE16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8BA58E4-1B73-48B7-98D0-00283381EE16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8BA58E4-1B73-48B7-98D0-00283381EE16}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +111,15 @@ Global
 		{9602B636-45F8-4309-9B83-E754481AD5FC} = {2C178FA7-12D3-498E-836D-EB461745C5C2}
 		{72C05029-299C-4EF3-8583-C9273C08CDBC} = {92D5A5DA-E27F-4718-B901-B5465B8D9C6C}
 		{AB5BE718-E21B-4485-84BB-A26ABE02B15E} = {9DE0EEF0-1558-4587-B2E7-E75D2A472092}
+		{9BC0F450-3C56-4AAC-9924-84805E04E154} = {92D5A5DA-E27F-4718-B901-B5465B8D9C6C}
+		{FC7CE0FB-76C5-43DF-89B4-B4A3F3C60410} = {9DE0EEF0-1558-4587-B2E7-E75D2A472092}
+		{524BFB44-ED83-41BA-9E79-FB7EB180574F} = {0CCC3585-FB1B-41BD-B78F-4BFBADBF491D}
+		{3C44A2B6-49C4-42A6-B5BB-DCA3537358F6} = {0CCC3585-FB1B-41BD-B78F-4BFBADBF491D}
+		{8EEF3614-322A-46A5-B3F9-CC342563FDAE} = {53D6054A-0973-4464-835B-67CDC0DD0361}
+		{F9D44908-0CC4-43AF-87B5-32F10EC81F92} = {0CCC3585-FB1B-41BD-B78F-4BFBADBF491D}
+		{B4362832-8B95-4721-892F-ED2AEC0A84A6} = {9DE0EEF0-1558-4587-B2E7-E75D2A472092}
+		{C07A94BD-84B4-4181-9B6E-8877E2CB4D3C} = {2C178FA7-12D3-498E-836D-EB461745C5C2}
+		{B8BA58E4-1B73-48B7-98D0-00283381EE16} = {C07A94BD-84B4-4181-9B6E-8877E2CB4D3C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC2C5339-00F9-4F63-AEB2-C38276295EAE}

@@ -6,7 +6,18 @@ using Axis.Pollux.Common.Exceptions;
 
 namespace Axis.Pollux.Common.Models
 {
-    public abstract class BaseModel<Key>: IValidatable
+    public interface IBaseModel<Key> : IValidatable
+    {
+        Key Id { get; set; }
+
+        DateTimeOffset CreatedOn { get; set; }
+        DateTimeOffset? ModifiedOn { get; set; }
+
+        Guid CreatedBy { get; set; }
+        Guid? ModifiedBy { get; set; }
+    }
+
+    public abstract class BaseModel<Key>: IBaseModel<Key>
     {
 
         public Key Id { get; set; }
@@ -15,7 +26,7 @@ namespace Axis.Pollux.Common.Models
         public DateTimeOffset? ModifiedOn { get; set; }
 
         public Guid CreatedBy { get; set; }
-        public Guid ModifiedBy { get; set; }
+        public Guid? ModifiedBy { get; set; }
 
 
         public virtual Operation Validate() => Operation.Try(() =>

@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Axis.Luna.Common" Version="4.2.0" />
+    <PackageReference Include="Axis.Luna.Common" Version="4.2.1" />
   </ItemGroup>
 
   <ItemGroup>

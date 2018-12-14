@@ -3,8 +3,8 @@ using Axis.Pollux.Identity.Models;
 
 namespace Axis.Pollux.Identity.Contracts
 {
-    public interface IProfileManager: IAddressDataManager, IContactDataManager, IBioDataManager, INameDataManager, IUserDataManager, IUserManager
+    public interface IProfileManager
     {
-        Operation<UserProfile> GetUserProfile(Params.UserProfileRequest param);
+        Operation<UserProfile> GetUserProfile(Params.UserProfileRequestInfo param);
     }
 }

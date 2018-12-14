@@ -15,7 +15,9 @@ namespace Axis.Pollux.Identity.Services.Queries
         Task<ArrayPage<UserData>> GetUserData(Guid userId, ArrayPageRequest request = null);
         Task<BioData> GetUserBioData(Guid userId);
         Task<BioData> GetBioDataById(Guid bioDataId);
+        Task<NameData> GetNameDataById(Guid nameData);
         Task<AddressData> GetAddressDataById(Guid addressDataId);
-        Task<ContactData> GetContactDataById(Guid contactData);
+        Task<ContactData> GetContactDataById(Guid contactDataId);
+        Task<UserData> GetUserDataById(Guid userDataId);
     }
 }

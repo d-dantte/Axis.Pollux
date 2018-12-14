@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Axis.Pollux.Authorization.Models
+namespace Axis.Pollux.Authentication.Models
 {
-    public class OperationDescriptor
+    public interface ISensitiveData
     {
     }
 }

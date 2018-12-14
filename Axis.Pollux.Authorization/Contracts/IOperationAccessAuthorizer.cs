@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Axis.Luna.Operation;
-using Axis.Pollux.Authorization.Models;
+﻿using Axis.Luna.Operation;
+using Axis.Pollux.Common.Attributes;
 
 namespace Axis.Pollux.Authorization.Contracts
 {
@@ -13,6 +10,6 @@ namespace Axis.Pollux.Authorization.Contracts
         /// </summary>
         /// <param name="descriptor">object describing the operation being accessed</param>
         /// <returns></returns>
-        Operation AuthorizeAccess(OperationDescriptor descriptor);
+        Operation AuthorizeAccess(ContractOperation descriptor);
     }
 }

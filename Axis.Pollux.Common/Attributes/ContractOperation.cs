@@ -1,9 +1,12 @@
 ﻿using System;
+using Axis.Luna.Operation;
+using Axis.Pollux.Common.Exceptions;
+using Axis.Pollux.Common.Models;
 
 namespace Axis.Pollux.Common.Attributes
 {
     [AttributeUsage(validOn: AttributeTargets.Method)]
-    public class ContractOperation: Attribute
+    public class ContractOperation: Attribute, IValidatable
     {
         /// <inheritdoc />
         /// <summary>
@@ -17,8 +20,7 @@ namespace Axis.Pollux.Common.Attributes
 
         /// <inheritdoc />
         /// <summary>
-        /// Creates a new ContractOperation attribute. A default name is given to
-        /// this contract operation, formed from the namespace+classname+methodname+randomguid
+        /// Creates a new ContractOperation attribute.
         /// </summary>
         public ContractOperation()
         {
@@ -26,5 +28,13 @@ namespace Axis.Pollux.Common.Attributes
         }
 
         public string Name { get; }
+
+
+        public Operation Validate()
+        => Operation.Try(() =>
+        {
+            if(string.IsNullOrWhiteSpace(Name))
+                throw new CommonException(ErrorCodes.ModelValidationError);
+        });
     }
 }

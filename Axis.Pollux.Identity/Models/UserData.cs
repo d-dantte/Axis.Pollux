@@ -64,6 +64,11 @@ namespace Axis.Pollux.Identity.Models
         public CommonDataType Type { get; set; }
         public int Status { get; set; }
 
+        /// <summary>
+        /// Context-based String labels
+        /// </summary>
+        public string[] Tags { get; set; }
+
         public User Owner { get; set; }
     }
 

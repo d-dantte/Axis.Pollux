@@ -22,6 +22,7 @@ namespace Axis.Pollux.Authorization.Contracts
 
         /// <summary>
         /// Attempt to ascertain if the user found in IUserContext.CurrentUserId() has the permission to access any data of the specified type, owned by the specified owner.
+        /// If OwnerId does not represent a valid user, the authorization is denied
         /// </summary>
         /// <param name="dataType"></param>
         /// <param name="ownerId"></param>
@@ -30,6 +31,7 @@ namespace Axis.Pollux.Authorization.Contracts
 
         /// <summary>
         /// Attempt to ascertain if the user found in IUserContext.CurrentUserId() has the permission to access the specified data.
+        /// If OwnerId does not represent a valid user, the authorization is denied
         /// </summary>
         /// <param name="dataType">A unique string label signifying the root data-type being accessed. Typically, this will be Type.FullName, but can be anything at all.</param>
         /// <param name="ownerId"> a unique value signifying that access to a specific object is requested.</param>

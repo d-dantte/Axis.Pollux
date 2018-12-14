@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Axis.Luna.Operation;
 using Axis.Pollux.Common.Utils;
 using Axis.Pollux.Identity.Models;
@@ -20,6 +18,7 @@ namespace Axis.Pollux.Identity.Contracts
 
         Operation<ContactData> GetContactData(Guid contactDataId);
         Operation<ArrayPage<ContactData>> GetUserContact(Guid userId, ArrayPageRequest request = null);
+        Operation<ArrayPage<ContactData>> GetUserContact(Guid userId, string[] communicationChannels, string[] tags, ArrayPageRequest arrayPageRequest);
 
         #endregion
     }

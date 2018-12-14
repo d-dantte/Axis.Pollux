@@ -10,9 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Axis.Luna.Operation">
-      <HintPath>..\..\..\..\..\Users\stda01\.nuget\packages\axis.luna.operation\4.2.0\lib\netstandard2.0\Axis.Luna.Operation.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Axis.Luna.Extensions" Version="4.2.0" />
+    <PackageReference Include="Axis.Luna.Operation" Version="4.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Axis.Pollux.Common\Axis.Pollux.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
 </Project>
