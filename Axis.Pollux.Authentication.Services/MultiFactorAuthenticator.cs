@@ -27,13 +27,13 @@ namespace Axis.Pollux.Authentication.Services
         private readonly StoreProvider _storeProvider;
         private readonly IDataAccessAuthorizer _authorizer;
         private readonly IContactDataManager _contactManager;
-        private readonly ICommsService _commsService;
+        private readonly MessagingService _commsService;
         private readonly ISystemChannelSourceAddressProvider _channelSourceAddressProvider;
 
         public MultiFactorAuthenticator(
             StoreProvider storeProvider, IDataAccessAuthorizer authorizer,
             IMultiFactorQueries queries, ICredentialHasher hasher,
-            IContactDataManager contactDataManager, ICommsService commsService,
+            IContactDataManager contactDataManager, MessagingService commsService,
             ISystemChannelSourceAddressProvider channelSourceAddressProvider,
             IMultiFactorConfigurationQueries configurationQueries)
         {

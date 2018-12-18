@@ -16,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{78CF0C7F-FFC8-44C4-9197-AC082F76A70A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Account", "Account", "{758DD22C-EEE8-4B00-93AF-13AA890A183F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logon", "Logon", "{758DD22C-EEE8-4B00-93AF-13AA890A183F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Communication", "Communication", "{53D6054A-0973-4464-835B-67CDC0DD0361}"
 EndProject
@@ -46,7 +46,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Authorization.U
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Caching", "Caching", "{C07A94BD-84B4-4181-9B6E-8877E2CB4D3C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Common.Caching.Castor", "Axis.Pollux.Common.Caching.Castor\Axis.Pollux.Common.Caching.Castor.csproj", "{B8BA58E4-1B73-48B7-98D0-00283381EE16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Common.Caching.Castor", "Axis.Pollux.Common.Caching.Castor\Axis.Pollux.Common.Caching.Castor.csproj", "{B8BA58E4-1B73-48B7-98D0-00283381EE16}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Common.Caching.Redis", "Axis.Pollux.Common.Caching.Redis\Axis.Pollux.Common.Caching.Redis.csproj", "{A79A78D5-BA27-4B84-9B19-77086ACF8E20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Logon", "Axis.Pollux.Logon\Axis.Pollux.Logon.csproj", "{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,6 +106,14 @@ Global
 		{B8BA58E4-1B73-48B7-98D0-00283381EE16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8BA58E4-1B73-48B7-98D0-00283381EE16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8BA58E4-1B73-48B7-98D0-00283381EE16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A79A78D5-BA27-4B84-9B19-77086ACF8E20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A79A78D5-BA27-4B84-9B19-77086ACF8E20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A79A78D5-BA27-4B84-9B19-77086ACF8E20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A79A78D5-BA27-4B84-9B19-77086ACF8E20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -120,6 +132,8 @@ Global
 		{B4362832-8B95-4721-892F-ED2AEC0A84A6} = {9DE0EEF0-1558-4587-B2E7-E75D2A472092}
 		{C07A94BD-84B4-4181-9B6E-8877E2CB4D3C} = {2C178FA7-12D3-498E-836D-EB461745C5C2}
 		{B8BA58E4-1B73-48B7-98D0-00283381EE16} = {C07A94BD-84B4-4181-9B6E-8877E2CB4D3C}
+		{A79A78D5-BA27-4B84-9B19-77086ACF8E20} = {C07A94BD-84B4-4181-9B6E-8877E2CB4D3C}
+		{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB} = {758DD22C-EEE8-4B00-93AF-13AA890A183F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC2C5339-00F9-4F63-AEB2-C38276295EAE}

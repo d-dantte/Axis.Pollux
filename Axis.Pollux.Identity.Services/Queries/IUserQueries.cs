@@ -19,5 +19,10 @@ namespace Axis.Pollux.Identity.Services.Queries
         Task<AddressData> GetAddressDataById(Guid addressDataId);
         Task<ContactData> GetContactDataById(Guid contactDataId);
         Task<UserData> GetUserDataById(Guid userDataId);
+        Task<ArrayPage<ContactData>> GetUserContactData(
+            Guid userId,
+            string[] communicationChannels,
+            string[] tags,
+            ArrayPageRequest arrayPageRequest);
     }
 }

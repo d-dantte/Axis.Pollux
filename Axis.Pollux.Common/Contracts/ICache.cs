@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
 using Axis.Luna.Operation;
 
 namespace Axis.Pollux.Common.Contracts
 {
+
     /// <summary>
     /// Caching abstraction for the Pollux Library. Unlike conventional caches, this cache does not receive data values
     /// from external sources to pair with keys, rather, it accepts a value provider that in turn generates the values
@@ -16,6 +15,8 @@ namespace Axis.Pollux.Common.Contracts
     /// </summary>
     public interface ICache
     {
+        event EventHandler<string> Invalidated;
+
         /// <summary>
         /// Adds or updates the data provider for a specific key in the cache, as well as adding an invalidation timer.
         /// </summary>
@@ -98,7 +99,7 @@ namespace Axis.Pollux.Common.Contracts
     }
 
     /// <summary>
-    /// 
+    /// If a value provider throws an exception while
     /// </summary>
     public class ValueProviderResolutionException : Exception
     {
@@ -106,4 +107,5 @@ namespace Axis.Pollux.Common.Contracts
         : base("ValueProvider Resolution Failure", innerException)
         { }
     }
+
 }

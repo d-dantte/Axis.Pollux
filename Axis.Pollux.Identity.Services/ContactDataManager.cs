@@ -191,6 +191,26 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult)); ;
         });
 
+        public Operation<ArrayPage<ContactData>> GetUserContact(
+            Guid userId, 
+            string[] communicationChannels, 
+            string[] tags, 
+            ArrayPageRequest arrayPageRequest)
+        => Operation.Try(async () =>
+        {
+            if (userId == default(Guid))
+                throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
+
+            //Ensure that the right principal has access to this data
+            await _dataAccessAuthorizer.AuthorizeAccess(
+                typeof(ContactData).FullName,
+                userId);
+
+            return (await _userQueries
+                .GetUserContactData(userId, communicationChannels, tags, arrayPageRequest))
+                .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult)); ;
+        });
+
         #endregion
     }
 }

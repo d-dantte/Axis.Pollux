@@ -1,15 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq;
 using Axis.Luna.Operation;
 using Axis.Pollux.Common.Contracts;
+
+using static Axis.Luna.Extensions.ExceptionExtension;
 
 namespace Axis.Pollux.Common.Caching.Castor
 {
     public class MultilevelCache: ICache
     {
         private readonly ICache[] _cacheLevels = null;
+
+        public event EventHandler<string> Invalidated;
+
+        public MultilevelCache(IEnumerable<ICache> cacheLevels)
+        {
+            ThrowNullArguments(() => cacheLevels);
+
+            _cacheLevels = cacheLevels
+                .ThrowIf(cache => cache.Any(c => c == null), new Exception("Invalid Cache Instance"))
+                .ToArray()
+                .ThrowIf(caches => caches.Length == 0, new Exception("Cache collection cannot be empty"));
+        }
 
         public ICache Set<TData>(string cacheKey, TimeSpan? expiration, Func<string, Operation<TData>> valueProvider)
         {
@@ -66,20 +79,28 @@ namespace Axis.Pollux.Common.Caching.Castor
         => _cacheLevels[0].Refresh<TData>(cacheKey);
 
         public Operation Invalidate(string cacheKey)
-        => Operation.Try(async () =>
         {
             if (string.IsNullOrWhiteSpace(cacheKey))
-                throw new InvalidCacheKeyException();
+                return Operation.Fail(new InvalidCacheKeyException());
 
-            foreach (var cache in _cacheLevels)
-                await cache.Invalidate(cacheKey);
-        });
+            return _cacheLevels
+                .Select(cache => cache.Invalidate(cacheKey))
+                .Fold();
+        }
 
         public Operation InvalidateAll()
-        => Operation.Try(async () =>
         {
-            foreach (var cache in _cacheLevels)
-                await cache.InvalidateAll();
-        });
+            return _cacheLevels
+                .Select(cache => cache.InvalidateAll())
+                .Fold();
+        }
+
+        protected virtual void OnInvalidated(string cacheKey)
+        {
+            if(string.IsNullOrWhiteSpace(cacheKey))
+                throw new InvalidCacheKeyException();
+
+            Invalidated?.Invoke(this, cacheKey);
+        }
     }
 }
