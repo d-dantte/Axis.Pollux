@@ -10,7 +10,6 @@ using Axis.Pollux.Authentication.Exceptions;
 using Axis.Pollux.Authentication.Models;
 using Axis.Pollux.Authentication.Services.CommsMessages;
 using Axis.Pollux.Authentication.Services.Queries;
-using Axis.Pollux.Authorization.Contracts;
 using Axis.Pollux.Common.Utils;
 using Axis.Pollux.Communication;
 using Axis.Pollux.Communication.Contracts;
@@ -25,13 +24,13 @@ namespace Axis.Pollux.Authentication.Services
         private readonly IMultiFactorQueries _queries;
         private readonly IMultiFactorConfigurationQueries _configQueries;
         private readonly StoreProvider _storeProvider;
-        private readonly IDataAccessAuthorizer _authorizer;
+        //private readonly IDataAccessAuthorizer _authorizer;
         private readonly IContactDataManager _contactManager;
         private readonly MessagingService _commsService;
         private readonly ISystemChannelSourceAddressProvider _channelSourceAddressProvider;
 
         public MultiFactorAuthenticator(
-            StoreProvider storeProvider, IDataAccessAuthorizer authorizer,
+            StoreProvider storeProvider, //IDataAccessAuthorizer authorizer,
             IMultiFactorQueries queries, ICredentialHasher hasher,
             IContactDataManager contactDataManager, MessagingService commsService,
             ISystemChannelSourceAddressProvider channelSourceAddressProvider,
@@ -39,7 +38,7 @@ namespace Axis.Pollux.Authentication.Services
         {
             ThrowNullArguments(
                 () => storeProvider,
-                () => authorizer,
+                //() => authorizer,
                 () => queries,
                 () => hasher,
                 () => contactDataManager,
@@ -49,14 +48,14 @@ namespace Axis.Pollux.Authentication.Services
 
             _queries = queries;
             _storeProvider = storeProvider;
-            _authorizer = authorizer;
+            //_authorizer = authorizer;
             _configQueries = configurationQueries;
             _contactManager = contactDataManager;
             _commsService = commsService;
             _channelSourceAddressProvider = channelSourceAddressProvider;
         }
 
-        public Operation Authenticate(MultiFactorValidationInfo info)
+        public Operation Authenticate(MultiFactorAuthenticationInfo info)
         {
             if (info == null)
                 return Operation.Fail(new AuthenticationException(Common.Exceptions.ErrorCodes.InvalidArgument));
@@ -79,9 +78,13 @@ namespace Axis.Pollux.Authentication.Services
                 });
         }
 
-        private Operation RequestMultiFactorAuthentication(MultiFactorValidationInfo info)
+        private Operation RequestMultiFactorAuthentication(MultiFactorAuthenticationInfo info)
         => Operation.Try(async () =>
         {
+            await info
+                .ThrowIfNull(new AuthenticationException(Common.Exceptions.ErrorCodes.InvalidContractParamState))
+                .Validate();
+
             var credential = await _queries.GetActiveCredential(info.UserId, info.EventLabel);
 
             var config = await _configQueries
@@ -113,11 +116,14 @@ namespace Axis.Pollux.Authentication.Services
             }
 
             #region  send the email/sms/etc message to the target user
-            var contactData = (await _contactManager
-                .GetUserContact(info.UserId, new[]{info.Channel}, null, ArrayPageRequest.CreateNormalizedRequest())
-                .ThrowIfNull(new AuthenticationException(ErrorCodes.InvalidStoreCommandResult)))
-                .Page.FirstOrDefault()
-                .ThrowIfNull(new AuthenticationException(ErrorCodes.InvalidStoreCommandResult));
+
+            var contactData = info.ContactDataId != null
+                ? (await _contactManager
+                    .GetContactData(info.ContactDataId.Value))
+                    .ThrowIfNull(new AuthenticationException(ErrorCodes.InvalidStoreCommandResult))
+                : (await _contactManager
+                    .GetPrimaryUserContact(info.UserId, info.Channel))
+                    .ThrowIfNull(new AuthenticationException(ErrorCodes.InvalidStoreCommandResult));
 
             //get the system-mapped source address for this type of messages.
             var sourceAddress = (await _channelSourceAddressProvider
@@ -136,7 +142,7 @@ namespace Axis.Pollux.Authentication.Services
             #endregion
 
             //throw the necessary exception
-            throw new AuthenticationException(ErrorCodes.MultiFactorAuthenticationRequest, new MultiFactorRequestErrorData
+            throw new AuthenticationException(ErrorCodes.MultiFactorAuthenticationRequest, new MultiFactorAuthenticationToken
             {
                 UserId = credential.TargetUser.Id,
                 CredentialKey = credential.CredentialKey,
@@ -145,7 +151,7 @@ namespace Axis.Pollux.Authentication.Services
             });
         });
 
-        private Operation AuthenticateMultiFactorCredential(MultiFactorValidationInfo info)
+        private Operation AuthenticateMultiFactorCredential(MultiFactorAuthenticationInfo info)
         => Operation.Try(async () =>
         {
             var credential = await _queries.GetActiveCredential(info.UserId, info.EventLabel);
@@ -161,9 +167,9 @@ namespace Axis.Pollux.Authentication.Services
         });
 
         private static string GenerateCredentialKey()
-        => new SecureRandom().Using(random => random.NextAlphaNumericString(50));
+        => new SecureRandom().Using(random => random.NextAlphaNumericString(50).ToUpper());
 
         private static string GenerateCredentialToken()
-        => new SecureRandom().Using(random => random.NextAlphaNumericString(7));
+        => new SecureRandom().Using(random => random.NextAlphaNumericString(7).ToUpper());
     }
 }

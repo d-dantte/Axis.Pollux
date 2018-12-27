@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Axis.Jupiter;
+using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
 using Axis.Pollux.Authorization.Contracts;
 using Axis.Pollux.Common.Utils;
@@ -46,6 +49,8 @@ namespace Axis.Pollux.Identity.Services
             await _dataAccessAuthorizer.AuthorizeAccess(typeof(ContactData).FullName, userId);
 
             contactData.Id = Guid.NewGuid();
+            contactData.IsVerified = false;
+            contactData.IsPrimary = false;
             contactData.Owner = (await _userQueries
                 .GetUserById(userId))
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
@@ -156,6 +161,103 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreCommandResult));
         });
 
+        public Operation<ContactData> MakePrimary(Guid contactDataId, bool isPrimary)
+        => Operation.Try(async () =>
+        {
+            if (contactDataId == default(Guid))
+                throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
+
+            var contactData = (await _userQueries
+                .GetContactDataById(contactDataId))
+                .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
+
+            //Ensure that the right principal has access to this data
+            await _dataAccessAuthorizer.AuthorizeAccess(
+                typeof(ContactData).FullName, 
+                contactData.Owner.Id,
+                contactDataId.ToString());
+
+            if (contactData.IsPrimary)
+                return contactData;
+
+            //find and reset the current primary contact
+            var currentPrimary = await _userQueries
+                .GetPrimaryUserContactData(contactData.Owner.Id, contactData.Channel)
+                .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
+
+            //get the store command
+            var storeCommand = _storeProvider.CommandFor(typeof(ContactData).FullName);
+
+            //reset the current primary contact
+            if (currentPrimary != null)
+            {
+                currentPrimary.IsPrimary = false;
+                (await storeCommand
+                    .Update(currentPrimary))
+                    .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreCommandResult));
+            }
+
+            //set the primary flag
+            contactData.IsPrimary = true;
+            return (await storeCommand
+                .Update(contactData))
+                .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreCommandResult));
+        });
+
+        public Operation<ContactData> AddTags(Guid contactDataId, params string[] tags)
+        => Operation.Try(async () =>
+        {
+            if (contactDataId == default(Guid))
+                throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
+
+            var contactData = (await _userQueries
+                .GetContactDataById(contactDataId))
+                .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
+
+            //Ensure that the right principal has access to this data
+            await _dataAccessAuthorizer.AuthorizeAccess(
+                typeof(ContactData).FullName,
+                contactData.Owner.Id,
+                contactData.Id.ToString());
+
+            //add the tags, using a hash set to get rid of duplicates
+            contactData.Tags = new HashSet<string>(contactData.Tags)
+                .AddRange(tags)
+                .ToArray();
+
+            var storeCommand = _storeProvider.CommandFor(typeof(ContactData).FullName);
+            return (await storeCommand
+                .Update(contactData))
+                .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreCommandResult));
+        });
+
+        public Operation<ContactData> RemoveTags(Guid contactDataId, params string[] tags)
+        => Operation.Try(async () =>
+        {
+            if (contactDataId == default(Guid))
+                throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
+
+            var contactData = (await _userQueries
+                .GetContactDataById(contactDataId))
+                .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
+
+            //Ensure that the right principal has access to this data
+            await _dataAccessAuthorizer.AuthorizeAccess(
+                typeof(ContactData).FullName,
+                contactData.Owner.Id,
+                contactData.Id.ToString());
+
+            //remove the tags
+            var tagBuffer = new HashSet<string>(contactData.Tags);
+            tagBuffer.RemoveAll(tags);
+            contactData.Tags = tagBuffer.ToArray();
+
+            var storeCommand = _storeProvider.CommandFor(typeof(ContactData).FullName);
+            return (await storeCommand
+                .Update(contactData))
+                .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreCommandResult));
+        });
+
         public Operation<ContactData> GetContactData(Guid contactDataId)
         => Operation.Try(async () =>
         {
@@ -188,6 +290,23 @@ namespace Axis.Pollux.Identity.Services
 
             return (await _userQueries
                 .GetUserContactData(userId, request))
+                .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult)); ;
+        });
+
+        public Operation<ContactData> GetPrimaryUserContact(Guid userId, string channel)
+        => Operation.Try(async () =>
+        {
+            if (userId == default(Guid)
+                || string.IsNullOrWhiteSpace(channel))
+                throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
+
+            //Ensure that the right principal has access to this data
+            await _dataAccessAuthorizer.AuthorizeAccess(
+                typeof(ContactData).FullName,
+                userId);
+
+            return (await _userQueries
+                .GetPrimaryUserContactData(userId, channel))
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult)); ;
         });
 

@@ -7,6 +7,12 @@
     <FileVersion>4.0.0.0</FileVersion>
     <Version>4.0.0</Version>
     <Description>Pollux Identity Module</Description>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>Dantte</Authors>
+    <Company>Axiis</Company>
+    <PackageLicenseUrl>https://licenses.nuget.org/MIT</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/d-dantte/Axis.Pollox/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/d-dantte/Axis.Pollox/</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

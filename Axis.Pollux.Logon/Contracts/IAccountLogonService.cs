@@ -14,7 +14,7 @@ namespace Axis.Pollux.Logon.Contracts
         /// <param name="publicCredential"></param>
         /// <param name="secretCredential"></param>
         /// <returns></returns>
-        Operation<LogonResult> Login(LogonCredential publicCredential, LogonCredential secretCredential);
+        Operation<LogonSession> Login(LogonCredential publicCredential, LogonCredential secretCredential);
 
         /// <summary>
         /// 
@@ -34,10 +34,25 @@ namespace Axis.Pollux.Logon.Contracts
         /// <param name="sliceQuery"></param>
         /// <returns></returns>
         Operation<ArrayPage<UserLogon>> GetUserLogons(
-            Guid userId, 
-            string ipaddress = null, 
-            string locale = null, 
-            string device = null, 
+            Guid userId,
+            string ipaddress = null,
+            string locale = null,
+            string device = null,
+            ArrayPageRequest sliceQuery = null);
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ipaddress"></param>
+        /// <param name="locale"></param>
+        /// <param name="device"></param>
+        /// <param name="sliceQuery"></param>
+        /// <returns></returns>
+        Operation<ArrayPage<UserLogon>> GetSystemLogons(
+            string ipaddress = null,
+            string locale = null,
+            string device = null,
             ArrayPageRequest sliceQuery = null);
     }
 }

@@ -14,5 +14,13 @@ namespace Axis.Pollux.Logon.Contracts
         /// <param name="token"></param>
         /// <returns></returns>
         Operation<UserLogon> InvalidateLogon(Guid userId, string token);
+
+        /// <summary>
+        /// Invalidates a user logon identified by the given id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="logonId"></param>
+        /// <returns></returns>
+        Operation<UserLogon> InvalidateLogon(Guid userId, Guid logonId);
     }
 }

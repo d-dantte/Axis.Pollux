@@ -79,7 +79,7 @@ namespace Axis.Pollux.Authentication.Services
                 var credential = credentials.Page.FirstOrDefault(c => IsAuthenticated(c, info.Data));
                 if (credential != null)
                 {
-                    //Ensure that the principal has access to this data
+                    //Ensure that the principal has access to this data. This privilege can (and should) be given to the Guest user
                     await _authorizer.AuthorizeAccess(typeof(Credential).FullName, credential.Owner.Id);
 
                     return credential.Owner.Id;

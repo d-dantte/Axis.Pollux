@@ -5,7 +5,7 @@ using Axis.Pollux.Common.Models;
 
 namespace Axis.Pollux.Logon.Contracts.Params
 {
-    public class LogonResult: IValidatable
+    public class LogonSession: IValidatable
     {
         public Guid UserId { get; set; }
 

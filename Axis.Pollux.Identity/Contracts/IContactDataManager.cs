@@ -15,10 +15,14 @@ namespace Axis.Pollux.Identity.Contracts
         Operation<ContactData> UpdateContactData(ContactData contactData);
         Operation UpdateContactDataStatus(Guid contactDataId, int status);
         Operation VerifyContactData(Guid contactDataId);
+        Operation<ContactData> MakePrimary(Guid contactDataId, bool isPrimary);
+        Operation<ContactData> AddTags(Guid contactDataId, params string[] tags);
+        Operation<ContactData> RemoveTags(Guid contactDataId, params string[] tags);
 
         Operation<ContactData> GetContactData(Guid contactDataId);
         Operation<ArrayPage<ContactData>> GetUserContact(Guid userId, ArrayPageRequest request = null);
         Operation<ArrayPage<ContactData>> GetUserContact(Guid userId, string[] communicationChannels, string[] tags, ArrayPageRequest arrayPageRequest);
+        Operation<ContactData> GetPrimaryUserContact(Guid userId, string communicationChannels);
 
         #endregion
     }

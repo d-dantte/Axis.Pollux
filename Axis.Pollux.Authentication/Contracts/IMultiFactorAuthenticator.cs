@@ -17,6 +17,6 @@ namespace Axis.Pollux.Authentication.Contracts
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        Operation Authenticate(MultiFactorValidationInfo info);
+        Operation Authenticate(MultiFactorAuthenticationInfo info);
     }
 }
