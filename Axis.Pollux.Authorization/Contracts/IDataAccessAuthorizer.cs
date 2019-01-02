@@ -1,5 +1,6 @@
 ﻿using System;
 using Axis.Luna.Operation;
+using Axis.Pollux.Authorization.Contracts.Params;
 
 namespace Axis.Pollux.Authorization.Contracts
 {
@@ -38,5 +39,14 @@ namespace Axis.Pollux.Authorization.Contracts
         /// <param name="uniqueId"> compared with the IUserContext.CurrentUserId() to determine automatic access to the data</param>
         /// <returns></returns>
         Operation AuthorizeAccess(string dataType, Guid ownerId, string uniqueId);
+
+        /// <summary>
+        /// Attempt to evaluate some custom data authorization policy. Resource attributes added to the execution context include
+        /// the <c>ICustomAccessDataRoot.CustomDataType</c>, as well as the serialized version of the object itself.
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        Operation AuthorizeCustomAccess<TData>(TData data) where TData: class, ICustomAccessDataRoot;
     }
 }

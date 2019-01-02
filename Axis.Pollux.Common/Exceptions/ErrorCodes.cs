@@ -16,5 +16,10 @@
         /// When an invalid argument (nulls, etc) is passed into a method
         /// </summary>
         public static readonly string InvalidArgument = "Pollux.Common.Error.2";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly string GeneralError = "Pollux.Common.Error.3";
     }
 }

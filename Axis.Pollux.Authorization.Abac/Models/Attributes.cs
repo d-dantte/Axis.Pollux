@@ -30,6 +30,16 @@ namespace Axis.Pollux.Authorization.Abac.Models
         public static readonly string DataAccessUniqueId = "Pollux.DataAccess.UniqueId";
 
         /// <summary>
+        /// A resource attribute used for 'Custom' DataAccess policy resolution, signifying a unique string identifying the custom data authorization policy
+        /// </summary>
+        public static string DataAccessCustomDataType = "Pollux.DataAccess.CustomDataType";
+
+        /// <summary>
+        /// A resource attribute used for 'Custom' DataAccess policy resolution, signifying an object that needs to be present for custom data authorization policy evaluation.
+        /// </summary>
+        public static string DataAccessCustomData = "Pollux.DataAccess.CustomData";
+
+        /// <summary>
         /// A resource attribute used for OperationAccess policy resolution, signifying a unique label that
         /// describes the operation to which access is sought.
         /// </summary>

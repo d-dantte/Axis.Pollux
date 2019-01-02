@@ -50,7 +50,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Common.Caching.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Common.Caching.Redis", "Axis.Pollux.Common.Caching.Redis\Axis.Pollux.Common.Caching.Redis.csproj", "{A79A78D5-BA27-4B84-9B19-77086ACF8E20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Logon", "Axis.Pollux.Logon\Axis.Pollux.Logon.csproj", "{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Logon", "Axis.Pollux.Logon\Axis.Pollux.Logon.csproj", "{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Serializers", "Serializers", "{DC629B99-A0F1-4214-BE6A-9E90C45C1902}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Common.Serializers.NewtonsoftAdapter", "Axis.Pollux.Common.Serializers.NewtonsoftAdapter\Axis.Pollux.Common.Serializers.NewtonsoftAdapter.csproj", "{ECBE38DF-B341-49A8-A527-427072D35DC4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Common.Serializers.NewtonsoftAdapter.Tests", "Axis.Pollux.Common.Serializers.NewtonsoftAdapter.Tests\Axis.Pollux.Common.Serializers.NewtonsoftAdapter.Tests.csproj", "{D21BBC53-BC01-47A5-853B-9CB8C1C673EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -114,6 +120,14 @@ Global
 		{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECBE38DF-B341-49A8-A527-427072D35DC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECBE38DF-B341-49A8-A527-427072D35DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECBE38DF-B341-49A8-A527-427072D35DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECBE38DF-B341-49A8-A527-427072D35DC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D21BBC53-BC01-47A5-853B-9CB8C1C673EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D21BBC53-BC01-47A5-853B-9CB8C1C673EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D21BBC53-BC01-47A5-853B-9CB8C1C673EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D21BBC53-BC01-47A5-853B-9CB8C1C673EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,6 +148,9 @@ Global
 		{B8BA58E4-1B73-48B7-98D0-00283381EE16} = {C07A94BD-84B4-4181-9B6E-8877E2CB4D3C}
 		{A79A78D5-BA27-4B84-9B19-77086ACF8E20} = {C07A94BD-84B4-4181-9B6E-8877E2CB4D3C}
 		{3E206D65-AA0D-4768-BF8F-87D7E51ABDCB} = {758DD22C-EEE8-4B00-93AF-13AA890A183F}
+		{DC629B99-A0F1-4214-BE6A-9E90C45C1902} = {2C178FA7-12D3-498E-836D-EB461745C5C2}
+		{ECBE38DF-B341-49A8-A527-427072D35DC4} = {DC629B99-A0F1-4214-BE6A-9E90C45C1902}
+		{D21BBC53-BC01-47A5-853B-9CB8C1C673EC} = {DC629B99-A0F1-4214-BE6A-9E90C45C1902}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC2C5339-00F9-4F63-AEB2-C38276295EAE}

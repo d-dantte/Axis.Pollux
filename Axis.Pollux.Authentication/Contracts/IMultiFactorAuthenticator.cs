@@ -1,4 +1,5 @@
-﻿using Axis.Luna.Operation;
+﻿using System;
+using Axis.Luna.Operation;
 using Axis.Pollux.Authentication.Contracts.Params;
 
 namespace Axis.Pollux.Authentication.Contracts
@@ -18,5 +19,10 @@ namespace Axis.Pollux.Authentication.Contracts
         /// <param name="info"></param>
         /// <returns></returns>
         Operation Authenticate(MultiFactorAuthenticationInfo info);
+
+        Operation<MultiFactorAuthenticationToken> RequestMultiFactorToken(Guid userId, string eventLabel, Guid contactId);
+        Operation<MultiFactorAuthenticationToken> RequestMultiFactorToken(Guid userId, string eventLabel, string contactChannel);
+
+        Operation ValidateMultiFactorToken(Guid userId, string eventLabel, string tokenKey, string tokenValue);
     }
 }

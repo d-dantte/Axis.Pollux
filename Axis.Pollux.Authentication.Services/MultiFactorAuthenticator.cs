@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Axis.Jupiter;
 using Axis.Luna.Common.Utils;
 using Axis.Luna.Extensions;
@@ -10,7 +9,6 @@ using Axis.Pollux.Authentication.Exceptions;
 using Axis.Pollux.Authentication.Models;
 using Axis.Pollux.Authentication.Services.CommsMessages;
 using Axis.Pollux.Authentication.Services.Queries;
-using Axis.Pollux.Common.Utils;
 using Axis.Pollux.Communication;
 using Axis.Pollux.Communication.Contracts;
 using Axis.Pollux.Identity.Contracts;
@@ -62,12 +60,13 @@ namespace Axis.Pollux.Authentication.Services
 
             return info
                 .Validate()
-                .Then(() =>
+                .Then(async () =>
                 {
                     switch (info.Step)
                     {
                         case MultiFactorStep.Request:
-                            return RequestMultiFactorAuthentication(info);
+                            var token = await RequestMultiFactorAuthenticationToken(info);
+                            throw new AuthenticationException(ErrorCodes.MultiFactorAuthenticationRequest, token);
 
                         case MultiFactorStep.Response:
                             return AuthenticateMultiFactorCredential(info);
@@ -78,7 +77,32 @@ namespace Axis.Pollux.Authentication.Services
                 });
         }
 
-        private Operation RequestMultiFactorAuthentication(MultiFactorAuthenticationInfo info)
+        public Operation<MultiFactorAuthenticationToken> RequestMultiFactorToken(Guid userId, string eventLabel, Guid contactId)
+        => RequestMultiFactorAuthenticationToken(new MultiFactorAuthenticationInfo
+        {
+            UserId = userId,
+            EventLabel = eventLabel,
+            ContactDataId = contactId
+        });
+
+        public Operation<MultiFactorAuthenticationToken> RequestMultiFactorToken(Guid userId, string eventLabel, string contactChannel)
+        => RequestMultiFactorAuthenticationToken(new MultiFactorAuthenticationInfo
+        {
+            UserId = userId,
+            EventLabel = eventLabel,
+            Channel = contactChannel
+        });
+
+        public Operation ValidateMultiFactorToken(Guid userId, string eventLabel, string tokenKey, string tokenValue)
+        => AuthenticateMultiFactorCredential(new MultiFactorAuthenticationInfo(MultiFactorStep.Response)
+        {
+            UserId = userId,
+            EventLabel = eventLabel,
+            CredentialKey = tokenKey,
+            CredentialToken = tokenValue
+        });
+
+        private Operation<MultiFactorAuthenticationToken> RequestMultiFactorAuthenticationToken(MultiFactorAuthenticationInfo info)
         => Operation.Try(async () =>
         {
             await info
@@ -142,13 +166,13 @@ namespace Axis.Pollux.Authentication.Services
             #endregion
 
             //throw the necessary exception
-            throw new AuthenticationException(ErrorCodes.MultiFactorAuthenticationRequest, new MultiFactorAuthenticationToken
+            return new MultiFactorAuthenticationToken
             {
                 UserId = credential.TargetUser.Id,
                 CredentialKey = credential.CredentialKey,
                 EventLabel = credential.EventLabel,
                 AllowedCommunicationChannels = config.CommunicationChannels
-            });
+            };
         });
 
         private Operation AuthenticateMultiFactorCredential(MultiFactorAuthenticationInfo info)
