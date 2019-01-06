@@ -7,6 +7,7 @@ using Axis.Sigma.Policy;
 
 namespace Axis.Pollux.Authorization.Abac.Models
 {
+
     public class PolluxPolicy: Policy, IBaseModel<Guid>
     {
         public Operation Validate()

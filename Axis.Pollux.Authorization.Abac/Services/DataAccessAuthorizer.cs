@@ -98,7 +98,9 @@ namespace Axis.Pollux.Authorization.Abac.Services
                 {
                     Name = Models.ResourceAttributes.DataAccessCustomData,
                     Type = CommonDataType.JsonObject,
-                    Data = await _serializer.SerializeData(data) //potentially slow 
+                    Data = await _serializer.SerializeData( //potentially slow 
+                        typeof(TData), 
+                        data.CompressObjectGraph()) 
                 }
             };
 

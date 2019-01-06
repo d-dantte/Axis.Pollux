@@ -6,5 +6,6 @@ namespace Axis.Pollux.Logon.Contracts
     public interface ISessionContext
     {
         Operation<Guid> CurrentSessionId();
+        Operation<string> CurrentSessionToken();
     }
 }

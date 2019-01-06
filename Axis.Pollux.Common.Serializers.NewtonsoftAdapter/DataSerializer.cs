@@ -23,13 +23,15 @@ namespace Axis.Pollux.Common.Serializers.NewtonsoftAdapter
                 : JsonConvert.SerializeObject(data, settings);
         });
 
-        public Operation<string> SerializeData(object data)
+        public Operation<string> SerializeData(object data) => SerializeData(data?.GetType(), data);
+
+        public Operation<string> SerializeData(Type objectType, object data)
         => Operation.Try(() =>
         {
             if (data == null)
                 return JsonConvert.SerializeObject(null);
 
-            var settings = _configProvider.ConfigurationFor(data.GetType());
+            var settings = _configProvider.ConfigurationFor(objectType);
             return settings == null
                 ? JsonConvert.SerializeObject(data)
                 : JsonConvert.SerializeObject(data, settings);

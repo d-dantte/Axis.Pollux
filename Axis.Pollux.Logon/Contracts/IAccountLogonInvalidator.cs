@@ -5,7 +5,7 @@ using Axis.Pollux.Logon.Models;
 namespace Axis.Pollux.Logon.Contracts
 {
 
-    public interface ILogonInvalidator
+    public interface IAccountLogonInvalidator
     {
         /// <summary>
         /// Invalidates a user logon. Note that the token should be unique for a user.

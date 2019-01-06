@@ -9,5 +9,7 @@ namespace Axis.Pollux.Authorization.Contracts.Params
     public interface ICustomAccessDataRoot: IValidatable
     {
         string CustomDataType { get; }
+
+        object CompressObjectGraph();
     }
 }
