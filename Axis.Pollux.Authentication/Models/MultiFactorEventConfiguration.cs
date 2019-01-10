@@ -12,7 +12,7 @@ namespace Axis.Pollux.Authentication.Models
         public string[] CommunicationChannels { get; set; }
 
         public override Operation Validate()
-        => Operation.Try(() =>
+        => base.Validate().Then(() =>
         {
             if(ValidityDuration == default(TimeSpan)
                || string.IsNullOrWhiteSpace(EventLabel)

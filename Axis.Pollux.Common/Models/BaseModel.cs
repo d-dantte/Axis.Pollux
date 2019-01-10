@@ -19,7 +19,6 @@ namespace Axis.Pollux.Common.Models
 
     public abstract class BaseModel<Key>: IBaseModel<Key>
     {
-
         public Key Id { get; set; }
 
         public DateTimeOffset CreatedOn { get; set; } = DateTimeOffset.Now;

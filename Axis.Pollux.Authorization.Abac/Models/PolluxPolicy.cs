@@ -25,5 +25,17 @@ namespace Axis.Pollux.Authorization.Abac.Models
         public DateTimeOffset? ModifiedOn { get; set; }
         public Guid CreatedBy { get; set; }
         public Guid? ModifiedBy { get; set; }
+
+        public new PolluxPolicy Parent
+        {
+            get => (PolluxPolicy) base.Parent;
+            set => base.Parent = value;
+        }
+
+        public new PolluxPolicy[] SubPolicies
+        {
+            get => base.SubPolicies.Cast<PolluxPolicy>().ToArray();
+            set => base.SubPolicies = value;
+        }
     }
 }

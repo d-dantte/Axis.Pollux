@@ -54,8 +54,8 @@ namespace Axis.Pollux.Common.Serializers.NewtonsoftAdapter
 
             var settings = _configProvider.ConfigurationFor(dataType);
             return settings == null
-                ? JsonConvert.DeserializeObject(serialFormat)
-                : JsonConvert.DeserializeObject(serialFormat, settings);
+                ? JsonConvert.DeserializeObject(serialFormat, dataType)
+                : JsonConvert.DeserializeObject(serialFormat, dataType, settings);
         });
     }
 }

@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Axis.Luna.Extensions" Version="4.2.0" />
-    <PackageReference Include="Axis.Luna.Operation" Version="4.2.0" />
+    <PackageReference Include="Axis.Luna.Extensions" Version="4.2.1" />
+    <PackageReference Include="Axis.Luna.Operation" Version="4.2.1" />
   </ItemGroup>
 
   <ItemGroup>
