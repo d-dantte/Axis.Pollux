@@ -5,6 +5,7 @@ using Axis.Pollux.Identity.Models;
 
 namespace Axis.Pollux.Identity.Services.Queries
 {
+
     public interface IUserQueries
     {
         Task<User> GetUserById(Guid userId);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Axis.Luna.Common;
 using Axis.Luna.Extensions;
 using Axis.Pollux.Authorization.Exceptions;
@@ -64,5 +65,37 @@ namespace Axis.Pollux.Authorization.Abac.Models
         public CommonDataType Type { get; set; }
 
         public AttributeCategory Category { get; private set; }
+
+        public override string ToString() => Tupulize().Select(Encode).JoinUsing(" | ");
+
+
+        public static Attribute Parse(string attribute)
+        {
+            var parts = attribute
+                .Split(new[] { " | " }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(Decode)
+                .ToArray();
+
+            var result = new Attribute();
+            result.Initialize(parts);
+            return result;
+        }
+
+        public static bool TryParse(string @string, out Attribute attribute )
+        {
+            try
+            {
+                attribute = Parse(@string);
+                return true;
+            }
+            catch
+            {
+                attribute = null;
+                return false;
+            }
+        }
+
+        private static string Encode(string value) => value?.Replace("@", "@at;").Replace("|", "@bar;");
+        private static string Decode(string value) => value?.Replace("@bar;", "|").Replace("@at;", "@");
     }
 }
