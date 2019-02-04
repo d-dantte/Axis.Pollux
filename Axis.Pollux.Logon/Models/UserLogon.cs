@@ -6,7 +6,7 @@ using Axis.Pollux.Identity.Models;
 
 namespace Axis.Pollux.Logon.Models
 {
-    public class UserLogon : BaseModel<Guid>
+    public class UserLogon : BaseModel<Guid>, IUserOwned
     {
         public UserAgent Client { get; set; } = new UserAgent();
 
@@ -24,6 +24,8 @@ namespace Axis.Pollux.Logon.Models
         public string Locale { get; set; }
 
         public virtual User User { get; set; }
+
+        public virtual User Owner => User;
 
 
         public override Operation Validate()

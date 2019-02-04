@@ -6,6 +6,7 @@ using Axis.Pollux.Common.Utils;
 using Axis.Pollux.Identity.Contracts;
 using Axis.Pollux.Identity.Exceptions;
 using Axis.Pollux.Identity.Models;
+using Axis.Pollux.Identity.Services.AccessDescriptors;
 using Axis.Pollux.Identity.Services.Queries;
 
 using static Axis.Luna.Extensions.ExceptionExtension;
@@ -43,7 +44,11 @@ namespace Axis.Pollux.Identity.Services
                 .Validate();
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(typeof(AddressData).FullName, userId);
+            await _dataAccessAuthorizer.AuthorizeAccess(new OwnedDataDescriptor
+            {
+                DataType = typeof(AddressData).FullName,
+                OwnerId = userId
+            });
 
             addressData.Id = Guid.NewGuid();
             addressData.Owner = (await _userQueries
@@ -68,10 +73,12 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(
-                typeof(AddressData).FullName,
-                addressData.Owner.Id,
-                addressData.Id.ToString());
+            await _dataAccessAuthorizer.AuthorizeAccess(new OwnedDataDescriptor
+            {
+                DataType = typeof(AddressData).FullName,
+                OwnerId = addressData.Owner.Id,
+                DataId = addressData.Id.ToString()
+            });
 
             var storeCommand = _storeProvider.CommandFor(typeof(AddressData).FullName);
 
@@ -92,10 +99,12 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(
-                typeof(AddressData).FullName,
-                persisted.Owner.Id,
-                persisted.Id.ToString());
+            await _dataAccessAuthorizer.AuthorizeAccess(new OwnedDataDescriptor
+            {
+                DataType = typeof(AddressData).FullName,
+                OwnerId = persisted.Owner.Id,
+                DataId = persisted.Id.ToString()
+            });
 
             //copy values
             persisted.City = addressData.City;
@@ -122,10 +131,12 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(
-                typeof(AddressData).FullName,
-                addressData.Owner.Id,
-                addressData.Id.ToString());
+            await _dataAccessAuthorizer.AuthorizeAccess(new OwnedDataDescriptor
+            {
+                DataType = typeof(AddressData).FullName,
+                OwnerId = addressData.Owner.Id,
+                DataId = addressData.Id.ToString()
+            });
 
             addressData.Status = status;
             var storeCommand = _storeProvider.CommandFor(typeof(AddressData).FullName);
@@ -146,10 +157,12 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(
-                typeof(AddressData).FullName,
-                addressData.Owner.Id,
-                addressData.Id.ToString());
+            await _dataAccessAuthorizer.AuthorizeAccess(new OwnedDataDescriptor
+            {
+                DataType = typeof(AddressData).FullName,
+                OwnerId = addressData.Owner.Id,
+                DataId = addressData.Id.ToString()
+            });
 
             return addressData;
         });
@@ -161,9 +174,11 @@ namespace Axis.Pollux.Identity.Services
                 throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(
-                typeof(AddressData).FullName,
-                userId);
+            await _dataAccessAuthorizer.AuthorizeAccess(new OwnedDataDescriptor
+            {
+                DataType = typeof(AddressData).FullName,
+                OwnerId = userId
+            });
 
             return (await _userQueries
                 .GetUserAddressData(userId, request))

@@ -53,7 +53,7 @@ namespace Axis.Pollux.Authorization.Abac.Services
 
             //acquire authorization context
             var context = await _authorizationContextProvider
-                .ExecutionAuthorizationContext(descriptorAttribute);
+                .CaptureAuthorizationContext(descriptorAttribute);
 
             await _authority
                 .Authorize(context)

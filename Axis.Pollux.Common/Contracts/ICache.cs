@@ -3,7 +3,6 @@ using Axis.Luna.Operation;
 
 namespace Axis.Pollux.Common.Contracts
 {
-
     /// <summary>
     /// Caching abstraction for the Pollux Library. Unlike conventional caches, this cache does not receive data values
     /// from external sources to pair with keys, rather, it accepts a value provider that in turn generates the values
@@ -28,9 +27,21 @@ namespace Axis.Pollux.Common.Contracts
         ICache Set<TData>(string cacheKey, TimeSpan? expiration, Func<string, Operation<TData>> valueProvider);
 
         /// <summary>
+        /// Adds or updates the data provider for a specific key in the cache, as well as adding an invalidation timer.
+        /// Updating the provider and expiration depends on the value of the'updateIfPresent' flag.
+        /// </summary>
+        /// <typeparam name="TData"></typeparam>
+        /// <param name="cacheKey"></param>
+        /// <param name="updateIfPresent"></param>
+        /// <param name="expiration"></param>
+        /// <param name="valueProvider"></param>
+        /// <returns></returns>
+        ICache Set<TData>(string cacheKey, bool updateIfPresent, TimeSpan? expiration, Func<string, Operation<TData>> valueProvider);
+
+        /// <summary>
         /// Retrieves a value from the cache.
-        /// If no Value provider is set, an exception is thrown.
-        /// if the key has been invalidated, an exception is thrown.
+        /// If no Value provider is set, an exception is thrown (wrapped in an operation).
+        /// if the key has been invalidated, an exception is thrown (wrapped in an operation).
         /// </summary>
         /// <typeparam name="TData"></typeparam>
         /// <param name="cacheKey"></param>
@@ -38,8 +49,9 @@ namespace Axis.Pollux.Common.Contracts
         Operation<TData> Get<TData>(string cacheKey);
 
         /// <summary>
-        /// Gets a cached value: if non exists, attempt to query the value provider for a value. If no value provider
-        /// exists, throw an exception
+        /// Gets a cached value: if non exists, or the key is invalidated or expired, attempt to query the value provider 
+        /// for a value and reset the expiration timer (if one was provided). If no value provider
+        /// exists, return a failed operation containing an exception
         /// </summary>
         /// <typeparam name="TData"></typeparam>
         /// <param name="cacheKey"></param>
@@ -47,7 +59,8 @@ namespace Axis.Pollux.Common.Contracts
         Operation<TData> GetOrRefresh<TData>(string cacheKey);
 
         /// <summary>
-        /// Query the value provider for a new value, throwing an exception if no provider exists for that key
+        /// Query the value provider for a new value and reset the timer if one was provided, returning a failed operation if no
+        /// provider exists for that key
         /// </summary>
         /// <typeparam name="TData"></typeparam>
         /// <param name="cacheKey"></param>
@@ -99,7 +112,7 @@ namespace Axis.Pollux.Common.Contracts
     }
 
     /// <summary>
-    /// If a value provider throws an exception while
+    /// If a value provider throws an exception while attempting to generate/retrieve the value
     /// </summary>
     public class ValueProviderResolutionException : Exception
     {

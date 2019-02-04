@@ -3,7 +3,7 @@ using Axis.Pollux.Common.Models;
 
 namespace Axis.Pollux.Identity.Models
 {
-    public class AddressData: BaseModel<Guid>
+    public class AddressData: BaseModel<Guid>, IUserOwned
     {
         public string PostCode { get; set; }
         public string Flat { get; set; }

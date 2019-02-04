@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;netcoreapp2.1</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>4.2.1.0</AssemblyVersion>
-    <FileVersion>4.2.1.0</FileVersion>
-    <Version>4.2.1</Version>
+    <AssemblyVersion>4.3.0.0</AssemblyVersion>
+    <FileVersion>4.3.0.0</FileVersion>
+    <Version>4.3.0</Version>
     <Description>Pollux Identity Authorization Module</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Authors>Dantte</Authors>
@@ -13,6 +13,7 @@
     <PackageLicenseUrl>https://licenses.nuget.org/MIT</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/d-dantte/Axis.Pollox/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/d-dantte/Axis.Pollox/</RepositoryUrl>
+    <PackageReleaseNotes></PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="Contracts\Params\" />
   </ItemGroup>
 </Project>

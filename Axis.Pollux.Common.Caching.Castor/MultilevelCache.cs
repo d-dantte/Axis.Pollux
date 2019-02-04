@@ -24,7 +24,16 @@ namespace Axis.Pollux.Common.Caching.Castor
                 .ThrowIf(caches => caches.Length == 0, new Exception("Cache collection cannot be empty"));
         }
 
-        public ICache Set<TData>(string cacheKey, TimeSpan? expiration, Func<string, Operation<TData>> valueProvider)
+        public ICache Set<TData>(
+            string cacheKey, 
+            TimeSpan? expiration, 
+            Func<string, Operation<TData>> valueProvider) => Set(cacheKey, true, expiration, valueProvider);
+
+        public ICache Set<TData>(
+            string cacheKey,
+            bool updateIfPresent,
+            TimeSpan? expiration,
+            Func<string, Operation<TData>> valueProvider)
         {
             if(string.IsNullOrWhiteSpace(cacheKey))
                 throw new InvalidCacheKeyException();
@@ -44,7 +53,7 @@ namespace Axis.Pollux.Common.Caching.Castor
                     provider = (key) => _cacheLevels[prev].GetOrRefresh<TData>(key);
                 }
 
-                cache.Set(cacheKey, expiration, provider);
+                cache.Set(cacheKey, updateIfPresent, expiration, provider);
             }
 
             return this;

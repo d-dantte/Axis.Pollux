@@ -10,6 +10,6 @@ namespace Axis.Pollux.Authorization.Abac.Contracts
     /// </summary>
     public interface IAuthorizationContextProvider
     {
-        Operation<IAuthorizationContext> ExecutionAuthorizationContext(params IAttribute[] additionalAttributes);
+        Operation<IAuthorizationContext> CaptureAuthorizationContext(params IAttribute[] additionalAttributes);
     }
 }

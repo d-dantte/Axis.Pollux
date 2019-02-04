@@ -5,6 +5,7 @@ using Axis.Pollux.Authentication.Contracts;
 using Axis.Pollux.Authentication.Contracts.Params;
 using Axis.Pollux.Authentication.Exceptions;
 using Axis.Pollux.Authentication.Models;
+using Axis.Pollux.Authentication.Services.AccessDescriptors;
 using Axis.Pollux.Authentication.Services.Queries;
 using Axis.Pollux.Authorization.Contracts;
 using Axis.Pollux.Common.Utils;
@@ -37,7 +38,11 @@ namespace Axis.Pollux.Authentication.Services
             await info.Validate();
 
             //Ensure that the principal has access to this data
-            await _authorizer.AuthorizeAccess(typeof(Credential).FullName, info.UserId);
+            await _authorizer.AuthorizeAccess(new OwnedDataDescriptor
+            {
+                DataType = typeof(Credential).FullName,
+                OwnerId = info.UserId
+            });
 
             var request = ArrayPageRequest.CreateNormalizedRequest();
             var credentials = await _queries.GetActiveUserCredentials(info.UserId, info.Name, request); //<-- returns expired active credentials?
@@ -73,7 +78,11 @@ namespace Axis.Pollux.Authentication.Services
                 if (credential != null)
                 {
                     //Ensure that the principal has access to this data. This privilege can (and should) be given to the Guest user
-                    await _authorizer.AuthorizeAccess(typeof(Credential).FullName, credential.Owner.Id);
+                    await _authorizer.AuthorizeAccess(new OwnedDataDescriptor
+                    {
+                        DataType = typeof(Credential).FullName,
+                        OwnerId = credential.Owner.Id
+                    });
 
                     return credential.Owner.Id;
                 }

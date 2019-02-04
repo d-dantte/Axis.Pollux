@@ -5,7 +5,7 @@ using Axis.Pollux.Common.Models;
 
 namespace Axis.Pollux.Identity.Models
 {
-    public class NameData: BaseModel<Guid>
+    public class NameData: BaseModel<Guid>, IUserOwned
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

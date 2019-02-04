@@ -23,7 +23,7 @@ namespace Axis.Pollux.Authentication.Models
         SystemUnique
     }
 
-    public class Credential: BaseModel<Guid>
+    public class Credential: BaseModel<Guid>, IUserOwned
     {
         public CredentialVisibility Visibility { get; set; }
         public int Status { get; set; }

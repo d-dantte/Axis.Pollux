@@ -1,52 +1,17 @@
-﻿using System;
-using Axis.Luna.Operation;
-using Axis.Pollux.Authorization.Contracts.Params;
+﻿using Axis.Luna.Operation;
+using Axis.Pollux.Authorization.Models;
 
 namespace Axis.Pollux.Authorization.Contracts
 {
     public interface IDataAccessAuthorizer
     {
         /// <summary>
-        /// Attempt to ascertain if the user found in IUserContext.CurrentUserId() has the permission to access any data of the specified type.
-        /// </summary>
-        /// <param name="dataType"></param>
-        /// <returns></returns>
-        Operation AuthorizeAccess(string dataType);
-
-        /// <summary>
-        /// Attempt to ascertain if the user found in IUserContext.CurrentUserId() has the permission to access data identified by "uniqueId" of the specified type.
-        /// </summary>
-        /// <param name="dataType"></param>
-        /// <param name="uniqueId"></param>
-        /// <returns></returns>
-        Operation AuthorizeAccess(string dataType, string uniqueId);
-
-        /// <summary>
-        /// Attempt to ascertain if the user found in IUserContext.CurrentUserId() has the permission to access any data of the specified type, owned by the specified owner.
-        /// If OwnerId does not represent a valid user, the authorization is denied
-        /// </summary>
-        /// <param name="dataType"></param>
-        /// <param name="ownerId"></param>
-        /// <returns></returns>
-        Operation AuthorizeAccess(string dataType, Guid ownerId);
-
-        /// <summary>
-        /// Attempt to ascertain if the user found in IUserContext.CurrentUserId() has the permission to access the specified data.
-        /// If OwnerId does not represent a valid user, the authorization is denied
-        /// </summary>
-        /// <param name="dataType">A unique string label signifying the root data-type being accessed. Typically, this will be Type.FullName, but can be anything at all.</param>
-        /// <param name="ownerId"> a unique value signifying that access to a specific object is requested.</param>
-        /// <param name="uniqueId"> compared with the IUserContext.CurrentUserId() to determine automatic access to the data</param>
-        /// <returns></returns>
-        Operation AuthorizeAccess(string dataType, Guid ownerId, string uniqueId);
-
-        /// <summary>
-        /// Attempt to evaluate some custom data authorization policy. Resource attributes added to the execution context include
-        /// the <c>ICustomAccessDataRoot.CustomDataType</c>, as well as the serialized version of the object itself.
+        /// Attempt to evaluate the data authorization policy that relates to the given data descriptor. Resource attributes added to the execution context include
+        /// the <c>IDataAccessDescriptor.DataType</c>, as well as the serialized version of the object itself.
         /// </summary>
         /// <typeparam name="TData"></typeparam>
         /// <param name="data"></param>
         /// <returns></returns>
-        Operation AuthorizeCustomAccess<TData>(TData data) where TData: class, ICustomAccessDataRoot;
+        Operation AuthorizeAccess(IDataAccessDescriptor data);
     }
 }

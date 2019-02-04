@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyVersion>4.3.1.0</AssemblyVersion>
     <FileVersion>4.3.1.0</FileVersion>
-    <Version>4.3.1</Version>
+    <Version>4.3.2</Version>
     <Description>Pollux Identity Authentication Module</Description>
     <RepositoryUrl>https://github.com/d-dantte/Axis.Pollox/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/d-dantte/Axis.Pollox/</PackageProjectUrl>
@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Axis.Jupiter" Version="4.3.1" />
+    <PackageReference Include="Axis.Jupiter" Version="4.3.3" />
     <PackageReference Include="Axis.Luna.Common" Version="4.2.2" />
     <PackageReference Include="Axis.Luna.Extensions" Version="4.2.1" />
     <PackageReference Include="Axis.Luna.Operation" Version="4.2.1" />

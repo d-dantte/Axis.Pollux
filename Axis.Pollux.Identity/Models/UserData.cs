@@ -8,7 +8,7 @@ using Axis.Pollux.Common.Models;
 
 namespace Axis.Pollux.Identity.Models
 {
-    public class UserData: BaseModel<Guid>, IDataItem
+    public class UserData: BaseModel<Guid>, IUserOwned, IDataItem
     {
         public string DisplayData()
         {
