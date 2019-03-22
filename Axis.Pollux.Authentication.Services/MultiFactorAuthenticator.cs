@@ -35,14 +35,14 @@ namespace Axis.Pollux.Authentication.Services
             IMultiFactorConfigurationQueries configurationQueries)
         {
             ThrowNullArguments(
-                () => storeProvider,
-                //() => authorizer,
-                () => queries,
-                () => hasher,
-                () => contactDataManager,
-                () => commsService,
-                () => channelSourceAddressProvider,
-                () => configurationQueries);
+              //nameof(authorizer).ObjectPair(authorizer),
+                nameof(storeProvider).ObjectPair(storeProvider),
+                nameof(queries).ObjectPair(queries),
+                nameof(hasher).ObjectPair(hasher),
+                nameof(contactDataManager).ObjectPair(contactDataManager),
+                nameof(commsService).ObjectPair(commsService),
+                nameof(channelSourceAddressProvider).ObjectPair(channelSourceAddressProvider),
+                nameof(configurationQueries).ObjectPair(configurationQueries));
 
             _queries = queries;
             _storeProvider = storeProvider;

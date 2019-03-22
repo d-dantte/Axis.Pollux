@@ -10,8 +10,8 @@ namespace Axis.Pollux.Authorization.Contracts
         /// the <c>IDataAccessDescriptor.DataType</c>, as well as the serialized version of the object itself.
         /// </summary>
         /// <typeparam name="TData"></typeparam>
-        /// <param name="data"></param>
+        /// <param name="rootData"></param>
         /// <returns></returns>
-        Operation AuthorizeAccess(IDataAccessDescriptor data);
+        Operation AuthorizeAccess(IDataAccessDescriptor rootData);
     }
 }

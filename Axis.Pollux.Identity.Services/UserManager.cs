@@ -1,5 +1,6 @@
 ﻿using System;
 using Axis.Jupiter;
+using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
 using Axis.Pollux.Authorization.Contracts;
 using Axis.Pollux.Identity.Contracts;
@@ -21,9 +22,10 @@ namespace Axis.Pollux.Identity.Services
 
         public UserManager(IUserQueries userQueries, IDataAccessAuthorizer dataAuthorizer, StoreProvider storeProvider)
         {
-            ThrowNullArguments(() => userQueries,
-                               () => dataAuthorizer,
-                               () => storeProvider);
+            ThrowNullArguments(
+                nameof(userQueries).ObjectPair(userQueries),
+                nameof(dataAuthorizer).ObjectPair(dataAuthorizer),
+                nameof(storeProvider).ObjectPair(storeProvider));
 
             _userQueries = userQueries;
             _storeProvider = storeProvider;
@@ -54,7 +56,7 @@ namespace Axis.Pollux.Identity.Services
                 throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new OwnedDataDescriptor
+            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
             {
                 DataType = typeof(User).FullName,
                 OwnerId = userId,
@@ -79,7 +81,7 @@ namespace Axis.Pollux.Identity.Services
                 throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new OwnedDataDescriptor
+            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
             {
                 DataType = typeof(User).FullName,
                 OwnerId = userId,
@@ -105,7 +107,7 @@ namespace Axis.Pollux.Identity.Services
                 throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new OwnedDataDescriptor
+            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
             {
                 DataType = typeof(User).FullName,
                 OwnerId = userId,

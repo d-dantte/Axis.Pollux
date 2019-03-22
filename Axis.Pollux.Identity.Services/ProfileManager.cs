@@ -1,4 +1,5 @@
-﻿using Axis.Luna.Operation;
+﻿using Axis.Luna.Extensions;
+using Axis.Luna.Operation;
 using Axis.Pollux.Authorization.Contracts;
 using Axis.Pollux.Identity.Contracts;
 using Axis.Pollux.Identity.Exceptions;
@@ -16,16 +17,15 @@ namespace Axis.Pollux.Identity.Services
         private readonly IUserQueries _userQueries;
         private readonly IDataAccessAuthorizer _dataAccessAuthorizer;
 
-
         public ProfileManager(IUserQueries userQueries, IDataAccessAuthorizer dataAuthorizer)
         {
-            ThrowNullArguments(() => userQueries,
-                () => dataAuthorizer);
+            ThrowNullArguments(
+                nameof(userQueries).ObjectPair(userQueries),
+                nameof(dataAuthorizer).ObjectPair(dataAuthorizer));
 
             _userQueries = userQueries;
             _dataAccessAuthorizer = dataAuthorizer;
         }
-
 
         public Operation<UserProfile> GetUserProfile(Contracts.Params.UserProfileRequestInfo param)
         => Operation.Try(async () =>
@@ -35,7 +35,7 @@ namespace Axis.Pollux.Identity.Services
                 .Validate();
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new OwnedDataDescriptor
+            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
             {
                 DataType = typeof(UserProfile).FullName,
                 OwnerId = param.UserId

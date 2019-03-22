@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461;netcoreapp2.1</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>4.5.0.0</AssemblyVersion>
-    <FileVersion>4.5.0.0</FileVersion>
-    <Version>4.5.0</Version>
+    <AssemblyVersion>4.9.0.0</AssemblyVersion>
+    <FileVersion>4.9.0.0</FileVersion>
+    <Version>4.9.0</Version>
     <Description>Pollux Identity Authorization.ABAC Module</Description>
     <Authors>Dantte</Authors>
     <Company>Axiis</Company>
@@ -16,20 +16,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Axis.Luna.Operation" Version="4.2.1" />
-    <PackageReference Include="Axis.Sigma" Version="4.4.1" />
+    <PackageReference Include="Axis.Luna.Operation" Version="4.3.0" />
+    <PackageReference Include="Axis.Sigma" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Axis.Pollux.Authorization\Axis.Pollux.Authorization.csproj" />
     <ProjectReference Include="..\Axis.Pollux.Common\Axis.Pollux.Common.csproj" />
     <ProjectReference Include="..\Axis.Pollux.Identity\Axis.Pollux.Identity.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Web.Services">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.1\System.Web.Services.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Runtime.ExceptionServices;
-using Axis.Luna.Common;
+using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
 using Axis.Pollux.Authorization.Abac.Contracts;
 using Axis.Pollux.Authorization.Contracts;
 using Axis.Pollux.Authorization.Exceptions;
 using Axis.Pollux.Authorization.Models;
-using Axis.Pollux.Common.Contracts;
 using Axis.Pollux.Identity.Contracts;
 using Axis.Sigma;
 using Axis.Sigma.Authority;
@@ -29,7 +28,6 @@ namespace Axis.Pollux.Authorization.Abac.Services
         private readonly PolicyAuthority _authority;
         private readonly IAuthorizationContextProvider _authorizationContextProvider;
         private readonly IUserContext _userContext;
-        private readonly IDataSerializer _serializer;
 
         /// <summary>
         /// create a new instance
@@ -41,50 +39,32 @@ namespace Axis.Pollux.Authorization.Abac.Services
         public DataAccessAuthorizer(
             IAuthorizationContextProvider provider, 
             IUserContext userContext,
-            IDataSerializer serializer,
             PolicyAuthority authority)
         {
             ThrowNullArguments(
-                () => provider,
-                () => userContext,
-                () => serializer,
-                () => authority);
+                nameof(provider).ObjectPair(provider),
+                nameof(userContext).ObjectPair(userContext),
+                nameof(authority).ObjectPair(authority));
 
             _authority = authority;
             _userContext = userContext;
             _authorizationContextProvider = provider;
-            _serializer = serializer;
         }
 
         public Operation AuthorizeAccess(IDataAccessDescriptor data)
         => Operation.Try(async () =>
         {
             //validate the data
-            await data
-                .ThrowIfNull(new AuthorizationException(Common.Exceptions.ErrorCodes.InvalidArgument))
-                .Validate();
+            data.ThrowIfNull(new AuthorizationException(Common.Exceptions.ErrorCodes.InvalidArgument));
 
             //create the resource attributes
-            var resourceAttributes = new List<IAttribute>
-            {
-                new Attribute(AttributeCategory.Resource)
-                {
-                    Name = Models.ResourceAttributes.DataAccessCustomDataType,
-                    Type = CommonDataType.String,
-                    Data = data.CustomDataType.ThrowIf(
-                        string.IsNullOrWhiteSpace,
-                        new AuthorizationException(Common.Exceptions.ErrorCodes.InvalidArgument))
-                },
-                new Attribute(AttributeCategory.Resource)
-                {
-                    Name = Models.ResourceAttributes.DataAccessCustomData,
-                    Type = CommonDataType.JsonObject,
-                    Data = await _serializer.SerializeData(data.GetType(), data) 
-                }
-            };
+            var resourceAttributes = data
+                .DataDescriptors()
+                .Select(ToResourceAttribute)
+                .ToArray();
 
             var context = await _authorizationContextProvider
-                .CaptureAuthorizationContext(resourceAttributes.ToArray());
+                .CaptureAuthorizationContext(resourceAttributes);
 
             await _authority
                 .Authorize(context)
@@ -99,7 +79,14 @@ namespace Axis.Pollux.Authorization.Abac.Services
                         .Throw();
                 });
         });
-        
+
+        private static IAttribute ToResourceAttribute(DataAttribute dataAttribute) 
+        => new Attribute(AttributeCategory.Resource)
+        {
+            Type = dataAttribute.Type,
+            Name = $"{Models.ResourceAttributes.DataDescriptorPrefix}.{dataAttribute.Name}",
+            Data = dataAttribute.Data
+        };
 
         //public Operation AuthorizeAccess(string dataType)
         //=> _AuthorizeAccess(dataType, null, null);

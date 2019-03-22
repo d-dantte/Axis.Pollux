@@ -7,6 +7,7 @@ using Axis.Sigma.Policy;
 
 namespace Axis.Pollux.Authorization.Abac.Models
 {
+    using Ext = Common.Extensions;
 
     public class PolluxPolicy: Policy, IBaseModel<Guid>
     {
@@ -16,7 +17,9 @@ namespace Axis.Pollux.Authorization.Abac.Models
             if(string.IsNullOrWhiteSpace(Code))
                 throw new AuthorizationException(Common.Exceptions.ErrorCodes.ModelValidationError);
 
-            if (GovernedResources.Length == 0 || GovernedResources.Any(string.IsNullOrWhiteSpace))
+            if (AuthorizationContextFilter == null
+                || AuthorizationContextFilter.Length == 0 
+                || AuthorizationContextFilter.Any(Ext.IsNull))
                 throw new AuthorizationException(Common.Exceptions.ErrorCodes.ModelValidationError);
         });
 

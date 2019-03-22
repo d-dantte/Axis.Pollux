@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace Axis.Pollux.Authorization.Abac.Models
 {
     /// <summary>
@@ -10,38 +7,14 @@ namespace Axis.Pollux.Authorization.Abac.Models
     public static class ResourceAttributes
     {
         /// <summary>
-        /// A resource attribute used for DataAccess policy resolution, signifying the type of the data being accessed.
-        /// It is typically the fully qualified name of the c# type, devoid of the assembly information.
+        /// Value used to prefix attributes generated from the <c>IDataAccessDescriptor.DataDescriptors()</c> method
         /// </summary>
-        public static readonly string DataAccessDataType = "Pollux.DataAccess.DataType";
+        public static readonly string DataDescriptorPrefix = "Pollux.DataAccess.Descriptor";
 
         /// <summary>
-        /// A resource attribute used for DataAccess policy resolution, signifying the Id of the PRINCIPAL
-        /// that owns the data - meaning access is sought for any/all data of the specified type belonging
-        /// to the specified PRINCIPAL. If not present, signifying access to all data of the specified type.
-        /// </summary>
-        public static readonly string DataAccessOwnerId = "Pollux.DataAccess.OwnerId";
-
-        /// <summary>
-        /// A resource attribute used for DataAccess policy resolution, signifying a string version of some
-        /// Uniquely identifying property of its own (typically, it's key). When not present, any data is
-        /// sought.
-        /// </summary>
-        public static readonly string DataAccessUniqueId = "Pollux.DataAccess.UniqueId";
-
-        /// <summary>
-        /// A resource attribute used for 'Custom' DataAccess policy resolution, signifying a unique string identifying the custom data authorization policy
-        /// </summary>
-        public static string DataAccessCustomDataType = "Pollux.DataAccess.CustomDataType";
-
-        /// <summary>
-        /// A resource attribute used for 'Custom' DataAccess policy resolution, signifying an object that needs to be present for custom data authorization policy evaluation.
-        /// </summary>
-        public static string DataAccessCustomData = "Pollux.DataAccess.CustomData";
-
-        /// <summary>
-        /// A resource attribute used for OperationAccess policy resolution, signifying a unique label that
-        /// describes the operation to which access is sought.
+        /// A resource attribute used for OperationAccess policy resolution. It is the serialized version of the <c>OperationAccessDescriptor</c>
+        /// object passed into the <c>IOperationAccessAthorizer</c> service. The policy is meant to use this object, along with any parameters it may contain,
+        /// to make it's authorization decision
         /// </summary>
         public static readonly string OperationAccessDescriptor = "Pollux.OperationAccess.Descriptor";
     }}

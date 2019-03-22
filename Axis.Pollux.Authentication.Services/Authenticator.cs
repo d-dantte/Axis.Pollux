@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
 using Axis.Pollux.Authentication.Contracts;
 using Axis.Pollux.Authentication.Contracts.Params;
@@ -19,12 +20,15 @@ namespace Axis.Pollux.Authentication.Services
         private readonly IDataAccessAuthorizer _authorizer;
         private readonly ICredentialHasher _hasher;
 
-        public Authenticator(IDataAccessAuthorizer authorizer, IAuthenticatorQueries queries, ICredentialHasher hasher)
+        public Authenticator(
+            IDataAccessAuthorizer authorizer, 
+            IAuthenticatorQueries queries, 
+            ICredentialHasher hasher)
         {
             ThrowNullArguments(
-                () => authorizer,
-                () => queries,
-                () => hasher);
+                nameof(authorizer).ObjectPair(authorizer),
+                nameof(queries).ObjectPair(queries),
+                nameof(hasher).ObjectPair(hasher));
 
             _queries = queries;
             _authorizer = authorizer;
@@ -38,7 +42,7 @@ namespace Axis.Pollux.Authentication.Services
             await info.Validate();
 
             //Ensure that the principal has access to this data
-            await _authorizer.AuthorizeAccess(new OwnedDataDescriptor
+            await _authorizer.AuthorizeAccess(new UserOwnedData
             {
                 DataType = typeof(Credential).FullName,
                 OwnerId = info.UserId
@@ -78,7 +82,7 @@ namespace Axis.Pollux.Authentication.Services
                 if (credential != null)
                 {
                     //Ensure that the principal has access to this data. This privilege can (and should) be given to the Guest user
-                    await _authorizer.AuthorizeAccess(new OwnedDataDescriptor
+                    await _authorizer.AuthorizeAccess(new UserOwnedData
                     {
                         DataType = typeof(Credential).FullName,
                         OwnerId = credential.Owner.Id

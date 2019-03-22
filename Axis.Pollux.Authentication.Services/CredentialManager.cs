@@ -1,5 +1,6 @@
 ﻿using System;
 using Axis.Jupiter;
+using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
 using Axis.Pollux.Authentication.Contracts;
 using Axis.Pollux.Authentication.Exceptions;
@@ -27,10 +28,10 @@ namespace Axis.Pollux.Authentication.Services
             ICredentialHasher hasher)
         {
             ThrowNullArguments(
-                () => storeProvider,
-                () => authorizer,
-                () => hasher,
-                () => queries);
+                nameof(storeProvider).ObjectPair(storeProvider),
+                nameof(authorizer).ObjectPair(authorizer),
+                nameof(hasher).ObjectPair(hasher),
+                nameof(queries).ObjectPair(queries));
 
             _queries = queries;
             _storeProvider = storeProvider;
@@ -47,7 +48,7 @@ namespace Axis.Pollux.Authentication.Services
                 throw new AuthenticationException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //data access validation
-            await _authorizer.AuthorizeAccess(new OwnedDataDescriptor
+            await _authorizer.AuthorizeAccess(new UserOwnedData
             {
                 DataType = typeof(Credential).FullName,
                 OwnerId = userId
@@ -101,7 +102,7 @@ namespace Axis.Pollux.Authentication.Services
                 .ThrowIfNull(new AuthenticationException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _authorizer.AuthorizeAccess(new OwnedDataDescriptor
+            await _authorizer.AuthorizeAccess(new UserOwnedData
             {
                 DataType = typeof(Credential).FullName,
                 OwnerId = credential.Owner.Id,
@@ -125,7 +126,7 @@ namespace Axis.Pollux.Authentication.Services
             var credential = await _queries.GetCredentialById(credentialId);
 
             //Ensure that the right principal has access to this data
-            await _authorizer.AuthorizeAccess(new OwnedDataDescriptor
+            await _authorizer.AuthorizeAccess(new UserOwnedData
             {
                 DataType = typeof(Credential).FullName,
                 OwnerId = credential.Owner.Id,
@@ -145,7 +146,7 @@ namespace Axis.Pollux.Authentication.Services
             var credential = await _queries.GetCredentialById(credentialId);
 
             //Ensure that the right principal has access to this data
-            await _authorizer.AuthorizeAccess(new OwnedDataDescriptor
+            await _authorizer.AuthorizeAccess(new UserOwnedData
             {
                 DataType = typeof(Credential).FullName,
                 OwnerId = credential.Owner.Id,

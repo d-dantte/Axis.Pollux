@@ -58,6 +58,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Common.Serializ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Authorization", "Axis.Pollux.Authorization\Axis.Pollux.Authorization.csproj", "{07BABC3D-F939-4FF7-BECC-8E2561080502}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Comms.ElasticMail", "Axis.Pollux.Comms.ElasticMail\Axis.Pollux.Comms.ElasticMail.csproj", "{D2A96807-B2E8-4F4B-827B-FF933001B218}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -128,6 +130,10 @@ Global
 		{07BABC3D-F939-4FF7-BECC-8E2561080502}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07BABC3D-F939-4FF7-BECC-8E2561080502}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07BABC3D-F939-4FF7-BECC-8E2561080502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A96807-B2E8-4F4B-827B-FF933001B218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A96807-B2E8-4F4B-827B-FF933001B218}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A96807-B2E8-4F4B-827B-FF933001B218}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A96807-B2E8-4F4B-827B-FF933001B218}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -151,6 +157,7 @@ Global
 		{ECBE38DF-B341-49A8-A527-427072D35DC4} = {DC629B99-A0F1-4214-BE6A-9E90C45C1902}
 		{D21BBC53-BC01-47A5-853B-9CB8C1C673EC} = {DC629B99-A0F1-4214-BE6A-9E90C45C1902}
 		{07BABC3D-F939-4FF7-BECC-8E2561080502} = {9DE0EEF0-1558-4587-B2E7-E75D2A472092}
+		{D2A96807-B2E8-4F4B-827B-FF933001B218} = {53D6054A-0973-4464-835B-67CDC0DD0361}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC2C5339-00F9-4F63-AEB2-C38276295EAE}
