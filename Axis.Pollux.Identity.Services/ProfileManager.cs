@@ -4,7 +4,6 @@ using Axis.Pollux.Authorization.Contracts;
 using Axis.Pollux.Identity.Contracts;
 using Axis.Pollux.Identity.Exceptions;
 using Axis.Pollux.Identity.Models;
-using Axis.Pollux.Identity.Services.AccessDescriptors;
 using Axis.Pollux.Identity.Services.Queries;
 
 using static Axis.Luna.Extensions.ExceptionExtension;
@@ -35,11 +34,9 @@ namespace Axis.Pollux.Identity.Services
                 .Validate();
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(UserProfile).FullName,
-                OwnerId = param.UserId
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(UserProfile).FullName,
+                intent: Authorization.Models.DataAccessIntent.Read));
 
             //retrieve the object, then one by one, retrieve it's constituents
             return new UserProfile

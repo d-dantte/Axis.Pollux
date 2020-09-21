@@ -20,8 +20,8 @@ namespace Axis.Pollux.Identity.Contracts
         Operation<ContactData> RemoveTags(Guid contactDataId, params string[] tags);
 
         Operation<ContactData> GetContactData(Guid contactDataId);
-        Operation<ArrayPage<ContactData>> GetUserContact(Guid userId, ArrayPageRequest request = null);
-        Operation<ArrayPage<ContactData>> GetUserContact(Guid userId, string[] communicationChannels, string[] tags, ArrayPageRequest arrayPageRequest);
+        Operation<ArrayPage<ContactData>> GetUserContacts(Guid userId, ArrayPageRequest request = null);
+        Operation<ArrayPage<ContactData>> GetUserContacts(Guid userId, string[] communicationChannels, string[] tags, ArrayPageRequest arrayPageRequest);
         Operation<ContactData> GetPrimaryUserContact(Guid userId, string communicationChannels);
 
         #endregion

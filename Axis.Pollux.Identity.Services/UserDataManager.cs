@@ -7,7 +7,6 @@ using Axis.Pollux.Common.Utils;
 using Axis.Pollux.Identity.Contracts;
 using Axis.Pollux.Identity.Exceptions;
 using Axis.Pollux.Identity.Models;
-using Axis.Pollux.Identity.Services.AccessDescriptors;
 using Axis.Pollux.Identity.Services.Queries;
 
 using static Axis.Luna.Extensions.ExceptionExtension;
@@ -46,11 +45,9 @@ namespace Axis.Pollux.Identity.Services
                 .Validate();
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(NameData).FullName,
-                OwnerId = userId
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(NameData).FullName,
+                intent: Authorization.Models.DataAccessIntent.Write));
 
             userData.Id = Guid.NewGuid();
             userData.Owner = (await _userQueries
@@ -75,12 +72,10 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(UserData).FullName,
-                OwnerId = userData.Owner.Id,
-                DataId = userData.Id.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(UserData).FullName,
+                dataId: userData.Id.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Delete));
 
             var storeCommand = _storeProvider.CommandFor(typeof(UserData).FullName);
 
@@ -101,12 +96,10 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(UserData).FullName,
-                OwnerId = persisted.Owner.Id,
-                DataId = persisted.Id.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(UserData).FullName,
+                dataId: persisted.Id.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Write));
 
             //copy values
             persisted.Data = userData.Data;
@@ -130,12 +123,10 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(UserData).FullName,
-                OwnerId = userData.Owner.Id,
-                DataId = userData.Id.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(UserData).FullName,
+                dataId: userData.Id.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Write));
 
             userData.Status = status;
             var storeCommand = _storeProvider.CommandFor(typeof(UserData).FullName);
@@ -156,12 +147,10 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(UserData).FullName,
-                OwnerId = userData.Owner.Id,
-                DataId = userData.Id.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(UserData).FullName,
+                dataId: userData.Id.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Read));
 
             return userData;
         });
@@ -173,11 +162,9 @@ namespace Axis.Pollux.Identity.Services
                 throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(UserData).FullName,
-                OwnerId = userId
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(UserData).FullName,
+                intent: Authorization.Models.DataAccessIntent.Read));
 
             return (await _userQueries
                 .GetUserData(userId, request))

@@ -10,9 +10,11 @@ namespace Axis.Pollux.Authorization.Models
     /// </summary>
     public class OperationAccessDescriptor
     {
+        private readonly CommonDataItem[] _parameterContext;
+
         public string OperationName { get; }
 
-        public CommonDataItem[] ParameterContext { get; }
+        public CommonDataItem[] ParameterContext => _parameterContext.ToArray(); //so the array cannot be altered externally
 
         public OperationAccessDescriptor(string name, params CommonDataItem[] parameters)
         {
@@ -20,9 +22,13 @@ namespace Axis.Pollux.Authorization.Models
                 string.IsNullOrWhiteSpace, 
                 new ArgumentException(nameof(name)));
 
-            ParameterContext = parameters
+            _parameterContext = parameters
                 ?.ToArray()                 //duplicate the array
                 ?? new CommonDataItem[0];   //or an empty array
+
+            _parameterContext
+                .Any(p => p == null)
+                .ThrowIf(true, new ArgumentException("Invalid Parameter"));
         }
     }
 }

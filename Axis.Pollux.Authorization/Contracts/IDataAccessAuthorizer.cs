@@ -12,6 +12,6 @@ namespace Axis.Pollux.Authorization.Contracts
         /// <typeparam name="TData"></typeparam>
         /// <param name="rootData"></param>
         /// <returns></returns>
-        Operation AuthorizeAccess(IDataAccessDescriptor rootData);
+        Operation AuthorizeAccess(DataAccessDescriptor rootData);
     }
 }

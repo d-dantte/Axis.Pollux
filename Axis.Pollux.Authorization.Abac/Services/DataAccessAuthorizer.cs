@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Runtime.ExceptionServices;
 using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
 using Axis.Pollux.Authorization.Abac.Contracts;
+using Axis.Pollux.Authorization.Abac.Models;
 using Axis.Pollux.Authorization.Contracts;
 using Axis.Pollux.Authorization.Exceptions;
 using Axis.Pollux.Authorization.Models;
@@ -51,20 +53,39 @@ namespace Axis.Pollux.Authorization.Abac.Services
             _authorizationContextProvider = provider;
         }
 
-        public Operation AuthorizeAccess(IDataAccessDescriptor data)
+        public Operation AuthorizeAccess(DataAccessDescriptor descriptor)
         => Operation.Try(async () =>
         {
             //validate the data
-            data.ThrowIfNull(new AuthorizationException(Common.Exceptions.ErrorCodes.InvalidArgument));
+            descriptor.ThrowIfNull(new AuthorizationException(Common.Exceptions.ErrorCodes.InvalidArgument));
 
             //create the resource attributes
-            var resourceAttributes = data
-                .DataDescriptors()
-                .Select(ToResourceAttribute)
-                .ToArray();
+            var resourceAttributes = this
+                .Intents(descriptor.Intent)
+                .Select(intent => new Attribute(AttributeCategory.Intent)
+                {
+                    Type = Luna.Common.CommonDataType.String,
+                    Name = IntentAttributeNames.DataAccessIntent,
+                    Data = intent.ToString()
+                })
+                .AppendAt(0, new Attribute(AttributeCategory.Resource)
+                {
+                    Type = Luna.Common.CommonDataType.String,
+                    Name = ResourceAttributeNames.DataAccessType,
+                    Data = descriptor.DataType
+                })
+                .ToList();
+
+            if (!string.IsNullOrWhiteSpace(descriptor.DataId))
+                resourceAttributes.Add(new Attribute(AttributeCategory.Resource)
+                {
+                    Type = Luna.Common.CommonDataType.String,
+                    Name = ResourceAttributeNames.DataAccessId,
+                    Data = descriptor.DataId
+                });
 
             var context = await _authorizationContextProvider
-                .CaptureAuthorizationContext(resourceAttributes);
+                .CaptureAuthorizationContext(resourceAttributes.ToArray());
 
             await _authority
                 .Authorize(context)
@@ -80,74 +101,13 @@ namespace Axis.Pollux.Authorization.Abac.Services
                 });
         });
 
-        private static IAttribute ToResourceAttribute(DataAttribute dataAttribute) 
-        => new Attribute(AttributeCategory.Resource)
+        private DataAccessIntent[] Intents(DataAccessIntent flags)
         {
-            Type = dataAttribute.Type,
-            Name = $"{Models.ResourceAttributes.DataDescriptorPrefix}.{dataAttribute.Name}",
-            Data = dataAttribute.Data
-        };
-
-        //public Operation AuthorizeAccess(string dataType)
-        //=> _AuthorizeAccess(dataType, null, null);
-
-        //public Operation AuthorizeAccess(string dataType, string uniqueId)
-        //=> _AuthorizeAccess(dataType, null, uniqueId);
-
-        //public Operation AuthorizeAccess(string dataType, Guid ownerId)
-        //=> _AuthorizeAccess(dataType, ownerId, null);
-
-        //public Operation AuthorizeAccess(string dataType, Guid ownerId, string uniqueId)
-        //=> _AuthorizeAccess(dataType, ownerId, uniqueId);
-
-        //private Operation _AuthorizeAccess(string dataType, Guid? ownerId, string uniqueId)
-        //=> Operation.Try(async () =>
-        //{
-        //    //create the resource attributes
-        //    var resourceAttributes = new List<IAttribute>
-        //    {
-        //        new Attribute(AttributeCategory.Resource)
-        //        {
-        //            Name = Models.ResourceAttributes.DataAccessDataType,
-        //            Type = CommonDataType.String,
-        //            Data = dataType.ThrowIf(
-        //                string.IsNullOrWhiteSpace,
-        //                new AuthorizationException(Common.Exceptions.ErrorCodes.InvalidArgument))
-        //        }
-        //    };
-        //    if (ownerId != null) resourceAttributes.Add(new Attribute(AttributeCategory.Resource)
-        //    {
-        //        Name = Models.ResourceAttributes.DataAccessOwnerId,
-        //        Type = CommonDataType.Guid,
-        //        Data = ownerId.ToString()
-        //    });
-        //    if (!string.IsNullOrWhiteSpace(uniqueId)) resourceAttributes.Add(new Attribute(AttributeCategory.Resource)
-        //    {
-        //        Name = Models.ResourceAttributes.DataAccessUniqueId,
-        //        Type = CommonDataType.Guid,
-        //        Data = uniqueId
-        //    });
-
-        //    //first and foremost, the easiest test is if the current user is the owner of the data
-        //    var currentUserId = await _userContext.CurrentUserId();
-        //    if (currentUserId == ownerId)
-        //        return; //<-- access granted
-
-        //    var context = await _authorizationContextProvider
-        //        .CaptureAuthorizationContext(resourceAttributes.ToArray());
-
-        //    await _authority
-        //        .Authorize(context)
-        //        .Catch(exception =>
-        //        {
-        //            if (exception.GetType() == typeof(Sigma.Exceptions.SigmaAccessDeniedException))
-        //                throw new AuthorizationException(ErrorCodes.AccessDeniedError);
-
-        //            //else propagate the original error
-        //            ExceptionDispatchInfo
-        //                .Capture(exception)
-        //                .Throw();
-        //        });
-        //});
+            return Enum
+                .GetValues(typeof(DataAccessIntent))
+                .Cast<DataAccessIntent>()
+                .Where(flag => flags.HasFlag(flag))
+                .ToArray();
+        }
     }
 }

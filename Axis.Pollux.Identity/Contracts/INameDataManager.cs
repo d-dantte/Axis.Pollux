@@ -18,7 +18,7 @@ namespace Axis.Pollux.Identity.Contracts
         Operation UpdateNameDataStatus(Guid nameDataId, int status);
 
         Operation<NameData> GetNameData(Guid nameDataId);
-        Operation<ArrayPage<NameData>> GetUserName(Guid userId, ArrayPageRequest request = null);
+        Operation<ArrayPage<NameData>> GetUserNames(Guid userId, ArrayPageRequest request = null);
 
         #endregion
     }

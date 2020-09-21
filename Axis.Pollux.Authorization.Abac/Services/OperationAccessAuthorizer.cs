@@ -1,4 +1,7 @@
-﻿using Axis.Luna.Common;
+﻿using static Axis.Luna.Extensions.ExceptionExtension;
+using Attribute = Axis.Pollux.Authorization.Abac.Models.Attribute;
+
+using Axis.Luna.Common;
 using Axis.Luna.Extensions;
 using Axis.Luna.Operation;
 using Axis.Pollux.Authorization.Abac.Contracts;
@@ -9,9 +12,7 @@ using Axis.Pollux.Authorization.Models;
 using Axis.Pollux.Common.Contracts;
 using Axis.Sigma;
 using Axis.Sigma.Authority;
-
-using static Axis.Luna.Extensions.ExceptionExtension;
-using Attribute = Axis.Pollux.Authorization.Abac.Models.Attribute;
+using System.Linq;
 
 namespace Axis.Pollux.Authorization.Abac.Services
 {
@@ -51,18 +52,26 @@ namespace Axis.Pollux.Authorization.Abac.Services
             descriptor
                 .ThrowIfNull(new AuthorizationException(Common.Exceptions.ErrorCodes.InvalidArgument));
 
-            //create descriptor attribute
-            var descriptorAttribute = new Attribute(AttributeCategory.Resource)
-            {
-                Name = ResourceAttributes.OperationAccessDescriptor,
-                Type = CommonDataType.JsonObject,
-                Data = await _serializer.SerializeData(descriptor),
-            };
+            //convert descriptor to attributes
+            var attributes = descriptor.ParameterContext
+                .Select(item => new Attribute(AttributeCategory.Resource)
+                {
+                    Type = item.Type,
+                    Name = $"{ResourceAttributeNames.OperationAccessParameterPrefix}.{item.Name}",
+                    Data = item.Data
+                })
+                .AppendAt(0, new Attribute(AttributeCategory.Resource)
+                {
+                    Name = ResourceAttributeNames.OperationAccessName,
+                    Type = CommonDataType.String,
+                    Data = descriptor.OperationName,
+                })
+                .AppendAt(0, DefaultIntentAttributes.OperationIntent);
                         
             await _authorizationContextProvider
-                .CaptureAuthorizationContext(descriptorAttribute) //acquire authorization context
-                .Then(r => _authority.Authorize(r))               //authorize
-                .Catch(exception =>                               //convert exception if present
+                .CaptureAuthorizationContext(attributes.ToArray()) //acquire authorization context
+                .Then(r => _authority.Authorize(r))                //authorize
+                .Catch(exception =>                                //convert exception if present
                 {
                     if (exception is Sigma.Exceptions.SigmaAccessDeniedException)
                         throw new AuthorizationException(ErrorCodes.AccessDeniedError);

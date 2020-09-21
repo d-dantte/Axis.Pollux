@@ -9,7 +9,6 @@ using Axis.Pollux.Common.Utils;
 using Axis.Pollux.Identity.Contracts;
 using Axis.Pollux.Identity.Exceptions;
 using Axis.Pollux.Identity.Models;
-using Axis.Pollux.Identity.Services.AccessDescriptors;
 using Axis.Pollux.Identity.Services.Queries;
 
 using static Axis.Luna.Extensions.ExceptionExtension;
@@ -48,11 +47,9 @@ namespace Axis.Pollux.Identity.Services
                 .Validate();
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(ContactData).FullName,
-                OwnerId = userId
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(ContactData).FullName,
+                intent: Authorization.Models.DataAccessIntent.Write));
 
             contactData.Id = Guid.NewGuid();
             contactData.IsVerified = false;
@@ -79,12 +76,10 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(AddressData).FullName,
-                OwnerId = contactData.Owner.Id,
-                DataId = contactData.Id.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(AddressData).FullName,
+                dataId: contactData.Id.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Delete));
 
             var storeCommand = _storeProvider.CommandFor(typeof(ContactData).FullName);
 
@@ -105,12 +100,10 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(ContactData).FullName,
-                OwnerId = persisted.Owner.Id,
-                DataId = persisted.Id.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(ContactData).FullName,
+                dataId: persisted.Id.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Write));
 
             //copy values
             persisted.Channel = contactData.Channel;
@@ -134,12 +127,10 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(ContactData).FullName,
-                OwnerId = contactData.Owner.Id,
-                DataId = contactData.Id.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(ContactData).FullName,
+                dataId: contactData.Id.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Write));
 
             contactData.Status = status;
             var storeCommand = _storeProvider.CommandFor(typeof(ContactData).FullName);
@@ -160,12 +151,10 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(ContactData).FullName,
-                OwnerId = contactData.Owner.Id,
-                DataId = contactData.Id.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(ContactData).FullName,
+                dataId: contactData.Id.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Write));
 
             contactData.IsVerified = true;
             var storeCommand = _storeProvider.CommandFor(typeof(ContactData).FullName);
@@ -186,12 +175,10 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(ContactData).FullName,
-                OwnerId = contactData.Owner.Id,
-                DataId = contactDataId.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(ContactData).FullName,
+                dataId: contactDataId.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Write));
 
             if (contactData.IsPrimary)
                 return contactData;
@@ -231,12 +218,10 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(ContactData).FullName,
-                OwnerId = contactData.Owner.Id,
-                DataId = contactData.Id.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(ContactData).FullName,
+                dataId: contactData.Id.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Write));
 
             //add the tags, using a hash set to get rid of duplicates
             contactData.Tags = new HashSet<string>(contactData.Tags)
@@ -260,12 +245,10 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(ContactData).FullName,
-                OwnerId = contactData.Owner.Id,
-                DataId = contactData.Id.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(ContactData).FullName,
+                dataId: contactData.Id.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Write));
 
             //remove the tags
             var tagBuffer = new HashSet<string>(contactData.Tags);
@@ -289,28 +272,24 @@ namespace Axis.Pollux.Identity.Services
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult));
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(ContactData).FullName,
-                OwnerId = contactData.Owner.Id,
-                DataId = contactData.Id.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(ContactData).FullName,
+                dataId: contactData.Id.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Read));
 
             return contactData;
         });
 
-        public Operation<ArrayPage<ContactData>> GetUserContact(Guid userId, ArrayPageRequest request = null)
+        public Operation<ArrayPage<ContactData>> GetUserContacts(Guid userId, ArrayPageRequest request = null)
         => Operation.Try(async () =>
         {
             if (userId == default(Guid))
                 throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(ContactData).FullName,
-                OwnerId = userId
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(ContactData).FullName,
+                intent: Authorization.Models.DataAccessIntent.Read));
 
             return (await _userQueries
                 .GetUserContactData(userId, request))
@@ -325,18 +304,16 @@ namespace Axis.Pollux.Identity.Services
                 throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(ContactData).FullName,
-                OwnerId = userId
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(ContactData).FullName,
+                intent: Authorization.Models.DataAccessIntent.Read));
 
             return (await _userQueries
                 .GetPrimaryUserContactData(userId, channel))
                 .ThrowIfNull(new IdentityException(ErrorCodes.InvalidStoreQueryResult)); ;
         });
 
-        public Operation<ArrayPage<ContactData>> GetUserContact(
+        public Operation<ArrayPage<ContactData>> GetUserContacts(
             Guid userId, 
             string[] communicationChannels, 
             string[] tags, 
@@ -347,11 +324,9 @@ namespace Axis.Pollux.Identity.Services
                 throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(ContactData).FullName,
-                OwnerId = userId
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(ContactData).FullName,
+                intent: Authorization.Models.DataAccessIntent.Read));
 
             return (await _userQueries
                 .GetUserContactData(userId, communicationChannels, tags, arrayPageRequest))

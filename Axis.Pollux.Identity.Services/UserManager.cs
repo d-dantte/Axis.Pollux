@@ -6,7 +6,6 @@ using Axis.Pollux.Authorization.Contracts;
 using Axis.Pollux.Identity.Contracts;
 using Axis.Pollux.Identity.Exceptions;
 using Axis.Pollux.Identity.Models;
-using Axis.Pollux.Identity.Services.AccessDescriptors;
 using Axis.Pollux.Identity.Services.Queries;
 
 using static Axis.Luna.Extensions.ExceptionExtension;
@@ -18,7 +17,6 @@ namespace Axis.Pollux.Identity.Services
         private readonly StoreProvider _storeProvider;
         private readonly IUserQueries _userQueries;
         private readonly IDataAccessAuthorizer _dataAccessAuthorizer;
-
 
         public UserManager(IUserQueries userQueries, IDataAccessAuthorizer dataAuthorizer, StoreProvider storeProvider)
         {
@@ -56,12 +54,10 @@ namespace Axis.Pollux.Identity.Services
                 throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(User).FullName,
-                OwnerId = userId,
-                DataId = userId.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(User).FullName,
+                dataId: userId.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Delete));
 
             var user = (await _userQueries
                 .GetUserById(userId))
@@ -81,12 +77,10 @@ namespace Axis.Pollux.Identity.Services
                 throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(User).FullName,
-                OwnerId = userId,
-                DataId = userId.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(User).FullName,
+                dataId: userId.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Write));
 
             var user = (await _userQueries
                     .GetUserById(userId))
@@ -107,12 +101,10 @@ namespace Axis.Pollux.Identity.Services
                 throw new IdentityException(Common.Exceptions.ErrorCodes.InvalidArgument);
 
             //Ensure that the right principal has access to this data
-            await _dataAccessAuthorizer.AuthorizeAccess(new UserOwnedData
-            {
-                DataType = typeof(User).FullName,
-                OwnerId = userId,
-                DataId = userId.ToString()
-            });
+            await _dataAccessAuthorizer.AuthorizeAccess(new Authorization.Models.DataAccessDescriptor(
+                dataType: typeof(User).FullName,
+                dataId: userId.ToString(),
+                intent: Authorization.Models.DataAccessIntent.Read));
 
             return (await _userQueries
                 .GetUserById(userId))

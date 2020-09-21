@@ -58,7 +58,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Common.Serializ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Authorization", "Axis.Pollux.Authorization\Axis.Pollux.Authorization.csproj", "{07BABC3D-F939-4FF7-BECC-8E2561080502}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Axis.Pollux.Comms.ElasticMail", "Axis.Pollux.Comms.ElasticMail\Axis.Pollux.Comms.ElasticMail.csproj", "{D2A96807-B2E8-4F4B-827B-FF933001B218}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axis.Pollux.Comms.ElasticMail", "Axis.Pollux.Comms.ElasticMail\Axis.Pollux.Comms.ElasticMail.csproj", "{D2A96807-B2E8-4F4B-827B-FF933001B218}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{16A38FCC-91D0-4A84-937D-46BBE9F64044}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
